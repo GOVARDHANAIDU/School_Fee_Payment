@@ -13,13 +13,13 @@ import com.google.gson.Gson;
     public class SearchServlet extends HttpServlet {
         protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
             List<Map<String, String>> students = new ArrayList<>();
+           
 
             try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_data", "root", "W7301@jqir#");
+            	Class.forName("com.mysql.cj.jdbc.Driver");
+                Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_data","root", "W7301@jqir#");
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT Student_Name, Email_ID, Phone_Number, Total_Fee, Paid_Fee, Admission_Number FROM StudentFeeDetails");
-
+                ResultSet rs = stmt.executeQuery("SELECT Student_Name, Email_ID, Phone_Number, Total_Fee, Paid_Fee, Student_Class, Admission_Number FROM studentfeedetails ");
                 while (rs.next()) {
                     Map<String, String> student = new HashMap<>();
                     student.put("name", rs.getString("Student_Name"));
@@ -28,8 +28,11 @@ import com.google.gson.Gson;
                     student.put("amount", rs.getString("Total_Fee"));
                     student.put("paidfee", rs.getString("Paid_Fee"));
                     student.put("admissionnumber", rs.getString("Admission_Number"));
+                    student.put("class1", rs.getString("Student_Class"));
                     students.add(student);
+                    
                 }
+                
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -39,4 +42,22 @@ import com.google.gson.Gson;
             response.getWriter().write(json);
         }
     }
+//schoolstudentdetails.database.windows.net
+    
+    
+//    import java.sql.Connection;
+//    import java.sql.DriverManager;
+//    import java.sql.SQLException;
+//
+//    public class AzureSqlConnection {
+//        public static void main(String[] args) {
+
+//
+//            try (Connection conn = DriverManager.getConnection(url)) {
+//                System.out.println("Connected to Azure SQL Database!");
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 

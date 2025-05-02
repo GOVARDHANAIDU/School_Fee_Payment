@@ -73,6 +73,7 @@
       font-weight: bold;
       color: #333;
       width: 40%;
+      border: none;
     }
 
     .amount-section {
@@ -106,6 +107,7 @@
 
     .print-btn {
       display: block;
+      position: bottom;
       margin: 20px auto;
       padding: 10px 30px;
       background: #2a4365;
@@ -114,8 +116,34 @@
       border-radius: 6px;
       font-size: 16px;
       cursor: pointer;
+      margin-top: -5%;
+      margin-left: 80%;
+    }
+     .btn-back {
+      position: bottom;
+      bottom: 30px;
+      left: 20px;
+      background-color:#2a4365 ;
+      color: white;
+      padding: 8px 20px;
+      font-size: 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.5s ease;
+      width: 150px;
     }
 
+    .btn-back:hover {
+      background: white;
+      color: black;
+      transition: background-color 0.3s ease;
+    }
+    input{
+    border: 0px;
+    background-color: transparent;
+    outline: 0px;
+    }
     .print-btn:hover {
       background-color: #4c6795;
     }
@@ -136,21 +164,23 @@
   %>
     <div class="info-section">
       <table>
+      <form action="addPayment" method="POST">
+       <tr>
+          <td class="label">Admission Number:</td>
+          <td><input value="<%= request.getParameter("admin.no") %>" name="AdmissionNumber" readOnly></td>
+        </tr>
         <tr>
           <td class="label">Student Name:</td>
-          <td><%=request.getParameter("studentName")%></td>
+          <td><input value="<%=request.getParameter("studentName")%>" name="studentName" readOnly></td>
         </tr>
-        <tr>
-          <td class="label">Admission Number:</td>
-          <td><%= request.getParameter("admin.no") %></td>
-        </tr>
+        
         <tr>
           <td class="label">Email ID:</td>
-          <td><%= request.getParameter("emailid") %></td>
+          <td><input value="<%= request.getParameter("emailid") %>" name="emailId" readOnly></td>
         </tr>
         <tr>
           <td class="label">Phone Number:</td>
-          <td><%= request.getParameter("phoneNumber") %></td>
+          <td><input value="<%= request.getParameter("phoneNumber") %>" name="phoneNumber" readOnly></td>
         </tr>
       </table>
     </div>
@@ -158,16 +188,20 @@
     <div class="amount-section">
       <table>
         <tr>
+          <td class="label">Mode of Payment:</td>
+          <td> <input value="<%= request.getParameter("paymentMode") %>" name="modeOfPayment" readOnly></td>
+        </tr>
+        <tr>
           <td class="label">Total Fee:</td>
-          <td>&#8377; <%=request.getParameter("amount")%></td>
+          <td>&#8377; <input value="<%=request.getParameter("amount")%>" name="totalFee" readOnly></td>
         </tr>
         <tr>
           <td class="label">Fee Already Paid:</td>
-          <td>&#8377; <%= request.getParameter("paidfee") %></td>
+          <td>&#8377; <input value="<%= request.getParameter("paidfee") %>"name="paidFee" readOnly></td>
         </tr>
         <tr>
           <td class="label">Fee Paid Now:</td>
-          <td>&#8377; <%= request.getParameter("payingfee") %></td>
+          <td>&#8377; <input value="<%= request.getParameter("payingfee") %>"name="payingFee" readOnly></td>
         </tr>
         <tr>
           <td class="label total">Remaining Balance:</td>
@@ -195,8 +229,9 @@
       <p>Generated on: <%= new java.util.Date() %></p>
       <p>Thank you for your payment!</p>
     </div>
-
-    <button class="print-btn" onclick="window.print()">&#xf0c7; Print Receipt</button>
+   <button class="btn-back" onclick="history.back()">Back</button>
+    <button type="submit" class="print-btn">Proceed</button>
+    </form>
   </div>
 
 </body>

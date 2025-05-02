@@ -48,6 +48,12 @@
         <artifactId>mongodb-driver-sync</artifactId>
         <version>4.10.2</version>
     </dependency>
+    <dependency>
+    <groupId>com.microsoft.sqlserver</groupId>
+    <artifactId>mssql-jdbc</artifactId>
+    <version>10.2.0.jre8</version> <!-- Check for the latest version -->
+</dependency>
+
   </dependencies>
   <build>
     <finalName>SchoolData</finalName>

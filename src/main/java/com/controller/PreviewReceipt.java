@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.tomcat.jni.Local;
 
@@ -27,7 +28,11 @@ public class PreviewReceipt extends HttpServlet{
 	    double amount = Double.parseDouble(request.getParameter("amount"));
 	    double paidFee = Double.parseDouble(request.getParameter("paidfee"));
 	    double payingFee = Double.parseDouble(request.getParameter("payingfee"));
+	    String class1 = request.getParameter("class1");
 	    
+	    
+	    HttpSession session =  request.getSession();
+	    session.setAttribute("Class1",class1);
 	    
 	    FeePayment feePayment = new FeePayment(); 
 	    feePayment.setStudentName(studentName);

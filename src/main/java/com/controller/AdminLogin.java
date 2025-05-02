@@ -34,7 +34,7 @@ public class AdminLogin extends HttpServlet {
 	    	HttpSession session = req.getSession();
 	    	session.setAttribute("email", emailid);
 	    	session.setAttribute("userName", name );
-	        RequestDispatcher requestDispatcher = req.getRequestDispatcher("BillingPage.jsp");
+	        RequestDispatcher requestDispatcher = req.getRequestDispatcher("home.jsp");
 	        requestDispatcher.include(req, resp);
 	     }
 	     else {	    	 
