@@ -6,6 +6,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>School Management Home</title>
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2132/2132732.png" type="image/x-icon">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
@@ -74,6 +75,7 @@
             <li><a class="dropdown-item" href="allStudents.jsp">All Student Info</a></li>
             <li><a class="dropdown-item" href="BillingPage.jsp">Student Fee Payment</a></li>
             <li><a class="dropdown-item" href="#">Create Student Details</a></li>
+            <li><a class="dropdown-item" href="bulkimporting.jsp">Create Bulk</a></li>
             <li><a class="dropdown-item" href="#">Update Student Details</a></li>
           </ul>
         </li>
