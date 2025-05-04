@@ -10,9 +10,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UPI ID Payment</title>
+    <title>All Students</title>
     <link rel="stylesheet" href="HomePage.css">
     <link rel="icon" href="https://i.pinimg.com/736x/2a/31/61/2a3161135f001e58c563ef3103221dcd.jpg" type="image/x-icon">
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2132/2132732.png" type="image/x-icon">
      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <style>
@@ -155,6 +156,12 @@ integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNL
     </div>
   </div>
 </nav>
+<br>
+  <div class="d-flex justify-content-center mb-4">
+  <input type="text" id="searchBox" class="form-control" style="width: 300px;" placeholder="Search by Name, Balance or Class" onkeyup="filterTable()" />
+</div>
+
+
   
      <div class="wrapper">
     <center>
@@ -207,5 +214,24 @@ integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNL
 	     </div>
 	     
 	    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	    
+	    <script>
+function filterTable() {
+    const input = document.getElementById("searchBox").value.toUpperCase();
+    const table = document.getElementById("tablewidth");
+    const tr = table.getElementsByTagName("tr");
+
+    for (let i = 1; i < tr.length; i++) {
+        const name = tr[i].getElementsByTagName("td")[2]?.textContent.toUpperCase() || "";
+        const balance = tr[i].getElementsByTagName("td")[6]?.textContent.toUpperCase() || "";
+        const classCol = tr[i].getElementsByTagName("td")[7]?.textContent.toUpperCase() || "";
+
+        const match = name.includes(input) || balance.includes(input) || classCol.includes(input);
+        tr[i].style.display = match ? "" : "none";
+    }
+}
+</script>
+
+	    
 </body>
 </html>
