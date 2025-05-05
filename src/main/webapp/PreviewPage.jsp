@@ -8,12 +8,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2132/2132732.png" type="image/x-icon">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+ 
   <style>
     
     body {
       font-family: 'Arial', sans-serif;
       background-color: #f9f9f9;
-      padding: 30px;
+      
     }
      @media print {
     body {
@@ -152,6 +155,70 @@
   </style>
 </head>
 <body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">SAS School</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <!-- Left side nav items -->
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item"><a class="nav-link active" href="home.jsp">Home</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Students</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="allStudents.jsp">All Student Info</a></li>
+            <li><a class="dropdown-item" href="BillingPage.jsp">Student Fee Payment</a></li>
+            <li><a class="dropdown-item" href="#">Create Student Details</a></li>
+            <li><a class="dropdown-item" href="bulkimporting.jsp">Create Bulk</a></li>
+            <li><a class="dropdown-item" href="#">Update Student Details</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Payments</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">All Payment Details</a></li>
+            <li><a class="dropdown-item" href="apbme.jsp">Admin Payment</a></li>
+          </ul>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">About Us</a></li>
+      </ul>
+
+       <%
+        HttpSession session2 = request.getSession();
+        String name = (String) session2.getAttribute("adminName");
+        String userName = "";
+        for(int i= 0 ; i<=name.length()-1 ; i++)
+        {
+        	char ch = name.charAt(i);
+        	if(ch == ' ' )
+        	{
+        		break;
+        	}
+        	else
+        	{
+        		userName = userName+ch;
+        	}
+        }
+        %>
+        <div style="display: flex; align-items: center; margin-left: 20px; gap: 10px;">
+    <p style="color: white; margin-right: 40px; padding-top: 10px;">Hello, <%=userName%></p>
+    
+</div>
+         
+      <!-- Right side Login and Signup buttons -->
+      <div class="d-flex">
+        <a class="btn btn-outline-light me-2" href="#">Login</a>
+        <a class="btn btn-outline-warning" href="#">Signup</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
 
   <div class="receipt">
     <div class="header">
@@ -235,6 +302,6 @@
     <button type="submit" class="print-btn">Proceed</button>
     </form>
   </div>
-
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

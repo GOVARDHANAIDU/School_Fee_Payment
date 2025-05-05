@@ -15,9 +15,10 @@ import com.DTO.PaymentTransaction;
 public class TransactionPageImp implements AllPaymentsByAdmin {
 	private static final String insertDetails =
 			"insert into transactions(student_admission_number, student_name, total_amount, Last_Paid_Amount, remaining_fee_balance, date_of_payment, "
-			+ "time_of_payment, mode_of_payment, admin_name, phone_number, Email_ID,Paid_amount,Student_Class)"
-			+ "values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			+ "time_of_payment, mode_of_payment, admin_name, phone_number, Email_ID,Paid_amount,Student_Class,admin_id)"
+			+ "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	private static final String selectAll = "Select * from transactions";
+	private static final String selectAllOfAdmin = "Select * from transactions where admin_id = ?";
 	@Override
 	public boolean insertAllPayments(PaymentTransaction paymentTransaction) {
 		try {
@@ -38,7 +39,9 @@ public class TransactionPageImp implements AllPaymentsByAdmin {
 			preparedStatement.setString(11,paymentTransaction.getEmail());
 			preparedStatement.setDouble(12, paymentTransaction.getPaidFee());
 			preparedStatement.setString(13, paymentTransaction.getStudentClass());
+			preparedStatement.setInt(14, paymentTransaction.getAdminId());
 			int result = preparedStatement.executeUpdate();
+			System.out.println(preparedStatement);
 			if(result != 0) {
 				return true;
 			} else {
@@ -93,4 +96,44 @@ public class TransactionPageImp implements AllPaymentsByAdmin {
 		return null;
 	}
 
+	@Override
+	public List<PaymentTransaction> selectAllPaymentsByAdmin(int id) {
+	    try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection connection = 
+					DriverManager.getConnection("jdbc:mysql://localhost:3306/school_data","root","W7301@jqir#");
+			PreparedStatement preparedStatement = connection.prepareStatement(selectAllOfAdmin);
+			
+			preparedStatement.setInt(1,id);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			System.out.println(preparedStatement);
+			List<PaymentTransaction> list = new ArrayList<PaymentTransaction>();
+			while(resultSet.next()) {
+				PaymentTransaction paymentTransaction = new PaymentTransaction();
+				paymentTransaction.setAdmin_no(resultSet.getString("student_admission_number"));
+				paymentTransaction.setStudentNAme(resultSet.getString("student_name"));
+				paymentTransaction.setStudentClass(resultSet.getString("Student_Class"));
+				paymentTransaction.setTotal_fee(resultSet.getDouble("total_amount"));
+				paymentTransaction.setPaidFee(resultSet.getDouble("Last_Paid_Amount"));
+				paymentTransaction.setPaidFee(resultSet.getDouble("Paid_amount"));
+				paymentTransaction.setRemaingFee(resultSet.getDouble("remaining_fee_balance"));
+				paymentTransaction.setDateOfTransaction(resultSet.getDate("date_of_payment").toLocalDate());
+				paymentTransaction.setTimeOfTransaction(resultSet.getTime("time_of_payment").toLocalTime());
+				paymentTransaction.setModeOfPayment(resultSet.getString("mode_of_payment"));
+				paymentTransaction.setPhone(resultSet.getLong("phone_number"));
+				paymentTransaction.setEmail(resultSet.getString("Email_ID"));
+				paymentTransaction.setAdminName(resultSet.getString("admin_name"));
+				list.add(paymentTransaction);
+			}
+			return list;
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    
+		return null;
+	}
 }

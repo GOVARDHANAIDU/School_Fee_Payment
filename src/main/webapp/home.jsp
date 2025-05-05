@@ -7,7 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>School Management Home</title>
   <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2132/2132732.png" type="image/x-icon">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -15,6 +16,8 @@
       padding-top: 70px; /* space for fixed navbar */
       padding-bottom: 80px; /* space for fixed footer */
     }
+
+
 
     /* Fixed navbar */
     .navbar {
@@ -25,16 +28,12 @@
     }
 
     /* Fixed footer */
-    .footer {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      background-color: #343a40;
-      color: white;
-      padding: 10px 0;
-      font-size: 0.9rem;
-    }
+   .footer {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
 
+	
     .footer a {
       color: #ffc107;
       text-decoration: none;
@@ -48,11 +47,11 @@
       overflow: hidden;
     }
 
-    .carousel-container img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+   .carousel-inner img {
+    width: 100%;
+    height: 450px;
+    object-fit: cover;
+}
   </style>
 </head>
 <body>
@@ -74,7 +73,7 @@
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="allStudents.jsp">All Student Info</a></li>
             <li><a class="dropdown-item" href="BillingPage.jsp">Student Fee Payment</a></li>
-            <li><a class="dropdown-item" href="#">Create Student Details</a></li>
+            <li><a class="dropdown-item" href="studentreg.jsp">Create Student Details</a></li>
             <li><a class="dropdown-item" href="bulkimporting.jsp">Create Bulk</a></li>
             <li><a class="dropdown-item" href="#">Update Student Details</a></li>
           </ul>
@@ -82,7 +81,7 @@
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Payments</a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">All Payment Details</a></li>
+            <li><a class="dropdown-item" href="allpayments.jsp">All Payment Details</a></li>
             <li><a class="dropdown-item" href="apbme.jsp">Admin Payment</a></li>
           </ul>
         </li>
@@ -90,10 +89,32 @@
         <li class="nav-item"><a class="nav-link" href="#">About Us</a></li>
       </ul>
 
+       <%
+        HttpSession session2 = request.getSession();
+        String name = (String) session2.getAttribute("adminName");
+        String userName = "";
+        for(int i= 0 ; i<=name.length()-1 ; i++)
+        {
+        	char ch = name.charAt(i);
+        	if(ch == ' ' )
+        	{
+        		break;
+        	}
+        	else
+        	{
+        		userName = userName+ch;
+        	}
+        }
+        %>
+        <div style="display: flex; align-items: center; margin-left: 20px; gap: 10px;">
+    <p style="color: white; margin-right: 40px; padding-top: 10px;">Hello, <%=userName%></p>
+    
+</div>
+         
       <!-- Right side Login and Signup buttons -->
       <div class="d-flex">
-        <a class="btn btn-outline-light me-2" href="#">Login</a>
-        <a class="btn btn-outline-warning" href="#">Signup</a>
+        <a class="btn btn-outline-light me-2" href="AdminLogin.jsp">Login</a>
+        <a class="btn btn-outline-warning" href="createaccount.jsp">Signup</a>
       </div>
     </div>
   </div>
@@ -122,30 +143,104 @@
   </div>
 </div>
 
-<!-- Footer -->
-<footer class="footer">
-  <div class="container">
-    <div class="row text-center text-md-start">
-      <div class="col-md-4">
-        <strong>Contact</strong><br />
-        Email: contact@sasschool.edu<br />
-        Phone: +1 123 456 7890
-      </div>
-      <div class="col-md-4">
-        <strong>About</strong><br />
-        <a href="#">Our Story</a><br />
-        <a href="#">Privacy Policy</a>
-      </div>
-      <div class="col-md-4">
-        <strong>Address</strong><br />
-        123 Learning Lane<br />
-        Education City, Country
-      </div>
+<div class="container my-5">
+    <div class="text-center">
+        <h2>Welcome to SAS School</h2>
+        <p class="lead">Empowering Students for a Brighter Future</p>
     </div>
-  </div>
-</footer>
+</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Info Cards -->
+<div class="container my-4">
+    <div class="row text-center">
+        <div class="col-md-4">
+            <div class="card shadow p-3">
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135768.png" class="card-img-top w-25 mx-auto my-2" alt="Students">
+                <div class="card-body">
+                    <h5 class="card-title">Students</h5>
+                    <p class="card-text">Track progress, manage fees, and explore academic resources.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow p-3">
+                <img src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png" class="card-img-top w-25 mx-auto my-2" alt="Faculty">
+                <div class="card-body">
+                    <h5 class="card-title">Faculty</h5>
+                    <p class="card-text">Experienced mentors guiding every student’s journey.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow p-3">
+                <img src="https://cdn-icons-png.flaticon.com/512/3703/3703273.png" class="card-img-top w-25 mx-auto my-2" alt="Facilities">
+                <div class="card-body">
+                    <h5 class="card-title">Facilities</h5>
+                    <p class="card-text">State-of-the-art infrastructure and learning environment.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Vision & Mission -->
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Our Vision</h3>
+            <p>To foster a nurturing and innovative learning environment that encourages every student to thrive intellectually and emotionally.</p>
+        </div>
+        <div class="col-md-6">
+            <h3>Our Mission</h3>
+            <p>We aim to provide high-quality education, instill strong values, and prepare students for global citizenship and lifelong success.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Stats Section -->
+<div class="container text-center my-5">
+    <div class="row">
+        <div class="col">
+            <h2 id="students">1200+</h2>
+            <p>Students Enrolled</p>
+        </div>
+        <div class="col">
+            <h2 id="teachers">80+</h2>
+            <p>Dedicated Teachers</p>
+        </div>
+        <div class="col">
+            <h2 id="years">25+</h2>
+            <p>Years of Excellence</p>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+    <!-- Footer -->
+    <footer class="footer bg-dark text-white py-4" id = "footer">
+      <div class="container">
+        <div class="row text-center text-md-start">
+          <div class="col-md-4 mb-3">
+            <h6><strong>Contact</strong></h6>
+            <p>Email: contact@sasschool.edu<br>Phone: +1 123 456 7890</p>
+          </div>
+          <div class="col-md-4 mb-3">
+            <h6><strong>About</strong></h6>
+            <a href="#" class="d-block text-warning">Our Story</a>
+            <a href="#" class="d-block text-warning">Privacy Policy</a>
+          </div>
+          <div class="col-md-4 mb-3">
+            <h6><strong>Address</strong></h6>
+            <p>123 Learning Lane<br>Education City, Country</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
 </body>
 </html>
     

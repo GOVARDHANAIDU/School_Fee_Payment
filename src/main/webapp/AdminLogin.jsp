@@ -133,13 +133,13 @@
              </div>
           </div>
             <div class="input-group">
-                <input type="password" required name="password" maxlength="4">
+                <input type="password" required name="password">
                 <label>Password</label>
             </div>
             <button type="button" class="btn" onclick="submitForm()">Login</button>
         </form>
         <div class="links">
-            <a href="ForgotPassword.jsp">Forgot Password?</a> | <a href="CreateAccount.jsp">Create Account</a>
+            <a href="forgotpassword.jsp">Forgot Password?</a>
         </div>
     </div>
     

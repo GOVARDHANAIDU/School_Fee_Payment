@@ -18,9 +18,11 @@ import com.DAO.AdminLoginInter;
 
 @WebServlet("/loginpage")
 public class AdminLogin extends HttpServlet {
-	private static String name ="";
+	private static String name ;
+	private static int adminId ;
 	
 	AdminLoginInter adminLoginInter = new AdminLoginImp();	
+	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 	    
@@ -33,7 +35,9 @@ public class AdminLogin extends HttpServlet {
 	     { 
 	    	HttpSession session = req.getSession();
 	    	session.setAttribute("email", emailid);
-	    	session.setAttribute("userName", name );
+	    	session.setAttribute("adminName", name );
+	    	session.setAttribute("adminId", adminId);
+	    	System.out.println("Admin ID:"+adminId);
 	        RequestDispatcher requestDispatcher = req.getRequestDispatcher("home.jsp");
 	        requestDispatcher.include(req, resp);
 	     }
@@ -45,8 +49,9 @@ public class AdminLogin extends HttpServlet {
 			  writer.println("</script>"); 
 	     }
 	}
-	public static void userName(String userName) {
+	public static void userName(String userName, int id) {
 			name = userName;
+			adminId = id;
 	}
 	
 }

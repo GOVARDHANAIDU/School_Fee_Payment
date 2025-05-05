@@ -42,8 +42,10 @@ public class InsertIntoTransactionHistory extends HttpServlet{
 		double remainingfee = totalFee - (paidFee +payingfee);
 		
 		HttpSession session = req.getSession();
-		String adminName = (String) session.getAttribute("userName");
+		String adminName = (String) session.getAttribute("adminName");
 		String class1 = (String) session.getAttribute("Class1");
+		int id =  (int) session.getAttribute("adminId");
+		
 		PaymentTransaction paymentTransaction = new PaymentTransaction();
 		
 		StudentDetailsInter studentDetailsInter = new StudentDetailsImp();
@@ -63,7 +65,7 @@ public class InsertIntoTransactionHistory extends HttpServlet{
 		paymentTransaction.setDateOfTransaction(LocalDate.now());
 		paymentTransaction.setTimeOfTransaction(LocalTime.now());
 		paymentTransaction.setStudentClass(class1);
-		
+		paymentTransaction.setAdminId(id);
 		AllPaymentsByAdmin allPaymentsByAdmin = new TransactionPageImp();
 		allPaymentsByAdmin.insertAllPayments(paymentTransaction);
 			

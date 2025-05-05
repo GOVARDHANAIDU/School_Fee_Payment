@@ -114,7 +114,8 @@
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="allStudents.jsp">All Student Info</a></li>
             <li><a class="dropdown-item" href="BillingPage.jsp">Student Fee Payment</a></li>
-            <li><a class="dropdown-item" href="#">Create Student Details</a></li>
+            <li><a class="dropdown-item" href="studentreg.jsp">Create Student Details</a></li>
+             <li><a class="dropdown-item" href="bulkimporting.jsp">Create Bulk</a></li>
             <li><a class="dropdown-item" href="#">Update Student Details</a></li>
           </ul>
         </li>
@@ -177,13 +178,14 @@
 
       <% 
         HttpSession session2 = request.getSession();
-        String name = (String) session2.getAttribute("userName");
+        String name = (String) session2.getAttribute("adminName");
       %>
       <label>Billed By:</label>
       <input type="text" value="<%=name%>" readonly>
     </div>
 
-    <input type="submit" class="preview" value="Proceed">
+    <input type="submit" class="preview" value="Proceed" disabled>
+
   </div>
 </form>
 
@@ -198,6 +200,24 @@
   let studentData = [];
 
   $(document).ready(function () {
+    const $payingFee = $('#payingfee');
+    const $proceedBtn = $('.preview');
+
+    function toggleProceedButton() {
+      const value = parseFloat($payingFee.val());
+      if (!value || value <= 0) {
+        $proceedBtn.prop('disabled', true);
+      } else {
+        $proceedBtn.prop('disabled', false);
+      }
+    }
+
+    // Initially disable the button
+    toggleProceedButton();
+
+    // Run on input change
+    $payingFee.on('input', toggleProceedButton);
+
     $.ajax({
       url: 'SearchServlet',
       method: 'GET',
@@ -213,7 +233,6 @@
           allowClear: true
         });
 
-        // Optional: Auto-select a default student like Alice Johnson
         const defaultStudent = studentData.find(s => s.name === "Alice Johnson");
         if (defaultStudent) {
           $('#studentDropdown').val(defaultStudent.name).trigger('change');
@@ -223,6 +242,8 @@
           $('#paidfee').val(defaultStudent.paidfee);
           $('#admissionnumber').val(defaultStudent.admissionnumber);
           $('#class1').val(defaultStudent.class1);
+          $('#payingfee').val(defaultStudent.payingfee);
+          toggleProceedButton(); // update button state based on default student
         }
 
         $('#studentDropdown').on('select2:select', function (e) {
@@ -236,12 +257,15 @@
             $('#paidfee').val(selectedStudent.paidfee);
             $('#admissionnumber').val(selectedStudent.admissionnumber);
             $('#class1').val(selectedStudent.class1);
+            $('#payingfee').val(selectedStudent.payingfee);
+            toggleProceedButton(); // update button state when selecting new student
           }
         });
       }
     });
   });
 </script>
+
 
 </body>
 </html>

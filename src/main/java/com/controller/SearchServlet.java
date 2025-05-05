@@ -19,7 +19,7 @@ import com.google.gson.Gson;
             	Class.forName("com.mysql.cj.jdbc.Driver");
                 Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_data","root", "W7301@jqir#");
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT Student_Name, Email_ID, Phone_Number, Total_Fee, Paid_Fee, Student_Class, Admission_Number FROM studentfeedetails ");
+                ResultSet rs = stmt.executeQuery("SELECT Student_Name, Email_ID, Phone_Number, Total_Fee, Paid_Fee, Student_Class, Admission_Number, Remaining_fee FROM studentfeedetails ");
                 while (rs.next()) {
                     Map<String, String> student = new HashMap<>();
                     student.put("name", rs.getString("Student_Name"));
@@ -29,6 +29,7 @@ import com.google.gson.Gson;
                     student.put("paidfee", rs.getString("Paid_Fee"));
                     student.put("admissionnumber", rs.getString("Admission_Number"));
                     student.put("class1", rs.getString("Student_Class"));
+                    student.put("payingfee", rs.getString("Remaining_fee"));
                     students.add(student);
                     
                 }

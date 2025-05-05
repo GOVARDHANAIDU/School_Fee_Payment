@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.DTO.Parallelinsertioninstudentfee;
 import com.DTO.StudentDetails;
 
 
@@ -21,7 +22,8 @@ public class StudentDetailsImp implements StudentDetailsInter{
 	private static final String selectPaidFee = "Select Paid_Fee from studentfeedetails where Admission_Number = ? ";
 	private static final String selectTotalFee = "Select Total_Fee from studentfeedetails where Admission_Number = ? ";
 	private static final String selectRemainingFee = "Select Remaining_fee from studentfeedetails where Admission_Number= ? ";
-	
+	private static final String insertall = "insert into studentfeedetails(Admission_Number, Student_Name, Email_ID, Phone_Number, Total_Fee, Paid_Fee, Remaining_fee, Student_Class)"
+			+ " values(?,?,?,?,?,?,?,?)";
 	@Override
 	public List<StudentDetails> allStudentDetails() {
 		try {
@@ -154,6 +156,42 @@ public class StudentDetailsImp implements StudentDetailsInter{
 				return 0;
 			}
 		return 0;
+	}
+	
+//	Student_id, Admission_Number, Student_Name, Email_ID, Phone_Number, Total_Fee, Paid_Fee, Remaining_fee, Student_Class
+	@Override
+	public boolean insertStudenttofeeDetails(Parallelinsertioninstudentfee studentDetails) {
+		
+			try {
+				Class.forName("com.mysql.cj.jdbc.Driver");
+				Connection connection =
+						DriverManager.getConnection("jdbc:mysql://localhost:3306/school_data","root","W7301@jqir#");
+				PreparedStatement preparedStatement = connection.prepareStatement(insertall);
+				preparedStatement.setString(1, studentDetails.getAdmissionNumber());
+				preparedStatement.setString(2, studentDetails.getStudentName());
+				preparedStatement.setString(3, studentDetails.getEmailID());
+				preparedStatement.setLong(4, studentDetails.getPhoneNumber());
+				preparedStatement.setDouble(5, studentDetails.getTotalFee());
+				preparedStatement.setDouble(6, studentDetails.getPaidFee());
+				preparedStatement.setDouble(7, studentDetails.getRemainingFee());
+				preparedStatement.setString(8, studentDetails.getStudentClass());
+				int result = preparedStatement.executeUpdate();
+				System.out.println(preparedStatement);
+				if(result != 0) {
+					return true;
+				} else {
+					return false;
+				}
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
+			}
+
 	}
 	
 	 

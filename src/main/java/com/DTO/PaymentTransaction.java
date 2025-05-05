@@ -29,5 +29,6 @@ public class PaymentTransaction {
 	private  long phone;	
 	private  String email;
 	private String studentClass;
+	private int adminId;
 	
 }

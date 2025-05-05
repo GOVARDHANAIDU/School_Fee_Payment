@@ -1,10 +1,9 @@
-<%@page import="com.DAO.StudentDetailsImp"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.List" %>
 <%@page import="com.DTO.PaymentTransaction"%>
 <%@page import="com.DAO.TransactionPageImp"%>
 <%@page import="com.DAO.AllPaymentsByAdmin"%>
-<%@page import="com.DTO.StudentDetails"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List" %>
+<%@ page import="javax.servlet.http.HttpSession" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,28 +28,20 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <style>
-    body {
-	  padding-top: 75px; /* Adjust to match actual navbar height */
-	}
         table.dataTable thead th {
             position: sticky;
             top: 0;
             background-color: #f8f9fa;
         }
-        nav {
-		  position: fixed;
-		  top: 0;
-		  width: 100%;
-		  z-index: 1000; /* Keeps it on top of other elements */
-		}
-		
+        body {
+	  padding-top: 75px; /* Adjust to match actual navbar height */
+	}
     </style>
 </head>
 <body>
 
 <!-- Navigation Bar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top px-4">
-
   <div class="container-fluid">
     <a class="navbar-brand" href="#">SAS School</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -114,36 +105,41 @@
         <table id="paymentTable" class="display table table-bordered table-hover">
             <thead class="table-light">
                 <tr>
-                <th>S.no</th>
-                <th>Admission No</th>
-                <th>Student Name</th>
-                <th>Phone Number</th>
-                <th>Total Fee</th>
-                <th>Paid Fee</th>
-                <th>Balance</th>
-                <th>Class</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% 
-                StudentDetailsImp studentDetailsImp = new StudentDetailsImp();
-                List<StudentDetails> list = studentDetailsImp.allStudentDetails();
+                    <th>S.No</th>
+                    <th>Student Name</th>
+                    <th>Total Fee</th>
+                    <th>Paid Fee</th>
+                    <th>Balance</th>
+                    <th>Class</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Mode</th>
+                    <th>Billed By</th>
+                </tr>
+            </thead>
+            <tbody>
+                <%
+                AllPaymentsByAdmin allPaymentsByAdmin = new TransactionPageImp();
+                List<PaymentTransaction> list = allPaymentsByAdmin.selectAllPayments();
                 int count = 1;
-                for (StudentDetails p : list) {
-            %>           
-            <tr>
-                <td><%= count %></td>
-                    <td><%= p.getAdmissionNumber() %></td>
-                    <td><%= p.getStudentName() %></td>
-                    <td><%= p.getPhoneNumber() %></td>
-                    <td><%= p.getTotalFee() %></td>
-                    <td><%= p.getPaidFee()%></td>
-                    <td><%= p.getRemainingFee() %></td>
-                    <td><%= p.getStudentClass() %></td>
-                    
-            </tr>
-            <% count++; } %>
-         </tbody>
+                for (PaymentTransaction fee : list) {
+                %>
+                <tr>
+                    <td><%= count++ %></td>
+                    <td><%= fee.getStudentNAme() %></td>
+                    <td><%= fee.getTotal_fee() %></td>
+                    <td><%= fee.getPaidFee() %></td>
+                    <td><%= fee.getRemaingFee() %></td>
+                    <td><%= fee.getStudentClass() %></td>
+                    <td><%= fee.getDateOfTransaction() %></td>
+                    <td><%= fee.getTimeOfTransaction() %></td>
+                    <td><%= fee.getModeOfPayment() %></td>
+                    <td><%= fee.getAdminName() %></td>
+                </tr>
+                <%
+                    }
+                %>
+            </tbody>
         </table>
     </div>
 </div>

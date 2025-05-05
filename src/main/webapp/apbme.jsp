@@ -49,7 +49,7 @@ integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNL
        margin-bottom: 5px;
        background: transparent;
        outline: 0px;
-     }
+      }
      #small{
        width:80px;
        margin-top: 5px;
@@ -121,14 +121,15 @@ integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNL
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="allStudents.jsp">All Student Info</a></li>
             <li><a class="dropdown-item" href="BillingPage.jsp">Student Fee Payment</a></li>
-            <li><a class="dropdown-item" href="#">Create Student Details</a></li>
+            <li><a class="dropdown-item" href="studentreg.jsp">Create Student Details</a></li>
+            <li><a class="dropdown-item" href="bulkimporting.jsp">Create Bulk</a></li>
             <li><a class="dropdown-item" href="#">Update Student Details</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Payments</a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="">All Payment Details</a></li>
+            <li><a class="dropdown-item" href="allpayments.jsp">All Payment Details</a></li>
             <li><a class="dropdown-item" href="apbme.jsp">Admin Payment</a></li>
           </ul>
         </li>
@@ -136,6 +137,27 @@ integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNL
         <li class="nav-item"><a class="nav-link" href="#">About Us</a></li>
       </ul>
 
+    <%
+        HttpSession session2 = request.getSession();
+        String name = (String) session2.getAttribute("adminName");
+        String userName = "";
+        int tempid = (int) session2.getAttribute("adminId");
+        
+        for(int i= 0 ; i<=name.length()-1 ; i++)
+        {
+        	char ch = name.charAt(i);
+        	if(ch == ' ' )
+        	{
+        		break;
+        	}
+        	else
+        	{
+        		userName = userName+ch;
+        	}
+        }
+        %>
+        <div style="display: flex; align-items: center; margin-left: 20px; gap: 10px;">
+    <p style="color: white; margin-right: 40px; padding-top: 10px;">Hello, <%=userName%></p>
       <!-- Right side Login and Signup buttons -->
       <div class="d-flex">
         <a class="btn btn-outline-light me-2" href="AdminLogin.jsp">Login</a>
@@ -163,10 +185,9 @@ integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNL
             </tr>
             <br><br>
             <%
-            
-              
+                          
             AllPaymentsByAdmin allPaymentsByAdmin = new TransactionPageImp();
-            List<PaymentTransaction> list = allPaymentsByAdmin.selectAllPayments();
+            List<PaymentTransaction> list = allPaymentsByAdmin.selectAllPaymentsByAdmin(tempid);
                 // Iterate over the product list
                 int count = 1;
                 for (PaymentTransaction p : list) {
