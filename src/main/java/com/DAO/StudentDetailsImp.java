@@ -47,6 +47,7 @@ public class StudentDetailsImp implements StudentDetailsInter{
 				studentDetails.setStudentClass(resultSet.getString("Student_Class"));
 				list.add(studentDetails);
 				
+			System.out.println(list);
 			}
 			return list;		
 		} catch (ClassNotFoundException | SQLException e) {

@@ -236,7 +236,11 @@
       <form action="addPayment" method="POST">
        <tr>
           <td class="label">Admission Number:</td>
-          <td><input value="<%= request.getParameter("admin.no") %>" name="AdmissionNumber" readOnly></td>
+          <% String admissionNo = request.getParameter("admin.no"); %>
+          <td><input value="<%= admissionNo %>" name="AdmissionNumber" readOnly></td>
+          <%
+          session2.setAttribute("admissionNo", admissionNo);
+          %>
         </tr>
         <tr>
           <td class="label">Student Name:</td>
@@ -263,14 +267,23 @@
         <tr>
           <td class="label">Total Fee:</td>
           <td>&#8377; <input value="<%=request.getParameter("amount")%>" name="totalFee" readOnly></td>
+          <%
+          session2.setAttribute("totalFee", request.getParameter("amount"));
+          %>
         </tr>
         <tr>
           <td class="label">Fee Already Paid:</td>
           <td>&#8377; <input value="<%= request.getParameter("paidfee") %>"name="paidFee" readOnly></td>
+            <%
+           session2.setAttribute("paidFee", request.getParameter("paidfee"));
+          %>
         </tr>
         <tr>
           <td class="label">Fee Paid Now:</td>
           <td>&#8377; <input value="<%= request.getParameter("payingfee") %>"name="payingFee" readOnly></td>
+           <%
+          session2.setAttribute("payingFee", request.getParameter("payingfee"));
+          %>
         </tr>
         <tr>
           <td class="label total">Remaining Balance:</td>
@@ -283,6 +296,7 @@
                 double now = Double.parseDouble(request.getParameter("payingfee"));
                 double balance = paid + now;
                 double remainingBalance = total - balance;
+                session2.setAttribute("remainingBalance", remainingBalance);
                 out.print(remainingBalance);
               } catch (Exception e) {
                 out.print("N/A");
@@ -290,6 +304,10 @@
             %>
             
           </td>
+        </tr>
+        <tr>
+          <td class="label">Phone Number:</td>
+          <td><input value="<%= request.getParameter("") %>" name="phoneNumber" readOnly></td>
         </tr>
       </table>
     </div>

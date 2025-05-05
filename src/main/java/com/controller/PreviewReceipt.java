@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.tomcat.jni.Local;
 
 import com.DTO.FeePayment;
 
@@ -28,8 +27,13 @@ public class PreviewReceipt extends HttpServlet{
 	    double amount = Double.parseDouble(request.getParameter("amount"));
 	    double paidFee = Double.parseDouble(request.getParameter("paidfee"));
 	    double payingFee = Double.parseDouble(request.getParameter("payingfee"));
+	    String modeOfPayment = request.getParameter("paymentMode");
 	    String class1 = request.getParameter("class1");
 	    
+	    if(modeOfPayment.equals("Online")) {
+	    	RequestDispatcher requestDispatcher = request.getRequestDispatcher("payment.jsp");
+		    requestDispatcher.forward(request, response);
+	    }
 	    
 	    HttpSession session =  request.getSession();
 	    session.setAttribute("Class1",class1);

@@ -35,7 +35,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
 
     <style>
-    
+    body {
+        padding-top: 75px; /* Adjust to match actual navbar height */
+    }
     table.dataTable thead th {
         position: sticky;
         top: 0;

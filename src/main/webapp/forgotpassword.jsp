@@ -13,7 +13,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-           background: linear-gradient(135deg, #dff6ff, #b6e3f9);;
+           background: linear-gradient(135deg, #dff6ff, #b6e3f9);
             height: 710px;
             display: flex;
             justify-content: center;
@@ -51,7 +51,7 @@
         background: #f0f2f5;
          }
         .btn {
-            background: #8e44ad;
+             background: linear-gradient(135deg, #dff6ff, #b6e3f9);
             color: white;
             padding: 10px;
             width: 85%;

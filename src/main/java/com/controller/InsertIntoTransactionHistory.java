@@ -69,7 +69,7 @@ public class InsertIntoTransactionHistory extends HttpServlet{
 		AllPaymentsByAdmin allPaymentsByAdmin = new TransactionPageImp();
 		allPaymentsByAdmin.insertAllPayments(paymentTransaction);
 			
-		RequestDispatcher requestDispatcher = req.getRequestDispatcher("txnscompleted.jsp");
+		RequestDispatcher requestDispatcher = req.getRequestDispatcher("printreceipt.jsp");
 		requestDispatcher.forward(req, resp);
 		} else {
 			PrintWriter writer = resp.getWriter();

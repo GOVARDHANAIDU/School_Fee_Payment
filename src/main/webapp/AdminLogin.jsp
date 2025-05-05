@@ -7,153 +7,118 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login</title>
     <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2132/2132732.png" type="image/x-icon">
+
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #dff6ff, #b6e3f9);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .login-container {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-            width: 380px;
-            text-align: center;
-            float : left;
-        }
-        h2 {
-            margin-bottom: 20px;
-            font-size: 24px;
-            color: #333;
-            font-weight: bold;
-        }
-        .input-group {
-            position: relative;
-            margin-bottom: 20px;
-        }
-        .input-group input {
-            width: 90%;
-            padding: 12px;
-            border: 2px solid black;
-            border-radius: 5px;
-            font-size: 16px;
-            outline: none;
-            
-        }
-        .input-group input:focus {
-            border-color: #4cc43d;
-        }
-        .input-group label {
-            position: absolute;
-            top: 50%;
-            left: 12px;
-            transform: translateY(-50%);
-            font-size: 18px;
-            color: black;
-            background: white;
-            padding: 0 5px;
-            
-            transition: 0.3s ease;
-        }
-         .input-group input:hover{
-        background: #f0f2f5;
-         }
-        .input-group input:focus + label,
-        .input-group input:valid + label {
-            top: 0;
-            font-size: 12px;
-            color: #0c0c0c;
-        }
-        .btn {
-            width: 85%;
-            left : 30px;
-            padding: 12px;
-            background: #76e6f0;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: 0.3s;
-            font-size: 16px;
-        }
-        .btn:hover {
-            background: #76e6f0;
-        }
-        .links {
-            margin-top: 15px;
-            font-size: 14px;
-        }
-        .links a {
-            text-decoration: none;
-            color: black;
-            transition: 0.3s;
-        }
-        .links a:hover {
-            text-decoration: underline;
-        }
-        
-        .spinner {
-      border: 5px solid #f3f3f3;
-      border-top: 5px solid teal;
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      animation: spin 1s linear infinite;
-      margin-top:-19%;
-      margin-left:44%;
-      float: left;
-    }
+       body {
+		     background: url('https://img.freepik.com/free-vector/education-pattern-background-doodle-style_53876-115373.jpg') no-repeat center center fixed;
+		    background-size: cover;
+		    height: 100vh;
+		    display: flex;
+		    align-items: center;
+		    justify-content: center;
+		}
 
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+            animation: fadeIn 0.8s ease-in-out;
+        }
 
-    #loading {
-      display: none;
-      text-align: center;
-    }
-        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-floating label {
+            padding-left: 0.75rem;
+        }
+
+        .error-msg {
+            color: red;
+            font-size: 0.85rem;
+        }
+
+        #loadingSpinner {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <h2>Admin Login</h2>
-        <form id="balanceForm" action = "loginpage" method="Post">
-            <div class="input-group">
-                <input type="email" required name = "emailid">
-                <label>Email ID</label>
+    <div class="container">
+        <div class="login-card mx-auto">
+            <h3 class="text-center mb-4">Admin Login</h3>
+            <form id="loginForm" action="loginpage" method="post" novalidate>
+                <div class="form-floating mb-3">
+                    <input type="email" class="form-control" id="email" name="emailid" placeholder="name@example.com" required>
+                    <label for="email">Email ID</label>
+                    <div class="error-msg" id="emailError"></div>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                    <label for="password">Password</label>
+                    <div class="error-msg" id="passwordError"></div>
+                </div>
+
+                <div id="loadingSpinner" class="text-center mb-3">
+                    <div class="spinner-border text-info" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+
+                <button type="button" class="btn btn-primary w-100" onclick="validateAndSubmit()">Login</button>
+            </form>
+            <div class="text-center mt-3">
+                <a href="forgotpassword.jsp" class="text-decoration-none">Forgot Password?</a>
             </div>
-            <div id="loading" style="display: none;">
-             <div class="spinner">
-             </div>
-          </div>
-            <div class="input-group">
-                <input type="password" required name="password">
-                <label>Password</label>
-            </div>
-            <button type="button" class="btn" onclick="submitForm()">Login</button>
-        </form>
-        <div class="links">
-            <a href="forgotpassword.jsp">Forgot Password?</a>
         </div>
     </div>
-    
- 
+
+    <!-- Bootstrap 5 JS Bundle CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
-    function submitForm() {
-        // Show loading spinner
-        document.getElementById("loading").style.display = "block";
+        function validateAndSubmit() {
+            const email = document.getElementById('email');
+            const password = document.getElementById('password');
+            const emailError = document.getElementById('emailError');
+            const passwordError = document.getElementById('passwordError');
+            const loading = document.getElementById('loadingSpinner');
 
-        // Submit the form
-        document.getElementById("balanceForm").submit();
-       
-      }
-</script>
+            let isValid = true;
+            emailError.textContent = '';
+            passwordError.textContent = '';
+            email.classList.remove('is-invalid');
+            password.classList.remove('is-invalid');
 
+            const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+
+            if (!email.value.match(emailPattern)) {
+                emailError.textContent = 'Please enter a valid email address.';
+                email.classList.add('is-invalid');
+                isValid = false;
+            }
+
+            if (password.value.length < 6) {
+                passwordError.textContent = 'Password must be at least 6 characters.';
+                password.classList.add('is-invalid');
+                isValid = false;
+            }
+
+            if (isValid) {
+                loading.style.display = "block";
+                setTimeout(() => {
+                    document.getElementById('loginForm').submit();
+                }, 800);
+            }
+        }
+    </script>
 </body>
 </html>
