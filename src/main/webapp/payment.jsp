@@ -1,17 +1,98 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment</title>
-    <!-- Bootstrap CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Animate.css for animation -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <title>Student Payment</title>
+      <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2132/2132732.png" type="image/x-icon">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        body {
+		    font-family: 'Segoe UI', sans-serif;
+		    background-color: #f2f2f2;
+		    margin: 0;
+		    /* reserve space for navbar */
+		}
+		
+		.container {
+		    background: white;
+		    padding: 30px 40px;
+		    border-radius: 12px;
+		    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+		    width: 100%;
+		    max-width: 400px;
+		    margin: 0 auto; /* center horizontally */
+		    margin-top: 30px; /* space below navbar */
+		}
+
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            background-color: #0b5ed7;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #084bb5;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+                width: 90%;
+            }
+        }
+        
+        
+         .spinner {
+	      border: 5px solid #f3f3f3;
+	      border-top: 5px solid teal;
+	      border-radius: 50%;
+	      width: 60px;
+	      height: 60px;
+	      animation: spin 1s linear infinite;
+	      margin-top:-19%;
+	      margin-left:44%;
+	      float: left;
+	    }
+	
+	    @keyframes spin {
+	      0% { transform: rotate(0deg); }
+	      100% { transform: rotate(360deg); }
+	    }
+	
+	    #loading {
+	      display: none;
+	      text-align: center;
+	    }
+    </style>
 </head>
 <body>
-
-
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
@@ -32,6 +113,7 @@
             <li><a class="dropdown-item" href="BillingPage.jsp">Student Fee Payment</a></li>
             <li><a class="dropdown-item" href="studentreg.jsp">Create Student Details</a></li>
             <li><a class="dropdown-item" href="bulkimporting.jsp">Create Bulk</a></li>
+            <li><a class="dropdown-item" href="payment.jsp">Online Payment</a></li>
             <li><a class="dropdown-item" href="#">Update Student Details</a></li>
           </ul>
         </li>
@@ -77,105 +159,79 @@
   </div>
 </nav>
 
-    <div class="container mt-5">
-        <h2 class="text-center">Student Payment Form</h2>
 
-        <form id="paymentForm" method="post" action="/createOrder">
-            <!-- Name -->
-            <div class="form-floating mb-3">
-                <input type="text" id="name" name="name" class="form-control form-control-sm" required>
-                <label for="name">Name</label>
-            </div>
-
-            <!-- Email -->
-            <div class="form-floating mb-3">
-                <input type="email" id="email" name="email" class="form-control form-control-sm" required>
-                <label for="email">Email</label>
-            </div>
-
-            <!-- Phone Number -->
-            <div class="form-floating mb-3">
-                <input type="text" id="phoneNo" name="phoneNo" class="form-control form-control-sm" required>
-                <label for="phoneNo">Phone Number</label>
-            </div>
-
-            <!-- Course -->
-            <div class="form-floating mb-3">
-                <input type="text" id="course" name="course" class="form-control form-control-sm" required>
-                <label for="course">Course</label>
-            </div>
-
-            <!-- Amount -->
-            <div class="form-floating mb-3">
-                <input type="number" id="amount" name="amount" class="form-control form-control-sm" required>
-                <label for="amount">Amount (in INR)</label>
-            </div>
-
-            <!-- Proceed to Payment Button -->
-            <button type="button" id="payButton" class="btn btn-primary">Proceed to Payment</button>
+    <div class="container">
+        <h2>Student Payment</h2>
+        <form id="paymentForm">
+            <input type="text" id="name" value="<%=request.getParameter("studentName") %>" required>
+            <input type="email" id="email" value="<%=request.getParameter("emailid") %>"placeholder="Email" >
+            <input type="text" id="phone" placeholder="Phone" value="<%=request.getParameter("phoneNumber") %>"required>
+            <input type="text" id="course" placeholder="Course" value="<%=request.getParameter("class1") %>" required>
+            <input type="number" id="amount" placeholder="Amount (INR)" value="<%=request.getParameter("payingfee") %>" required>
+            <button type="button" onclick="payNow()">Pay Now</button>
         </form>
-
-        <!-- Payment Success Message -->
-        <div id="paymentSuccess" class="mt-4" style="display:none;">
-            <div class="alert alert-success animate__animated animate__fadeIn" role="alert">
-                <i class="bi bi-check-circle"></i> Payment Successful!
-            </div>
-        </div>
     </div>
 
-    <!-- Bootstrap and Icon CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-
     <script>
-        document.getElementById('payButton').onclick = function() {
-            var form = document.getElementById('paymentForm');
-            var name = document.getElementById('name').value;
-            var email = document.getElementById('email').value;
-            var phoneNo = document.getElementById('phoneNo').value;
-            var course = document.getElementById('course').value;
-            var amount = document.getElementById('amount').value;
+        function payNow() {
+            const data = {
+                name: document.getElementById("name").value.trim(),
+                email: document.getElementById("email").value.trim(),
+                phone: document.getElementById("phone").value.trim(),
+                course: document.getElementById("course").value.trim(),
+                amount: parseInt(document.getElementById("amount").value.trim())
+            };
 
-            // Send data to the server to create the Razorpay order
-            fetch('/createOrder', {
+            if (!data.name || !data.email || !data.phone || !data.course || isNaN(data.amount)) {
+                alert("Please fill all fields correctly.");
+                return;
+            }
+
+            fetch('createOrder', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: name, email: email, phoneNo: phoneNo, course: course, amount: amount })
+                body: JSON.stringify(data)
             })
-            .then(response => response.json())
-            .then(data => {
+            .then(res => res.json())
+            .then(order => {
                 var options = {
-                    key: 'rzp_test_Jmsp2zqLWnGnkA', // Your Razorpay API Key
-                    amount: amount, // Amount to be paid
-                    currency: 'INR',
-                    name: 'Payment for Course',
-                    description: 'Payment for ' + course,
-                    image: 'https://example.com/logo.png',
-                    order_id: data.razorpayOrderID, // Razorpay Order ID
-                    handler: function(response) {
-                        // Show success message instead of alert
-                        document.getElementById('paymentSuccess').style.display = 'block';
-
-                        // Redirect to the success page after 4 seconds
-                        setTimeout(function() {
-                            window.location.href = 'printreceipt.jsp'; // Redirect to the success page
-                        }, 4000); // 4 seconds delay
+                    key: "rzp_test_Jmsp2zqLWnGnkA", // replace with your real test key or live key
+                    amount: order.amount,
+                    currency: "INR",
+                    name: "Course Payment",
+                    description: "Payment for " + data.course,
+                    order_id: order.razorpayOrderId,
+                    handler: function (response) {
+                        alert("Payment successful! Payment ID: " + response.razorpay_payment_id);
                     },
                     prefill: {
-                        name: name,
-                        email: email,
-                        contact: phoneNo
+                        name: data.name,
+                        email: data.email,
+                        contact: data.phone
                     },
-                    notes: {
-                        course: course
+                    theme: {
+                        color: "#0b5ed7"
+                    },
+                    modal: {
+                        ondismiss: function () {
+                            console.log("Checkout form closed.");
+                        }
                     }
                 };
-
-                var rzp1 = new Razorpay(options);
-                rzp1.open();
+                var rzp = new Razorpay(options);
+                rzp.open();
             })
-            .catch(error => console.error('Error:', error));
+            .catch(err => {
+                console.error("Error creating order", err);
+                alert("Failed to initiate payment.");
+            });
+            
+            
+         // Show loading spinner
+            document.getElementById("loading").style.display = "block";
+
+            // Submit the form
+            document.getElementById("paymentForm").submit();
         }
     </script>
 </body>

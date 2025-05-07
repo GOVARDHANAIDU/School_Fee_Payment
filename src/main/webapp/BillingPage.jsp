@@ -137,7 +137,7 @@
   </div>
 </nav>
 
-<form action="previewthebill">
+
   <div class="maincontainer">
     <h2>Search Student Info</h2>
     <div class="leftcontainer">
@@ -184,10 +184,10 @@
       <input type="text" value="<%=name%>" readonly>
     </div>
 
-    <input type="submit" class="preview" value="Proceed" disabled>
+    <button id="proceedBtn" class="preview" disabled>Proceed</button>
 
   </div>
-</form>
+
 
 
 
@@ -202,7 +202,49 @@
   $(document).ready(function () {
     const $payingFee = $('#payingfee');
     const $proceedBtn = $('.preview');
+    
+    document.getElementById("proceedBtn").addEventListener("click", function () {
+    	  const formData = new URLSearchParams();
 
+    	  formData.append("studentName", document.getElementById("studentDropdown").value);
+    	  formData.append("email", document.getElementById("email").value);
+    	  formData.append("amount", document.getElementById("amount").value);
+    	  formData.append("paidfee", document.getElementById("paidfee").value);
+    	  formData.append("class1", document.getElementById("class1").value);
+    	  formData.append("admissionnumber", document.getElementById("admissionnumber").value);
+    	  formData.append("phone", document.getElementById("phone").value);
+    	  formData.append("payingfee", document.getElementById("payingfee").value);
+    	  formData.append("paymentMode", document.querySelector("select[name='paymentMode']").value);
+
+    	  fetch("previewthebill", {
+    	    method: "POST", // Switch to POST for better practice
+    	    headers: {
+    	      "Content-Type": "application/x-www-form-urlencoded"
+    	    },
+    	    body: formData.toString()
+    	  })
+    	  .then(response => response.text())
+    	  .then(html => {
+    	    if (html.includes("<!--payment-page-->")) {
+    	      window.location.href = "payment.jsp"; // fallback if servlet doesn't redirect
+    	    } else {
+    	      document.open();
+    	      document.write(html);
+    	      document.close();
+    	    }
+    	  })
+    	  .catch(error => {
+    	    console.error("Error:", error);
+    	  });
+    	});
+    
+    
+    
+    
+    
+    
+    
+    
     function toggleProceedButton() {
       const value = parseFloat($payingFee.val());
       if (!value || value <= 0) {

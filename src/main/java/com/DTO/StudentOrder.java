@@ -1,22 +1,16 @@
 package com.DTO;
 
 public class StudentOrder {
-
-	private Integer orderId;
-	private String name;
-	private String email;
-	private String phone;
-	private String course;
-	private Integer amount;
-	private String orderStatus;
-	private String razorpayOrderId;
-	
-	
-	public Integer getOrderId() {
-		return orderId;
-	}
-	public void setOrderId(Integer orderId) {
-		this.orderId = orderId;
+    private String name;
+    private String email;
+    private String phone;
+    private String course;
+    private int amount;
+    private String razorpayOrderId;
+    private String orderStatus;
+	public StudentOrder() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 	public String getName() {
 		return name;
@@ -42,17 +36,11 @@ public class StudentOrder {
 	public void setCourse(String course) {
 		this.course = course;
 	}
-	public Integer getAmount() {
+	public int getAmount() {
 		return amount;
 	}
-	public void setAmount(Integer amount) {
+	public void setAmount(int amount) {
 		this.amount = amount;
-	}
-	public String getOrderStatus() {
-		return orderStatus;
-	}
-	public void setOrderStatus(String orderStatus) {
-		this.orderStatus = orderStatus;
 	}
 	public String getRazorpayOrderId() {
 		return razorpayOrderId;
@@ -60,13 +48,18 @@ public class StudentOrder {
 	public void setRazorpayOrderId(String razorpayOrderId) {
 		this.razorpayOrderId = razorpayOrderId;
 	}
-	
-	
+	public String getOrderStatus() {
+		return orderStatus;
+	}
+	public void setOrderStatus(String orderStatus) {
+		this.orderStatus = orderStatus;
+	}
 	@Override
 	public String toString() {
-		return "StudentOrder [orderId=" + orderId + ", name=" + name + ", email=" + email + ", phone=" + phone
-				+ ", course=" + course + ", amount=" + amount + ", orderStatus=" + orderStatus + ", razorpayOrderId="
-				+ razorpayOrderId + "]";
+		return "StudentOrder [name=" + name + ", email=" + email + ", phone=" + phone + ", course=" + course
+				+ ", amount=" + amount + ", razorpayOrderId=" + razorpayOrderId + ", orderStatus=" + orderStatus + "]";
 	}
-	
+
+    // Getters & Setters
+    
 }

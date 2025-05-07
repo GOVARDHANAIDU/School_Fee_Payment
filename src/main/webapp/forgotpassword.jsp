@@ -2,7 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%@page import="java.util.Set"%>
-<%@page import="com.mysql.cj.Session"%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
