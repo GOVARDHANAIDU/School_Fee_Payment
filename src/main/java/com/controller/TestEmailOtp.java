@@ -1,6 +1,5 @@
 package com.controller;
 
-import java.awt.print.Printable;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
@@ -47,7 +46,7 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws Se
     		RequestDispatcher requestDispatcher = req.getRequestDispatcher("NewPassword.jsp");
             requestDispatcher.forward(req, resp);           
     	} else {  			
-    		RequestDispatcher dispatcher = req.getRequestDispatcher("ForgotPassword.jsp");
+    		RequestDispatcher dispatcher = req.getRequestDispatcher("forgotPassword.jsp");
 			dispatcher.include(req, resp);
 			writer.println("<script>"); 
 			  writer.println("alert('The OTP will be sent only one time Due to some Security reasons. Try Again..!')"); 			  

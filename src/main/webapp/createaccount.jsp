@@ -8,10 +8,6 @@
   <title>Admin Registration</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
- 
- <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2132/2132732.png" type="image/x-icon">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <style>
     body {
       font-family: 'Inter', sans-serif;
@@ -40,13 +36,6 @@
       font-size: 0.875rem;
       color: #dc2626;
       margin-top: 0.25rem;
-    }
-
-    .success-message {
-      color: green;
-      font-weight: 500;
-      margin-bottom: 1rem;
-      text-align: center;
     }
 
     .floating-input {
@@ -113,13 +102,21 @@
         gap: 1.5rem;
       }
     }
+
+    @keyframes slideDown {
+      from { transform: translate(-50%, -100%); opacity: 0; }
+      to { transform: translate(-50%, 0); opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { transform: translate(-50%, 0); opacity: 1; }
+      to { transform: translate(-50%, -100%); opacity: 0; }
+    }
   </style>
 </head>
 <body>
 
-
 <%
-    String message = "", error = "";
     if(request.getParameter("name") != null) {
         String name = request.getParameter("name");
         String email = request.getParameter("email");
@@ -132,7 +129,7 @@
         String pincode = request.getParameter("pincode");
 
         if (!password.equals(confirmPassword)) {
-            error = "Passwords do not match. Please try again.";
+            out.println("<script>alert('Passwords do not match. Please try again.');</script>");
         } else {
             Connection con = null;
             PreparedStatement ps = null;
@@ -154,12 +151,42 @@
 
                 int i = ps.executeUpdate();
                 if (i > 0) {
-                    message = "✅ Admin registered successfully!";
+                    out.println("<script>" +
+                        "function showPopup(message, isSuccess) {" +
+                        "    const popup = document.createElement('div');" +
+                        "    popup.style.position = 'fixed';" +
+                        "    popup.style.top = '20px';" +
+                        "    popup.style.left = '50%';" +
+                        "    popup.style.transform = 'translateX(-50%)';" +
+                        "    popup.style.padding = '15px 30px';" +
+                        "    popup.style.borderRadius = '5px';" +
+                        "    popup.style.color = 'white';" +
+                        "    popup.style.fontWeight = 'bold';" +
+                        "    popup.style.zIndex = '1000';" +
+                        "    popup.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';" +
+                        "    popup.style.animation = 'slideDown 0.5s ease-out';" +
+                        "    popup.style.backgroundColor = isSuccess ? '#4CAF50' : '#f44336';" +
+                        "    popup.textContent = message;" +
+                        "    document.body.appendChild(popup);" +
+                        "    setTimeout(() => {" +
+                        "        popup.style.animation = 'slideUp 0.5s ease-out';" +
+                        "        setTimeout(() => {" +
+                        "            document.body.removeChild(popup);" +
+                        "            if(isSuccess) window.location.href='AdminLogin.jsp';" +
+                        "        }, 500);" +
+                        "    }, 2000);" +
+                        "}" +
+                        "showPopup('Admin Registered Successfully!', true);" +
+                        "</script>");
                 } else {
-                    error = "Registration failed. Please try again.";
+                    out.println("<script>showPopup('Registration Failed!', false);</script>");
                 }
             } catch(Exception e) {
-                error = "⚠ Database error: " + e.getMessage();
+                if (e.getMessage().contains("Duplicate entry")) {
+                    out.println("<script>showPopup('Error: Email or Aadhar number already exists!', false);</script>");
+                } else {
+                    out.println("<script>showPopup('Database error: " + e.getMessage().replace("'", "\\'") + "', false);</script>");
+                }
             } finally {
                 try { if(ps != null) ps.close(); } catch(Exception e) {}
                 try { if(con != null) con.close(); } catch(Exception e) {}
@@ -168,76 +195,8 @@
     }
 %>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">SAS School</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <!-- Left side nav items -->
-      <ul class="navbar-nav me-auto">
-        <li class="nav-item"><a class="nav-link active" href="home.jsp">Home</a></li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Students</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="allStudents.jsp">All Student Info</a></li>
-            <li><a class="dropdown-item" href="BillingPage.jsp">Student Fee Payment</a></li>
-            <li><a class="dropdown-item" href="studentreg.jsp">Create Student Details</a></li>
-            <li><a class="dropdown-item" href="bulkimporting.jsp">Create Bulk</a></li>
-            <li><a class="dropdown-item" href="#">Update Student Details</a></li>
-          </ul>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Payments</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="apbme.jsp">All Payment Details</a></li>
-            <li><a class="dropdown-item" href="paymentbyadmin.jsp">Admin Payment</a></li>
-          </ul>
-        </li>
-        <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">About Us</a></li>
-      </ul>
-
-    <%
-        HttpSession session2 = request.getSession();
-        String name = (String) session2.getAttribute("adminName");
-        String userName = "";
-       
-        
-        for(int i= 0 ; i<=name.length()-1 ; i++)
-        {
-        	char ch = name.charAt(i);
-        	if(ch == ' ' )
-        	{
-        		break;
-        	}
-        	else
-        	{
-        		userName = userName+ch;
-        	}
-        }
-        %>
-        <div style="display: flex; align-items: center; margin-left: 20px; gap: 10px;">
-    <p style="color: white; margin-right: 40px; padding-top: 10px;">Hello, <%=userName%></p>
-      <!-- Right side Login and Signup buttons -->
-      <div class="d-flex">
-        <a class="btn btn-outline-light me-2" href="AdminLogin.jsp">Login</a>
-        <a class="btn btn-outline-warning" href="createaccount.jsp">Signup</a>
-      </div>
-    </div>
-  </div>
-</nav>
-
-
 <div class="form-container">
   <h1 class="form-title">Admin Registration</h1>
-  <% if (!message.isEmpty()) { %>
-    <p class="success-message"><%= message %></p>
-  <% } else if (!error.isEmpty()) { %>
-    <p class="error-message text-center"><%= error %></p>
-  <% } %>
 
   <form method="post" id="adminForm" onsubmit="return validateAdminForm(event)">
     <div class="form-grid">
@@ -299,6 +258,37 @@
 </div>
 
 <script>
+  function showPopup(message, isSuccess) {
+    const popup = document.createElement('div');
+    popup.style.position = 'fixed';
+    popup.style.top = '20px';
+    popup.style.left = '50%';
+    popup.style.transform = 'translateX(-50%)';
+    popup.style.padding = '15px 30px';
+    popup.style.borderRadius = '5px';
+    popup.style.color = 'white';
+    popup.style.fontWeight = 'bold';
+    popup.style.zIndex = '1000';
+    popup.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+    popup.style.animation = 'slideDown 0.5s ease-out';
+    
+    if (isSuccess) {
+      popup.style.backgroundColor = '#4CAF50';
+    } else {
+      popup.style.backgroundColor = '#f44336';
+    }
+    
+    popup.textContent = message;
+    document.body.appendChild(popup);
+    
+    setTimeout(() => {
+      popup.style.animation = 'slideUp 0.5s ease-out';
+      setTimeout(() => {
+        document.body.removeChild(popup);
+      }, 500);
+    }, 3000);
+  }
+
   function validateAdminForm(event) {
     event.preventDefault();
     let valid = true;
@@ -360,4 +350,4 @@
 </script>
 
 </body>
-</html>
+</html> 

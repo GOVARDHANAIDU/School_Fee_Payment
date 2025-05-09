@@ -38,7 +38,7 @@ public class ForgotPasswordOTP extends HttpServlet {
               requestDispatcher.forward(req, resp);
               
           } else {
-        	  RequestDispatcher requestDispatcher = req.getRequestDispatcher("ForgotPassword.jsp");
+        	  RequestDispatcher requestDispatcher = req.getRequestDispatcher("forgotPassword.jsp");
               requestDispatcher.forward(req, resp); 	 
          }
 	  }	  

@@ -70,29 +70,39 @@
         <li class="nav-item"><a class="nav-link active" href="home.jsp">Home</a></li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Students</a>
-          <ul class="dropdown-menu">
+            <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="allStudents.jsp">All Student Info</a></li>
             <li><a class="dropdown-item" href="BillingPage.jsp">Student Fee Payment</a></li>
             <li><a class="dropdown-item" href="studentreg.jsp">Create Student Details</a></li>
             <li><a class="dropdown-item" href="bulkimporting.jsp">Create Bulk</a></li>
-            <li><a class="dropdown-item" href="payment.jsp">Online Payment</a></li>
-            <li><a class="dropdown-item" href="#">Update Student Details</a></li>
+            <li><a class="dropdown-item" href="newupdates.jsp">Update Student Details</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Payments</a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="allpayments.jsp">All Payment Details</a></li>
-            <li><a class="dropdown-item" href="apbme.jsp">Admin Payment</a></li>
+            <li><a class="dropdown-item" href="apbme.jsp">Payment By Admin </a></li>
+            <li><a class="dropdown-item" href="paymentdetails.jsp">All Payment Status</a></li>
           </ul>
         </li>
         <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
         <li class="nav-item"><a class="nav-link" href="#">About Us</a></li>
       </ul>
 
+
        <%
+        
+       
         HttpSession session2 = request.getSession();
         String name = (String) session2.getAttribute("adminName");
+        
+        if (name == null) {
+            // Redirect if not logged in
+            response.sendRedirect("AdminLogin.jsp");
+            return;
+        }
+        
         String userName = "";
         for(int i= 0 ; i<=name.length()-1 ; i++)
         {
@@ -114,7 +124,7 @@
          
       <!-- Right side Login and Signup buttons -->
       <div class="d-flex">
-        <a class="btn btn-outline-light me-2" href="AdminLogin.jsp">Login</a>
+        <a class="btn btn-outline-light me-2" href="AdminLogin.jsp">Logout</a>
         <a class="btn btn-outline-warning" href="createaccount.jsp">Signup</a>
       </div>
     </div>

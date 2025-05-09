@@ -188,13 +188,20 @@
         <li class="nav-item"><a class="nav-link" href="#">About Us</a></li>
       </ul>
 
-       <%
-        HttpSession session2 = request.getSession();
-        String name = (String) session2.getAttribute("adminName");
+        <%
+       HttpSession session2 = request.getSession();
+        String Aname = (String) session2.getAttribute("adminName");
         String userName = "";
-        for(int i= 0 ; i<=name.length()-1 ; i++)
+        
+        if (Aname == null) {
+            // Redirect if not logged in
+            response.sendRedirect("AdminLogin.jsp");
+            return;
+        }
+        
+        for(int i= 0 ; i<=Aname.length()-1 ; i++)
         {
-        	char ch = name.charAt(i);
+        	char ch = Aname.charAt(i);
         	if(ch == ' ' )
         	{
         		break;
@@ -231,16 +238,19 @@
   FeePayment feePayment = new FeePayment();
   
   %>
+  <form action="addPayment" method="POST"> 
     <div class="info-section">
       <table>
-      <form action="addPayment" method="POST">
+      
        <tr>
           <td class="label">Admission Number:</td>
-          <% String admissionNo = request.getParameter("admin.no"); %>
-          <td><input value="<%= admissionNo %>" name="AdmissionNumber" readOnly></td>
-          <%
-          session2.setAttribute("admissionNo", admissionNo);
-          %>
+           <%  String admissionNumber = request.getParameter("admissionnumber");
+               session2.setAttribute("admissionNumber", admissionNumber);
+               String studentName = (String)session2.getAttribute("studentName");
+           %>
+           
+          <td><input value="<%=admissionNumber%>" name="AdmissionNumber" readOnly></td>
+        
         </tr>
         <tr>
           <td class="label">Student Name:</td>
@@ -249,11 +259,11 @@
         
         <tr>
           <td class="label">Email ID:</td>
-          <td><input value="<%= request.getParameter("emailid") %>" name="emailId" readOnly></td>
+          <td><input value="<%= request.getParameter("email") %>" name="emailId" readOnly></td>
         </tr>
         <tr>
           <td class="label">Phone Number:</td>
-          <td><input value="<%= request.getParameter("phoneNumber") %>" name="phoneNumber" readOnly></td>
+          <td><input value="<%= request.getParameter("phone") %>" name="phoneNumber" readOnly></td>
         </tr>
       </table>
     </div>
@@ -263,6 +273,9 @@
         <tr>
           <td class="label">Mode of Payment:</td>
           <td> <input value="<%= request.getParameter("paymentMode") %>" name="modeOfPayment" readOnly></td>
+            <%
+          session2.setAttribute("modeOfPay", request.getParameter("paymentMode"));
+          %>
         </tr>
         <tr>
           <td class="label">Total Fee:</td>
@@ -306,20 +319,25 @@
           </td>
         </tr>
         <tr>
-          <td class="label">Phone Number:</td>
-          <td><input value="<%= request.getParameter("") %>" name="phoneNumber" readOnly></td>
+          <td class="label">Class&Section:</td>
+          <td><input value="<%= request.getParameter("class1") %>" name="phoneNumber" readOnly></td>
         </tr>
       </table>
     </div>
 
     <div class="footer">
       <p>Generated on: <%= new java.util.Date() %></p>
-      <p>Thank you for your payment!</p>
+     
     </div>
-   <button class="btn-back" onclick="history.back()">Back</button>
+     <button class="btn-back" onclick="history.back()">← Back</button>
     <button type="submit" class="print-btn">Proceed</button>
-    </form>
+    
+      </form>
   </div>
+ 
  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+ 
+
+ 
 </body>
 </html>

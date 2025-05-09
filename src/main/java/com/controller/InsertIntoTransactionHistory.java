@@ -46,11 +46,15 @@ public class InsertIntoTransactionHistory extends HttpServlet{
 		String class1 = (String) session.getAttribute("Class1");
 		int id =  (int) session.getAttribute("adminId");
 		
+		
+		
 		PaymentTransaction paymentTransaction = new PaymentTransaction();
 		
 		StudentDetailsInter studentDetailsInter = new StudentDetailsImp();
 		
-		if(studentDetailsInter.updateRemainingFee(adminNo, payingfee)) {
+		double paidfee = studentDetailsInter.getPaidFee(adminNo);
+		
+		if(studentDetailsInter.updateRemainingFee(adminNo, payingfee) ) {
 			
 		paymentTransaction.setAdmin_no(adminNo);
 		paymentTransaction.setStudentNAme(studentName);
@@ -69,12 +73,16 @@ public class InsertIntoTransactionHistory extends HttpServlet{
 		AllPaymentsByAdmin allPaymentsByAdmin = new TransactionPageImp();
 		allPaymentsByAdmin.insertAllPayments(paymentTransaction);
 			
+		
 		RequestDispatcher requestDispatcher = req.getRequestDispatcher("printreceipt.jsp");
 		requestDispatcher.forward(req, resp);
+		
 		} else {
+			RequestDispatcher requestDispatcher = req.getRequestDispatcher("BillingPage.jsp");
+			requestDispatcher.include(req, resp);
 			PrintWriter writer = resp.getWriter();
 			writer.print("<script>");
-			writer.print("alert('Transaction failed')");
+			writer.print("alert('Transaction Failed')");
 			writer.print("</script>");
 		}
 	}

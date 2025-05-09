@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.DTO.PaymentTransaction;
+import com.DTO.StudentOrder;
 
 public class TransactionPageImp implements AllPaymentsByAdmin {
 	private static final String insertDetails =
@@ -18,6 +19,7 @@ public class TransactionPageImp implements AllPaymentsByAdmin {
 			+ "time_of_payment, mode_of_payment, admin_name, phone_number, Email_ID,Paid_amount,Student_Class,admin_id)"
 			+ "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	private static final String selectAll = "Select * from transactions";
+	private static final String selectAllPayment = "Select * from student_orders";
 	private static final String selectAllOfAdmin = "Select * from transactions where admin_id = ?";
 	@Override
 	public boolean insertAllPayments(PaymentTransaction paymentTransaction) {
@@ -41,7 +43,7 @@ public class TransactionPageImp implements AllPaymentsByAdmin {
 			preparedStatement.setString(13, paymentTransaction.getStudentClass());
 			preparedStatement.setInt(14, paymentTransaction.getAdminId());
 			int result = preparedStatement.executeUpdate();
-			System.out.println(preparedStatement);
+			
 			if(result != 0) {
 				return true;
 			} else {
@@ -73,7 +75,7 @@ public class TransactionPageImp implements AllPaymentsByAdmin {
 				paymentTransaction.setStudentNAme(resultSet.getString("student_name"));
 				paymentTransaction.setStudentClass(resultSet.getString("Student_Class"));
 				paymentTransaction.setTotal_fee(resultSet.getDouble("total_amount"));
-				paymentTransaction.setPaidFee(resultSet.getDouble("Last_Paid_Amount"));
+				paymentTransaction.setPayingFee(resultSet.getDouble("Last_Paid_Amount"));
 				paymentTransaction.setPaidFee(resultSet.getDouble("Paid_amount"));
 				paymentTransaction.setRemaingFee(resultSet.getDouble("remaining_fee_balance"));
 				paymentTransaction.setDateOfTransaction(resultSet.getDate("date_of_payment").toLocalDate());
@@ -83,7 +85,9 @@ public class TransactionPageImp implements AllPaymentsByAdmin {
 				paymentTransaction.setEmail(resultSet.getString("Email_ID"));
 				paymentTransaction.setAdminName(resultSet.getString("admin_name"));
 				list.add(paymentTransaction);
+				
 			}
+			
 			return list;
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -114,7 +118,7 @@ public class TransactionPageImp implements AllPaymentsByAdmin {
 				paymentTransaction.setStudentNAme(resultSet.getString("student_name"));
 				paymentTransaction.setStudentClass(resultSet.getString("Student_Class"));
 				paymentTransaction.setTotal_fee(resultSet.getDouble("total_amount"));
-				paymentTransaction.setPaidFee(resultSet.getDouble("Last_Paid_Amount"));
+				paymentTransaction.setPayingFee(resultSet.getDouble("Last_Paid_Amount"));
 				paymentTransaction.setPaidFee(resultSet.getDouble("Paid_amount"));
 				paymentTransaction.setRemaingFee(resultSet.getDouble("remaining_fee_balance"));
 				paymentTransaction.setDateOfTransaction(resultSet.getDate("date_of_payment").toLocalDate());
@@ -136,4 +140,44 @@ public class TransactionPageImp implements AllPaymentsByAdmin {
 	    
 		return null;
 	}
+	
+	//orderId, name, email, phoneNo, course, student_class, orderStatus, razorpayOrderID, admin_name, admin_no
+	@Override
+	public List<StudentOrder> selectAllPaymentDetails() {
+		
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection connection = 
+					DriverManager.getConnection("jdbc:mysql://localhost:3306/school_data","root","W7301@jqir#");
+			PreparedStatement preparedStatement = connection.prepareStatement(selectAllPayment);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			System.out.println(preparedStatement);
+			List<StudentOrder> list = new ArrayList<StudentOrder>();
+			while(resultSet.next()) {
+				StudentOrder studentOrder = new StudentOrder();
+				studentOrder.setName(resultSet.getString("name"));
+				studentOrder.setEmail(resultSet.getString("email"));
+				studentOrder.setPhone(resultSet.getString("phoneNo"));
+				studentOrder.setCourse(resultSet.getString("course"));
+				studentOrder.setAmount(resultSet.getDouble("amount"));
+				studentOrder.setOrderStatus(resultSet.getString("orderStatus"));
+				studentOrder.setRazorpayOrderId(resultSet.getString("razorpayOrderID"));
+				studentOrder.setAdminName(resultSet.getString("admin_name"));
+				studentOrder.setAdminNo(resultSet.getInt("admin_no"));
+				list.add(studentOrder);
+			}
+			return list;
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+	
+	
 }

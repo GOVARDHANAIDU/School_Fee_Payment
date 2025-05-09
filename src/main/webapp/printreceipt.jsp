@@ -1,150 +1,172 @@
-
 <%@ page import="java.sql.*" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>Print Student Details</title>
-     <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2132/2132732.png" type="image/x-icon">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-   
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2132/2132732.png" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
     <style>
-    
         body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    box-sizing: border-box;
-}
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: #f8f9fa;
+        }
 
-.maincontainer {
-    width: 59%;
-    margin: 0 auto;
-    transition: width 0.3s ease;
-}
+        .maincontainer {
+            width: 210mm;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
 
-@media print {
-    .maincontainer {
-        width: 80%; /* Expand during printing */
-    }
-}
+        .copy {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 1px dashed #ccc;
+        }
 
-.copy {
-    padding: 20px;
-    margin: 30px 0;
-}
+        .header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
 
-.header {
-    text-align: center;
-    font-size: 0.85rem;
-    margin-bottom: 10px;
-}
+        .header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
 
-.header h1 {
-    font-size: 1.2rem;
-    margin: 5px 0;
-}
+        .header p {
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
 
-.header p {
-    margin: 3px 0;
-    font-size: 0.85rem;
-}
+        h2 {
+            text-align: center;
+            font-size: 1rem;
+            text-transform: uppercase;
+            margin: 20px 0;
+            color: #007bff;
+        }
 
-h2 {
-    text-align: center;
-    text-transform: uppercase;
-    font-size: 1rem;
-    margin: 10px 0;
-}
+        .details {
+            margin-top: 10px;
+            margin-left: 60px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px 30px;
+            font-size: 0.9rem;
+            padding: 10px 20px;
+        }
 
-.details {
-    margin-top: 10px;
-    margin-left: 40px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px 20px;
-    font-size: 0.85rem;
-}
+        .details p {
+            margin: 0;
+        }
 
-.details p {
-    margin: 0;
-}
+        .footer-note {
+            text-align: right;
+            font-size: 0.9rem;
+            margin-top: 30px;
+        }
 
-.print-button {
-    margin-top: 30px;
-    text-align: center;
-    
-}
+        .print-button {
+            text-align: center;
+            margin: 30px 0;
+        }
 
-.print-button button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-}
+        .print-button button {
+            padding: 10px 25px;
+            font-size: 16px;
+            border-radius: 5px;
+        }
 
-@media print {
-    .print-button {
-        display: none;
-    }
-}
+        @media print {
+            body {
+                background: none;
+            }
 
+            .print-button {
+                display: none;
+            }
+
+            .maincontainer {
+                box-shadow: none;
+                padding: 0;
+            }
+
+            body::before {
+                content: "";
+                position: fixed;
+                top: 35%;
+                left: 25%;
+                width: 50%;
+                height: 50%;
+                background: url('https://example.com/school-logo.png') no-repeat center center;
+                background-size: contain;
+                opacity: 0.06;
+                z-index: -1;
+            }
+        }
+        
+        
+        .footer-note{
+        text-align: center;
+        
+        }
+        .footer-sign{
+        text-align:right;
+        right:40%;
+        bottom: 45%;
+        padding: 0px;
+        }
+        .footer-sign2{
+        text-align:right;
+        right:40%;
+        bottom: 60%;
+        padding: 0px;
+        
+        }
     </style>
 </head>
 
 <%
-    // Get student ID from request parameter
     HttpSession session2 = request.getSession();
-    
-    String studentNo = (String) session2.getAttribute("admissionNo");
+    String studentNo = (String) session2.getAttribute("admissionNumber");
     String AdminName = (String) session2.getAttribute("AdminName");
-    System.out.println("Admin Name: "+AdminName);
-    String payingFee = (String) session2.getAttribute("payingFee");
-    // Initialize variables
-    Connection con = null;
-    PreparedStatement ps = null;
-    ResultSet rs = null;
 
-    String name = "", class1 = "",admissionNo="", modeofPay = "";
+    String name = "", class1 = "", admissionNo = "", modeofPay = "";
     long phone = 0;
-    double totalFee = 0;
-    double paidFee = 0;
-    double remainingFee = 0;
+
     try {
-        // Load JDBC driver
         Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_data", "root", "W7301@jqir#");
 
-        // Connect to database
-        con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_data", "root", "W7301@jqir#");
-
-        // Prepare SQL query
-        ps = con.prepareStatement("SELECT * FROM studentfeedetails WHERE Admission_Number = ?");
+        PreparedStatement ps = con.prepareStatement("SELECT * FROM studentfeedetails WHERE Admission_Number = ?");
         ps.setString(1, studentNo);
-
-        // Execute query
-        rs = ps.executeQuery();
+        ResultSet rs = ps.executeQuery();
 
         if (rs.next()) {
-        	admissionNo=rs.getString("Admission_Number");
+            admissionNo = rs.getString("Admission_Number");
             name = rs.getString("Student_Name");
             phone = rs.getLong("Phone_Number");
             class1 = rs.getString("Student_Class");
-            totalFee = rs.getDouble("Total_Fee");
-            paidFee = rs.getDouble("Paid_Fee");         
-            remainingFee = rs.getDouble("Remaining_fee");
-            modeofPay = rs.getString("mode_of_payment");      
+            modeofPay = rs.getString("mode_of_payment");
         } else {
             out.println("<p>No student found with ID: " + studentNo + "</p>");
             return;
         }
+
     } catch (Exception e) {
         e.printStackTrace();
     }
 %>
 <body>
 
-<!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">SAS School</a>
@@ -158,32 +180,42 @@ h2 {
         <li class="nav-item"><a class="nav-link active" href="home.jsp">Home</a></li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Students</a>
-          <ul class="dropdown-menu">
+ 		<ul class="dropdown-menu">
             <li><a class="dropdown-item" href="allStudents.jsp">All Student Info</a></li>
             <li><a class="dropdown-item" href="BillingPage.jsp">Student Fee Payment</a></li>
             <li><a class="dropdown-item" href="studentreg.jsp">Create Student Details</a></li>
             <li><a class="dropdown-item" href="bulkimporting.jsp">Create Bulk</a></li>
-            <li><a class="dropdown-item" href="#">Update Student Details</a></li>
+            <li><a class="dropdown-item" href="updatedetails.jsp">Update Student Details</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Payments</a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="allpayments.jsp">All Payment Details</a></li>
-            <li><a class="dropdown-item" href="apbme.jsp">Admin Payment</a></li>
+            <li><a class="dropdown-item" href="apbme.jsp">Payment By Admin </a></li>
+            <li><a class="dropdown-item" href="paymentdetails.jsp">All Payment Status</a></li>
           </ul>
         </li>
         <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
         <li class="nav-item"><a class="nav-link" href="#">About Us</a></li>
       </ul>
 
+
+
        <%
-        
-       String Aname = (String) session2.getAttribute("adminName");
+       
+        String Aname = (String) session2.getAttribute("adminName");
         String userName = "";
+
+         if (Aname == null) {
+             // Redirect if not logged in
+             response.sendRedirect("AdminLogin.jsp");
+             return;
+         }
+        
         for(int i= 0 ; i<=Aname.length()-1 ; i++)
         {
-        	char ch = name.charAt(i);
+        	char ch = Aname.charAt(i);
         	if(ch == ' ' )
         	{
         		break;
@@ -201,7 +233,7 @@ h2 {
          
       <!-- Right side Login and Signup buttons -->
       <div class="d-flex">
-        <a class="btn btn-outline-light me-2" href="AdminLogin.jsp">Login</a>
+        <a class="btn btn-outline-light me-2" href="AdminLogin.jsp">Logout</a>
         <a class="btn btn-outline-warning" href="createaccount.jsp">Signup</a>
       </div>
     </div>
@@ -211,63 +243,140 @@ h2 {
 
 
 
-  <div class="maincontainer">
+
+
+
+
+<div class="maincontainer">
+
+    <!-- Student Copy -->
     <div class="copy">
-    <div class="header">
-      <h1>&#9925; Bright Future High School</h1>
-      <p>123 School Lane, Knowledge City, India | Ph: 86456-56789</p>
-      <hr style="margin-top: 15px;">
-     
-    </div>
+        <div class="header">
+            <h1>🌤️ Bright Future High School</h1>
+            <p>123 School Lane, Knowledge City, India | Ph: 86456-56789</p>
+            <hr>
+        </div>
         <h2>Student Copy</h2>
         <div class="details">
-            <p><strong>Admission.no:</strong> <%= admissionNo %></p>
-            <p><strong>Name:</strong> <%= name %></p>           
-            <p><strong>Phone:</strong> <%= phone %></p>
+            <p><strong>Admission No:</strong> <%= admissionNo %></p>
             <p><strong>Class:</strong> <%= class1 %></p>
+            <p><strong>Name:</strong> <%= name %></p>
+            <p><strong>Phone:</strong> <%= phone %></p>
         </div>
         <div class="details">
-            <p><strong>Mode of Pay:</strong> <%= modeofPay %></p>
-            <p><strong>Total Fee:</strong> <%=totalFee %></p>
-            <p><strong>Paid Fee :</strong> <%= paidFee %></p>
-            <p><strong>Paid Now:</strong> <%= payingFee %></p>           
-            <p><strong>Balance Fee:</strong> <%= remainingFee %></p>          
-            <p><strong>Billed By:</strong> <%= AdminName %></p>
+            <p><strong>Mode of Pay:</strong> <%= session2.getAttribute("modeOfPay") %></p>
+            <p><strong>Total Fee:</strong> <%= session2.getAttribute("totalFee") %></p>
+            <p><strong>Paid Fee:</strong> <%= session2.getAttribute("paidFee") %></p>
+            <p><strong>Paid Now:</strong> <%= session2.getAttribute("payingFee") %></p>
+            <p><strong>Balance Fee:</strong> <%= session2.getAttribute("remainingBalance") %></p>
+            <p><strong>Billed By:</strong> <%= session2.getAttribute("adminName") %></p>
         </div>
-        
+        <div class="footer-note">
+            <p>Generated On: <%= new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new java.util.Date()) %><br>
+            Thank you for your payment</p>
+        </div>
+        <div class="footer-sign">  
+            <p>Signature of Admin.<br><%=session2.getAttribute("adminName")%></p>
+        </div>
     </div>
 
+    <!-- School Copy -->
     <div class="copy">
-    <div class="header">
-      <h1>&#9925; Bright Future High School</h1>
-      <p>123 School Lane, Knowledge City, India | Ph: 86456-56789</p>
-      <hr style="margin-top: 15px;">
-    </div>
+        <div class="header">
+            <h1>🌤️ Bright Future High School</h1>
+            <p>123 School Lane, Knowledge City, India | Ph: 86456-56789</p>
+            <hr>
+        </div>
         <h2>School Copy</h2>
         <div class="details">
-            <p><strong>Admission.no:</strong> <%= admissionNo %></p>
-            <p><strong>Name:</strong> <%= name %></p>           
-            <p><strong>Phone:</strong> <%= phone %></p>
+            <p><strong>Admission No:</strong> <%= admissionNo %></p>
             <p><strong>Class:</strong> <%= class1 %></p>
-            <p><strong>Mode of Pay:</strong> <%= modeofPay %></p>
+            <p><strong>Name:</strong> <%= name %></p>
+            <p><strong>Phone:</strong> <%= phone %></p>
+            
         </div>
         <div class="details">
-            
-            <p><strong>Total Fee:</strong> <%=totalFee %></p>
-            <p><strong>Paid Fee :</strong> <%= paidFee %></p>
-            <p><strong>Paid Now:</strong> <%= payingFee %></p>   
-               
-            <p><strong>Balance Fee:</strong> <%= remainingFee %></p>          
-            <p><strong>Billed By:</strong> <%=AdminName %></p>
-
-            
+            <p><strong>Mode of Pay:</strong> <%= session2.getAttribute("modeOfPay") %></p>
+            <p><strong>Total Fee:</strong> <%= session2.getAttribute("totalFee") %></p>
+            <p><strong>Paid Fee:</strong> <%= session2.getAttribute("paidFee") %></p>
+            <p><strong>Paid Now:</strong> <%= session2.getAttribute("payingFee") %></p>
+            <p><strong>Balance Fee:</strong> <%= session2.getAttribute("remainingBalance") %></p>
+            <p><strong>Billed By:</strong> <%= session2.getAttribute("adminName") %></p>
         </div>
-        
+        <div class="footer-note">
+            <p>Generated On: <%= new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new java.util.Date()) %><br>
+            Thank you for your payment</p>
+        </div>
+        <div class="footer-sign2">  
+            <p>Signature of Admin.<br><%=session2.getAttribute("adminName")%></p>
+        </div>
+    </div>
+
+    <!-- Print Button -->
+    <div class="print-button">
+      <button class="btn btn-primary" onclick="printAndNotify()">
+		    <i class="bi bi-printer-fill me-2"></i> Print Receipt
+		</button>
+    </div>
+    
+       
+    
+</div>
+
+
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+  <div id="printToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        ✅ Receipt printed successfully!
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
   </div>
-    <div class="print-button">
-        <button onclick="window.print()">Print</button>
-    </div>
+</div>
+
+
+<script>
+    function printAndNotify() {
+        window.onafterprint = function () {
+            const toastElement = document.getElementById('printToast');
+            const toast = new bootstrap.Toast(toastElement);
+            toast.show();
+        };
+        window.print();
+    }
+    
+    // Block F5 and Ctrl+R
+    document.addEventListener("keydown", function (e) {
+        if ((e.key === "F5") || (e.ctrlKey && e.key.toLowerCase() === "r")) {
+            e.preventDefault();
+            alert("Page refresh is disabled.");
+        }
+    });
+
+    // Prevent right-click menu (optional, for extra restriction)
+    document.addEventListener("contextmenu", function (e) {
+        e.preventDefault();
+    });
+
+    // Warn user when trying to close/reload
+    window.addEventListener("beforeunload", function (e) {
+        e.preventDefault();
+        e.returnValue = "Are you sure you want to leave or refresh this page?";
+    });
+
+    // Prevent page reload on back/forward navigation
+    if (window.history && window.history.pushState) {
+        window.history.pushState(null, "", window.location.href);
+        window.onpopstate = function () {
+            window.history.pushState(null, "", window.location.href);
+            alert("Back/forward navigation is disabled on this page.");
+        };
+    }
+
+    
+    
+</script>
 
 </body>
 </html>

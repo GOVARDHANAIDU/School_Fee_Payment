@@ -27,7 +27,7 @@ public class PreviewReceipt extends HttpServlet {
         double payingFee = Double.parseDouble(request.getParameter("payingfee"));
         String modeOfPayment = request.getParameter("paymentMode");
         String class1 = request.getParameter("class1");
-
+           
         if (modeOfPayment.equals("Online")) {
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("payment.jsp");
             requestDispatcher.forward(request, response);

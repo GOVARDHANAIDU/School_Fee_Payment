@@ -1,3 +1,6 @@
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +9,7 @@
 
   <!-- Select2 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2132/2132732.png" type="image/x-icon">
+  
   <!-- Fonts and custom CSS -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -90,8 +93,10 @@
     margin-top: -3% ;
     }
     .preview {
-      width: 30%;
+      width: 28%;
       margin-left: 35%;
+      height: 40px;
+      border-radius: 30px;
       background: linear-gradient(135deg, #dff6ff, #b6e3f9);
     }
   </style>
@@ -107,36 +112,70 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarNav">
+      <!-- Left side nav items -->
       <ul class="navbar-nav me-auto">
         <li class="nav-item"><a class="nav-link active" href="home.jsp">Home</a></li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Students</a>
-          <ul class="dropdown-menu">
+            <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="allStudents.jsp">All Student Info</a></li>
             <li><a class="dropdown-item" href="BillingPage.jsp">Student Fee Payment</a></li>
             <li><a class="dropdown-item" href="studentreg.jsp">Create Student Details</a></li>
-             <li><a class="dropdown-item" href="bulkimporting.jsp">Create Bulk</a></li>
-            <li><a class="dropdown-item" href="#">Update Student Details</a></li>
+            <li><a class="dropdown-item" href="bulkimporting.jsp">Create Bulk</a></li>
+            <li><a class="dropdown-item" href="newupdates.jsp">Update Student Details</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Payments</a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">All Payment Details</a></li>
-            <li><a class="dropdown-item" href="apbme.jsp">Admin Payment</a></li>
+            <li><a class="dropdown-item" href="allpayments.jsp">All Payment Details</a></li>
+            <li><a class="dropdown-item" href="apbme.jsp">Payment By Admin </a></li>
+            <li><a class="dropdown-item" href="paymentdetails.jsp">All Payment Status</a></li>
           </ul>
         </li>
         <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
         <li class="nav-item"><a class="nav-link" href="#">About Us</a></li>
       </ul>
+
+
+       <%
+        HttpSession session2 = request.getSession();
+        String name = (String) session2.getAttribute("adminName");
+        String userName = "";
+        
+        if (name == null) {
+            // Redirect if not logged in
+            response.sendRedirect("AdminLogin.jsp");
+            return;
+        }
+        for(int i= 0 ; i<=name.length()-1 ; i++)
+        {
+        	char ch = name.charAt(i);
+        	if(ch == ' ' )
+        	{
+        		break;
+        	}
+        	else
+        	{
+        		userName = userName+ch;
+        	}
+        }
+        %>
+        <div style="display: flex; align-items: center; margin-left: 20px; gap: 10px;">
+    <p style="color: white; margin-right: 40px; padding-top: 10px;">Hello, <%=userName%></p>
+    
+</div>
+         
+      <!-- Right side Login and Signup buttons -->
       <div class="d-flex">
-        <a class="btn btn-outline-light me-2" href="AdminLogin.jsp">Login</a>
-        <a class="btn btn-outline-warning" href="#">Signup</a>
+        <a class="btn btn-outline-light me-2" href="AdminLogin.jsp">Logout</a>
+        <a class="btn btn-outline-warning" href="createaccount.jsp">Signup</a>
       </div>
     </div>
   </div>
 </nav>
 
+	
 
   <div class="maincontainer">
     <h2>Search Student Info</h2>
@@ -144,10 +183,14 @@
       <label for="studentDropdown">Select Student:</label>
       <select id="studentDropdown" name="studentName" style="width: 100%">
         <option></option>
+          
       </select>
-
+          <% 
+        session2.setAttribute("studentName", request.getParameter("studentName"));
+          System.out.println(request.getParameter("studentName"));
+        %>
       <label for="email">Email:</label>
-      <input type="text" id="email" readonly name="emailid" />
+      <input type="text" id="email" readonly name="email" />
 
       <label for="amount">Total Fee:</label>
       <input type="text" id="amount" readonly name="amount" />
@@ -161,25 +204,20 @@
 
     <div class="rightcontainer">
       <label for="admissionnumber">Admission.no:</label>
-      <input type="text" id="admissionnumber" readonly name="admin.no" />
+      <input type="text" id="admissionnumber" readonly name="admissionnumber" />
 
       <label for="phone">Phone Number:</label>
-      <input type="text" id="phone" readonly name="phoneNumber" />
+      <input type="text" id="phone" readonly name="phone" />
 
       <label for="payingfee">Paying fee:</label>
       <input type="number" id="payingfee" name="payingfee" />
 
       <label for="modeOfPayment">Mode of payment:</label>
-      <select name="paymentMode" required>
-        <option value="" disabled selected>Select one option</option>
+      <select name="paymentMode" id="paymentMode" required="required">
         <option value="Cash">Cash</option>
         <option value="Online">Online</option>
       </select>
 
-      <% 
-        HttpSession session2 = request.getSession();
-        String name = (String) session2.getAttribute("adminName");
-      %>
       <label>Billed By:</label>
       <input type="text" value="<%=name%>" readonly>
     </div>
@@ -215,7 +253,7 @@
     	  formData.append("phone", document.getElementById("phone").value);
     	  formData.append("payingfee", document.getElementById("payingfee").value);
     	  formData.append("paymentMode", document.querySelector("select[name='paymentMode']").value);
-
+          
     	  fetch("previewthebill", {
     	    method: "POST", // Switch to POST for better practice
     	    headers: {
@@ -226,7 +264,7 @@
     	  .then(response => response.text())
     	  .then(html => {
     	    if (html.includes("<!--payment-page-->")) {
-    	      window.location.href = "payment.jsp"; // fallback if servlet doesn't redirect
+    	      window.location.href = "PreviewPage.jsp"; // fallback if servlet doesn't redirect
     	    } else {
     	      document.open();
     	      document.write(html);
@@ -237,13 +275,6 @@
     	    console.error("Error:", error);
     	  });
     	});
-    
-    
-    
-    
-    
-    
-    
     
     function toggleProceedButton() {
       const value = parseFloat($payingFee.val());
@@ -306,6 +337,7 @@
       }
     });
   });
+  
 </script>
 
 

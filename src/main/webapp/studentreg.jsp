@@ -291,32 +291,42 @@ button:active {
         <li class="nav-item"><a class="nav-link active" href="home.jsp">Home</a></li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Students</a>
-          <ul class="dropdown-menu">
+ 		<ul class="dropdown-menu">
             <li><a class="dropdown-item" href="allStudents.jsp">All Student Info</a></li>
             <li><a class="dropdown-item" href="BillingPage.jsp">Student Fee Payment</a></li>
             <li><a class="dropdown-item" href="studentreg.jsp">Create Student Details</a></li>
             <li><a class="dropdown-item" href="bulkimporting.jsp">Create Bulk</a></li>
-            <li><a class="dropdown-item" href="#">Update Student Details</a></li>
+            <li><a class="dropdown-item" href="updatedetails.jsp">Update Student Details</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Payments</a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">All Payment Details</a></li>
-            <li><a class="dropdown-item" href="apbme.jsp">Admin Payment</a></li>
+            <li><a class="dropdown-item" href="allpayments.jsp">All Payment Details</a></li>
+            <li><a class="dropdown-item" href="apbme.jsp">Payment By Admin </a></li>
+            <li><a class="dropdown-item" href="paymentdetails.jsp">All Payment Status</a></li>
           </ul>
         </li>
         <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
         <li class="nav-item"><a class="nav-link" href="#">About Us</a></li>
       </ul>
 
-       <%
-        HttpSession session2 = request.getSession();
-        String name = (String) session2.getAttribute("adminName");
+
+
+ <%
+       HttpSession session2 = request.getSession();
+        String Aname = (String) session2.getAttribute("adminName");
         String userName = "";
-        for(int i= 0 ; i<=name.length()-1 ; i++)
+        
+        if (Aname == null) {
+            // Redirect if not logged in
+            response.sendRedirect("AdminLogin.jsp");
+            return;
+        }
+        
+        for(int i= 0 ; i<=Aname.length()-1 ; i++)
         {
-        	char ch = name.charAt(i);
+        	char ch = Aname.charAt(i);
         	if(ch == ' ' )
         	{
         		break;
@@ -326,16 +336,16 @@ button:active {
         		userName = userName+ch;
         	}
         }
-        %>
-        <div style="display: flex; align-items: center; margin-left: 20px; gap: 10px;">
+        %> 
+     <div style="display: flex; align-items: center; margin-left: 20px; gap: 10px;">
     <p style="color: white; margin-right: 40px; padding-top: 10px;">Hello, <%=userName%></p>
     
 </div>
          
       <!-- Right side Login and Signup buttons -->
       <div class="d-flex">
-        <a class="btn btn-outline-light me-2" href="#">Login</a>
-        <a class="btn btn-outline-warning" href="#">Signup</a>
+        <a class="btn btn-outline-light me-2" href="AdminLogin.jsp">Logout</a>
+        <a class="btn btn-outline-warning" href="createaccount.jsp">Signup</a>
       </div>
     </div>
   </div>
@@ -388,7 +398,7 @@ button:active {
                 </div>
                 <div class="placeholder-float">
                     <input type="text" id="aadharNumber" name="aadharNumber" placeholder=" " class="placeholder-float__input">
-                    <label for="aadharNumber" class="placeholder-float__label">Aadhar Number</label>
+                    <label for="aadharNumber" class="placeholder-float__label">Aadhar Number<span class="text-red-500">*</span></label>
                     <p id="aadhar-error" class="text-red-500 text-xs italic" style="display: none;"></p>
                 </div>
             </div>

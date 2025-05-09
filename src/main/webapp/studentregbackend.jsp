@@ -115,25 +115,26 @@
             studentDetails.setRemainingFee(remainingFee);
             studentDetails.setStudentClass(className);
             StudentDetailsImp studentDetailsImp = new StudentDetailsImp();
-            if(studentDetailsImp.insertStudenttofeeDetails(studentDetails)) {
-            	out.println("<h3 style='color:green;'>Student Registered Successfully!</h3>");
-            } else {
-                out.println("<h3 style='color:red;'>Registration Failed!</h3>");
-            }
             
+            if(studentDetailsImp.insertStudenttofeeDetails(studentDetails)) {
+                // Show success alert and redirect
+                out.println("<script>alert('Student Registered Successfully!'); window.location.href='studentreg.jsp';</script>");
+            } else {
+                out.println("<script>alert('Registration Failed!');</script>");
+            }
         } else {
-            out.println("<h3 style='color:red;'>Registration Failed!</h3>");
+            out.println("<script>alert('Registration Failed!');</script>");
         }
 
     } catch (SQLException e) {
         if (e.getMessage().contains("Duplicate entry")) {
-            out.println("<h3 style='color:red;'>Error: Duplicate entry detected (Admin No, Email or Aadhar may already exist)!</h3>");
+            out.println("<script>alert('Error: Duplicate entry detected (Admin No, Email or Aadhar may already exist)!');window.location.href='studentreg.jsp';</script>");
         } else {
-            out.println("<h3 style='color:red;'>Database Error: " + e.getMessage() + "</h3>");
+            out.println("<script>alert('Database Error: " + e.getMessage().replace("'", "\\'") + "');</script>");
         }
         e.printStackTrace();
     } catch (Exception e) {
-        out.println("<h3 style='color:red;'>Error: " + e.getMessage() + "</h3>");
+        out.println("<script>alert('Error: " + e.getMessage().replace("'", "\\'") + "');</script>");
         e.printStackTrace();
     } finally {
         try { if (ps != null) ps.close(); } catch (Exception e) {}

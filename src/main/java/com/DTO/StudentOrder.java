@@ -5,9 +5,26 @@ public class StudentOrder {
     private String email;
     private String phone;
     private String course;
-    private int amount;
+    private double amount;
     private String razorpayOrderId;
     private String orderStatus;
+    private String adminName;
+    private String admissionnumber;
+    private double totalfee;
+    private double paidfee;
+    private int adminNo;
+	public String getAdminName() {
+		return adminName;
+	}
+	public void setAdminName(String adminName) {
+		this.adminName = adminName;
+	}
+	public int getAdminNo() {
+		return adminNo;
+	}
+	public void setAdminNo(int adminNo) {
+		this.adminNo = adminNo;
+	}
 	public StudentOrder() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -24,6 +41,7 @@ public class StudentOrder {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
 	public String getPhone() {
 		return phone;
 	}
@@ -33,14 +51,35 @@ public class StudentOrder {
 	public String getCourse() {
 		return course;
 	}
+	
+	public double getTotalfee() {
+		return totalfee;
+	}
+	public void setTotalfee(double totalfee) {
+		this.totalfee = totalfee;
+	}
+	public double getPaidfee() {
+		return paidfee;
+	}
+	public void setPaidfee(double paidfee) {
+		this.paidfee = paidfee;
+	}
 	public void setCourse(String course) {
 		this.course = course;
 	}
-	public int getAmount() {
+	
+	public double getAmount() {
 		return amount;
 	}
-	public void setAmount(int amount) {
+	public void setAmount(double amount) {
 		this.amount = amount;
+	}
+	
+	public String getAdmissionnumber() {
+		return admissionnumber;
+	}
+	public void setAdmissionnumber(String admissionnumber) {
+		this.admissionnumber = admissionnumber;
 	}
 	public String getRazorpayOrderId() {
 		return razorpayOrderId;
@@ -57,9 +96,15 @@ public class StudentOrder {
 	@Override
 	public String toString() {
 		return "StudentOrder [name=" + name + ", email=" + email + ", phone=" + phone + ", course=" + course
-				+ ", amount=" + amount + ", razorpayOrderId=" + razorpayOrderId + ", orderStatus=" + orderStatus + "]";
+				+ ", amount=" + amount + ", razorpayOrderId=" + razorpayOrderId + ", orderStatus=" + orderStatus
+				+ ", adminName=" + adminName + ", admissionnumber=" + admissionnumber + ", totalfee=" + totalfee
+				+ ", paidfee=" + paidfee + ", adminNo=" + adminNo + "]";
 	}
-
+	
+	
+	
+	
+	
     // Getters & Setters
     
 }

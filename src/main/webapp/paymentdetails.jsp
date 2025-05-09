@@ -1,3 +1,4 @@
+<%@page import="com.DTO.StudentOrder"%>
 <%@page import="com.DAO.StudentDetailsImp"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
@@ -64,39 +65,30 @@
         <li class="nav-item"><a class="nav-link active" href="home.jsp">Home</a></li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Students</a>
-            <ul class="dropdown-menu">
+          <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="allStudents.jsp">All Student Info</a></li>
             <li><a class="dropdown-item" href="BillingPage.jsp">Student Fee Payment</a></li>
             <li><a class="dropdown-item" href="studentreg.jsp">Create Student Details</a></li>
             <li><a class="dropdown-item" href="bulkimporting.jsp">Create Bulk</a></li>
-            <li><a class="dropdown-item" href="newupdates.jsp">Update Student Details</a></li>
+            <li><a class="dropdown-item" href="updatedetails.jsp">Update Student Details</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Payments</a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="allpayments.jsp">All Payment Details</a></li>
-            <li><a class="dropdown-item" href="apbme.jsp">Payment By Admin </a></li>
-            <li><a class="dropdown-item" href="paymentdetails.jsp">All Payment Status</a></li>
+            <li><a class="dropdown-item" href="apbme.jsp">Admin Payment</a></li>
+            <li><a class="dropdown-item" href="paymentdetails.jsp">Payment Details</a></li>
           </ul>
         </li>
         <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
         <li class="nav-item"><a class="nav-link" href="#">About Us</a></li>
       </ul>
 
-
-
        <%
         HttpSession session2 = request.getSession();
         String name = (String) session2.getAttribute("adminName");
         String userName = "";
-        
-        if (name == null) {
-            // Redirect if not logged in
-            response.sendRedirect("AdminLogin.jsp");
-            return;
-        }
-        
         for(int i= 0 ; i<=name.length()-1 ; i++)
         {
         	char ch = name.charAt(i);
@@ -117,7 +109,7 @@
          
       <!-- Right side Login and Signup buttons -->
       <div class="d-flex">
-        <a class="btn btn-outline-light me-2" href="AdminLogin.jsp">Logout</a>
+        <a class="btn btn-outline-light me-2" href="AdminLogin.jsp">Login</a>
         <a class="btn btn-outline-warning" href="createaccount.jsp">Signup</a>
       </div>
     </div>
@@ -127,46 +119,51 @@
 
 <!-- Main Container -->
 <div class="container pt-4">
-    <center> <h2 class="mb-4">Student Fee Details</h2> </center>
+    <center> <h2 class="mb-4">All Fee Payments Details</h2> </center>
 
     <!-- Download Buttons -->
     <button id="download-pdf" class="btn btn-primary mb-4">Download as PDF</button>
     <button id="download-xlsx" class="btn btn-success mb-4">Download as Excel</button>
 
-    <!-- Table to Display Payment Details -->
+    <!-- Table to Display Payment Details 
+    orderId, name, email, phoneNo, student_class, amount, orderStatus, razorpayOrderID, admin_name, admin_no
+    -->
     <div class="table-responsive">
         <table id="paymentTable" class="display table table-bordered table-hover">
             <thead class="table-light">
                 <tr>
-                    <th>S.no</th>
-                    <th>Admission No</th>
+                    <th>S.No</th>
                     <th>Student Name</th>
-                    <th>Phone Number</th>
-                    <th>Total Fee</th>
-                    <th>Paid Fee</th>
-                    <th>Balance</th>
+                    <th>Phone.no</th>
+                    <th>Amount</th>
+                    <th>Order Status</th>
+                    <th>Razorpay OrderID</th>
+                    <th>Billed By</th>
                     <th>Class</th>
+                    
                 </tr>
             </thead>
             <tbody>
-                <% 
-                    StudentDetailsImp studentDetailsImp = new StudentDetailsImp();
-                    List<StudentDetails> list = studentDetailsImp.allStudentDetails();
-                    int count = 1;
-                    for (StudentDetails p : list) {
-                %>           
+                <%
+                AllPaymentsByAdmin allPaymentsByAdmin = new TransactionPageImp();
+                List<StudentOrder> list = allPaymentsByAdmin.selectAllPaymentDetails();
+                int count = 1;
+                for (StudentOrder fee : list) {
+                %>
                 <tr>
-                    <td><%= count %></td>
-                    <td><%= p.getAdmissionNumber() %></td>
-                    <td><%= p.getStudentName() %></td>
-                    <td><%= p.getPhoneNumber() %></td>
-                    <td><%= p.getTotalFee() %></td>
-                    <td><%= p.getPaidFee()%></td>
-                    <td><%= p.getRemainingFee() %></td>
-                    <td><%= p.getStudentClass() %></td>
+                    <td><%= count++ %></td>
+                    <td><%= fee.getName()%></td>
+                    <td><%= fee.getPhone()%></td>
+                    <td><%= fee.getAmount()%></td>
+                    <td><%= fee.getOrderStatus()%></td>
+                    <td><%= fee.getRazorpayOrderId()%></td>                  
+                    <td><%= fee.getAdminName() %></td>
+                    <td><%= fee.getCourse()%></td>
                 </tr>
-                <% count++; } %>
-            </tbody>
+                <%
+                    }
+                %>
+             </tbody>
         </table>
     </div>
 </div>
@@ -181,6 +178,7 @@
 	        { orderable: true, targets: "_all" }
 	    ]
 	});
+
     // Function to get today's date in YYYY-MM-DD format
     function getTodayDate() {
         const today = new Date();

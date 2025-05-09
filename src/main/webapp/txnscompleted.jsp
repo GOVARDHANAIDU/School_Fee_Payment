@@ -63,7 +63,7 @@
             right: 20px;
             padding: 10px 20px;
             font-size: 18px;
-            background: #4285F4;
+            background: green;
             color: white;
             border: none;
             border-radius: 5px;
@@ -80,6 +80,7 @@
 
     <div class="confirmation-container">
         <div class="checkmark"><p style="font-size: 50px">&#10004;</p></div>
+        <p style="color: green">Student Registered Successfully</p>
     </div>
 
     <a href="home.jsp" class="home-btn">🏠 Home</a>
