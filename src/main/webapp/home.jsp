@@ -10,15 +10,12 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding-top: 70px; /* space for fixed navbar */
-      padding-bottom: 80px; /* space for fixed footer */
-    }
-
-
-
+	body {
+	  font-family: 'Segoe UI', sans-serif;
+	  margin: 0;
+	  padding-top: 70px;
+	  padding-bottom: 0;
+	}
     /* Fixed navbar */
     .navbar {
       position: fixed;
@@ -32,7 +29,10 @@
   margin-bottom: 0;
   padding-bottom: 0;
 }
-
+      .col-md-4:hover {
+            transform: scale(1.03);
+            
+        }
 	
     .footer a {
       color: #ffc107;
@@ -71,7 +71,8 @@
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Students</a>
             <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="allStudents.jsp">All Student Info</a></li>
+            <li><a class="dropdown-item" href="studentdetails.jsp">Student Details</a></li>
+            <li><a class="dropdown-item" href="allStudents.jsp">Student Payment Info</a></li>
             <li><a class="dropdown-item" href="BillingPage.jsp">Student Fee Payment</a></li>
             <li><a class="dropdown-item" href="studentreg.jsp">Create Student Details</a></li>
             <li><a class="dropdown-item" href="bulkimporting.jsp">Create Bulk</a></li>
@@ -165,22 +166,23 @@
 <div class="container my-4">
     <div class="row text-center">
         <div class="col-md-4">
-            <div class="card shadow p-3">
+           <a href="students.jsp" style="text-decoration: none;">  <div class="card shadow p-3">
                 <img src="https://cdn-icons-png.flaticon.com/512/3135/3135768.png" class="card-img-top w-25 mx-auto my-2" alt="Students">
-                <div class="card-body">
+                 <div class="card-body">
                     <h5 class="card-title">Students</h5>
                     <p class="card-text">Track progress, manage fees, and explore academic resources.</p>
                 </div>
-            </div>
+            </div>  </a>
         </div>
         <div class="col-md-4">
+        <a href="allStudents.jsp" style="text-decoration: none;">
             <div class="card shadow p-3">
                 <img src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png" class="card-img-top w-25 mx-auto my-2" alt="Faculty">
                 <div class="card-body">
                     <h5 class="card-title">Faculty</h5>
                     <p class="card-text">Experienced mentors guiding every student’s journey.</p>
                 </div>
-            </div>
+            </div> </a>
         </div>
         <div class="col-md-4">
             <div class="card shadow p-3">

@@ -12,12 +12,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.swing.JOptionPane;
 
 import com.DAO.AllPaymentsByAdmin;
 import com.DAO.StudentDetailsImp;
 import com.DAO.StudentDetailsInter;
 import com.DAO.TransactionPageImp;
 import com.DTO.PaymentTransaction;
+import com.service.EmailOTP;
 
 
 //transaction_id, student_admission_number, student_name, total_amount, 
@@ -43,7 +45,7 @@ public class InsertIntoTransactionHistory extends HttpServlet{
 		
 		HttpSession session = req.getSession();
 		String adminName = (String) session.getAttribute("adminName");
-		String class1 = (String) session.getAttribute("Class1");
+		String class1 = (String) session.getAttribute("class1");
 		int id =  (int) session.getAttribute("adminId");
 		
 		
@@ -72,11 +74,26 @@ public class InsertIntoTransactionHistory extends HttpServlet{
 		paymentTransaction.setAdminId(id);
 		AllPaymentsByAdmin allPaymentsByAdmin = new TransactionPageImp();
 		allPaymentsByAdmin.insertAllPayments(paymentTransaction);
-			
 		
-		RequestDispatcher requestDispatcher = req.getRequestDispatcher("printreceipt.jsp");
-		requestDispatcher.forward(req, resp);
+		double balance = totalFee - (paidFee+payingfee);
 		
+//	    public static boolean sendFeeAck(String recipient, String studentName, String studentAdmissionNo, double totalFee,
+//	            double paidFee, double payingFee, double balance, String paymentMode)
+		boolean status = EmailOTP.sendFeeAck("govardhannaiduece@gmail.com", studentName, adminNo, totalFee, paidFee, payingfee, balance, paymentMode);
+		if (status == true) {
+		    // Acknowledgement email sent successfully
+//		    JOptionPane.showMessageDialog(null, "Fee payment acknowledgement email sent successfully to " + emailID + ".", 
+//		                                  "Email Sent", JOptionPane.INFORMATION_MESSAGE);
+		    RequestDispatcher requestDispatcher = req.getRequestDispatcher("printreceipt.jsp");
+			requestDispatcher.forward(req, resp);
+		} else {
+		    // Failed to send the email
+		    JOptionPane.showMessageDialog(null, "Failed to send fee payment acknowledgement email. Please check the email ID or try again.", 
+		                                  "Email Failed", JOptionPane.ERROR_MESSAGE);
+		    RequestDispatcher requestDispatcher = req.getRequestDispatcher("printreceipt.jsp");
+			requestDispatcher.forward(req, resp);
+		}
+	
 		} else {
 			RequestDispatcher requestDispatcher = req.getRequestDispatcher("BillingPage.jsp");
 			requestDispatcher.include(req, resp);

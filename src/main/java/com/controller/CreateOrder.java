@@ -40,9 +40,8 @@ public class CreateOrder extends HttpServlet {
             double amount = student.getAmount();
             String admissionNo = student.getAdmissionnumber();
             
-            HttpSession session2 = request.getSession();
-            session2.setAttribute("admissionNumber", admissionNo);
-
+            System.out.println("Create Order admission number: "+admissionNo);
+            
             
             StudentService service = new StudentService();
             StudentOrder createdOrder = service.createRazorpayOrder(student);

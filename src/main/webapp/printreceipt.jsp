@@ -180,12 +180,13 @@
         <li class="nav-item"><a class="nav-link active" href="home.jsp">Home</a></li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Students</a>
- 		<ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="allStudents.jsp">All Student Info</a></li>
+ 		 <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="studentdetails.jsp">Student Details</a></li>
+            <li><a class="dropdown-item" href="allStudents.jsp">Student Payment Info</a></li>
             <li><a class="dropdown-item" href="BillingPage.jsp">Student Fee Payment</a></li>
             <li><a class="dropdown-item" href="studentreg.jsp">Create Student Details</a></li>
             <li><a class="dropdown-item" href="bulkimporting.jsp">Create Bulk</a></li>
-            <li><a class="dropdown-item" href="updatedetails.jsp">Update Student Details</a></li>
+            <li><a class="dropdown-item" href="newupdates.jsp">Update Student Details</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">
@@ -199,7 +200,6 @@
         <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
         <li class="nav-item"><a class="nav-link" href="#">About Us</a></li>
       </ul>
-
 
 
        <%
@@ -264,10 +264,10 @@
             <p><strong>Phone:</strong> <%= phone %></p>
         </div>
         <div class="details">
-            <p><strong>Mode of Pay:</strong> <%= session2.getAttribute("modeOfPay") %></p>
-            <p><strong>Total Fee:</strong> <%= session2.getAttribute("totalFee") %></p>
-            <p><strong>Paid Fee:</strong> <%= session2.getAttribute("paidFee") %></p>
-            <p><strong>Paid Now:</strong> <%= session2.getAttribute("payingFee") %></p>
+            <p><strong>Mode of Pay:</strong> <%= session2.getAttribute("paymentMode") %></p>
+            <p><strong>Total Fee:</strong> <%= session2.getAttribute("totalamount") %></p>
+            <p><strong>Paid Fee:</strong> <%= session2.getAttribute("paidfee") %></p>
+            <p><strong>Paid Now:</strong> <%= session2.getAttribute("payingfee") %></p>
             <p><strong>Balance Fee:</strong> <%= session2.getAttribute("remainingBalance") %></p>
             <p><strong>Billed By:</strong> <%= session2.getAttribute("adminName") %></p>
         </div>
@@ -296,10 +296,10 @@
             
         </div>
         <div class="details">
-            <p><strong>Mode of Pay:</strong> <%= session2.getAttribute("modeOfPay") %></p>
-            <p><strong>Total Fee:</strong> <%= session2.getAttribute("totalFee") %></p>
-            <p><strong>Paid Fee:</strong> <%= session2.getAttribute("paidFee") %></p>
-            <p><strong>Paid Now:</strong> <%= session2.getAttribute("payingFee") %></p>
+            <p><strong>Mode of Pay:</strong> <%= session2.getAttribute("paymentMode") %></p>
+            <p><strong>Total Fee:</strong> <%= session2.getAttribute("totalamount") %></p>
+            <p><strong>Paid Fee:</strong> <%= session2.getAttribute("paidfee") %></p>
+            <p><strong>Paid Now:</strong> <%= session2.getAttribute("payingfee") %></p>
             <p><strong>Balance Fee:</strong> <%= session2.getAttribute("remainingBalance") %></p>
             <p><strong>Billed By:</strong> <%= session2.getAttribute("adminName") %></p>
         </div>

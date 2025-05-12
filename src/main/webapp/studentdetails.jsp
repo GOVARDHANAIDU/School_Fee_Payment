@@ -1,19 +1,17 @@
-<%@page import="com.DAO.StudentDetailsImp"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
-<%@page import="com.DTO.PaymentTransaction"%>
-<%@page import="com.DAO.TransactionPageImp"%>
-<%@page import="com.DAO.AllPaymentsByAdmin"%>
-<%@page import="com.DTO.StudentDetails"%>
+<%@page import="com.DTO.Students"%>
+<%@page import="com.DAO.StudentDetailsImp"%>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>Student Fee Details</title>
-
+    
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2132/2132732.png" type="image/x-icon">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2132/2132732.png" type="image/x-icon">
+
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.4.0/css/fixedHeader.dataTables.min.css">
@@ -64,7 +62,7 @@
         <li class="nav-item"><a class="nav-link active" href="home.jsp">Home</a></li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Students</a>
-             <ul class="dropdown-menu">
+            <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="studentdetails.jsp">Student Details</a></li>
             <li><a class="dropdown-item" href="allStudents.jsp">Student Payment Info</a></li>
             <li><a class="dropdown-item" href="BillingPage.jsp">Student Fee Payment</a></li>
@@ -84,6 +82,7 @@
         <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
         <li class="nav-item"><a class="nav-link" href="#">About Us</a></li>
       </ul>
+
 
 
        <%
@@ -127,7 +126,7 @@
 
 <!-- Main Container -->
 <div class="container pt-4">
-    <center> <h2 class="mb-4">All Fee Payments Details</h2> </center>
+    <center> <h2 class="mb-4">Student Details</h2> </center>
 
     <!-- Download Buttons -->
     <button id="download-pdf" class="btn btn-primary mb-4">Download as PDF</button>
@@ -138,61 +137,64 @@
         <table id="paymentTable" class="display table table-bordered table-hover">
             <thead class="table-light">
                 <tr>
-                    <th>S.No</th>
+                    <th>S.no</th>
+                    <th>Admission No</th>
                     <th>Student Name</th>
+                    <th>Father Name</th>
+                    <th>Mother Name</th>
+                    <th>Father Number</th>
+                    <th>Mother Number</th>
+                    <th>Aadhaar Number</th>
                     <th>Total Fee</th>
                     <th>Paid Fee</th>
-                    <th>Lastly Paid Fee</th>
-                    <th>Balance</th>
                     <th>Class</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Mode</th>
-                    <th>Billed By</th>
+                    <th>Gender</th>
+                    <th>DOB</th>                    
+                    <th>Address</th>                  
+                    <th>Pincode</th>
+                    
                 </tr>
             </thead>
             <tbody>
-		    <%
-		        AllPaymentsByAdmin allPaymentsByAdmin = new TransactionPageImp();
-		        List<PaymentTransaction> list = allPaymentsByAdmin.selectAllPayments();
-		        int count = 1;
-		
-		        for (int i = list.size() - 1; i >= 0; i--) {
-		            PaymentTransaction fee = list.get(i);
-		    %>
-		    <tr>
-		        <td><%= count++ %></td>
-		        <td><%= fee.getStudentNAme() %></td>
-		        <td><%= fee.getTotal_fee() %></td>
-		        <td><%= fee.getPaidFee() %></td>
-		        <td><%= fee.getPayingFee() %></td>
-		        <td><%= fee.getRemaingFee() %></td>
-		        <td><%= fee.getStudentClass() %></td>
-		        <td><%= fee.getDateOfTransaction() %></td>
-		        <td><%= fee.getTimeOfTransaction() %></td>
-		        <td><%= fee.getModeOfPayment() %></td>
-		        <td><%= fee.getAdminName() %></td>
-		    </tr>
-		    <%
-		        }
-		    %>
-		</tbody>
-
+                <% 
+                    StudentDetailsImp studentDetailsImp = new StudentDetailsImp();
+                    List<Students> list = studentDetailsImp.allStudentPersonalDetails();
+                    int count = 1;
+                    for (Students p : list) {
+                %>           
+                <tr>
+                    <td><%= count %></td>
+                    <td><%= p.getAdminNo() %></td>
+                    <td><a href="home.jsp" style="color:black; text-decoration: none;"><%= p.getStudentName() %></a></td>
+                    <td><%= p.getFatherName() %></td>
+                    <td><%= p.getMotherName() %></td>
+                    <td><%= p.getFatherNumber()%></td>
+                    <td><%= p.getMotherNumber()%></td>
+                    <td><%= p.getAadharNumber()%></td>
+                    <td><%= p.getTotalFee()%></td>
+                    <td><%= p.getPaidFee()%></td>
+                    <td><%= p.getStudentClass()%></td>
+                    <td><%= p.getGender()%></td>
+                    <td><%= p.getDob()%></td>
+                    <td><%= p.getAddress()%></td>
+                    <td><%= p.getPincode()%></td>
+                </tr>
+                <% count++; } %>
+            </tbody>
         </table>
     </div>
 </div>
 
 <!-- DataTable Init -->
 <script>
-		$('#paymentTable').DataTable({
-		    fixedHeader: true,
-		    order: [],
-		    lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-		    columnDefs: [
-		        { orderable: true, targets: "_all" }
-		    ]
-		});
-
+	$('#paymentTable').DataTable({
+	    fixedHeader: true,
+	    order: [],
+	    lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+	    columnDefs: [
+	        { orderable: true, targets: "_all" }
+	    ]
+	});
     // Function to get today's date in YYYY-MM-DD format
     function getTodayDate() {
         const today = new Date();

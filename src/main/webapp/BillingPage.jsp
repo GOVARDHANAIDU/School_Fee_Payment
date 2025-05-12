@@ -117,8 +117,9 @@
         <li class="nav-item"><a class="nav-link active" href="home.jsp">Home</a></li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Students</a>
-            <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="allStudents.jsp">All Student Info</a></li>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="studentdetails.jsp">Student Details</a></li>
+            <li><a class="dropdown-item" href="allStudents.jsp">Student Payment Info</a></li>
             <li><a class="dropdown-item" href="BillingPage.jsp">Student Fee Payment</a></li>
             <li><a class="dropdown-item" href="studentreg.jsp">Create Student Details</a></li>
             <li><a class="dropdown-item" href="bulkimporting.jsp">Create Bulk</a></li>
@@ -306,19 +307,8 @@
           allowClear: true
         });
 
-        const defaultStudent = studentData.find(s => s.name === "Alice Johnson");
-        if (defaultStudent) {
-          $('#studentDropdown').val(defaultStudent.name).trigger('change');
-          $('#email').val(defaultStudent.email);
-          $('#phone').val(defaultStudent.phone);
-          $('#amount').val(defaultStudent.amount);
-          $('#paidfee').val(defaultStudent.paidfee);
-          $('#admissionnumber').val(defaultStudent.admissionnumber);
-          $('#class1').val(defaultStudent.class1);
-          $('#payingfee').val(defaultStudent.payingfee);
-          toggleProceedButton(); // update button state based on default student
-        }
-
+       
+        
         $('#studentDropdown').on('select2:select', function (e) {
           const selectedName = e.params.data.text;
           const selectedStudent = studentData.find(s => s.name === selectedName);

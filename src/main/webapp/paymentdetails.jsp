@@ -14,7 +14,7 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2132/2132732.png" type="image/x-icon">
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.4.0/css/fixedHeader.dataTables.min.css">
@@ -65,20 +65,21 @@
         <li class="nav-item"><a class="nav-link active" href="home.jsp">Home</a></li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Students</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="allStudents.jsp">All Student Info</a></li>
+           <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="studentdetails.jsp">Student Details</a></li>
+            <li><a class="dropdown-item" href="allStudents.jsp">Student Payment Info</a></li>
             <li><a class="dropdown-item" href="BillingPage.jsp">Student Fee Payment</a></li>
             <li><a class="dropdown-item" href="studentreg.jsp">Create Student Details</a></li>
             <li><a class="dropdown-item" href="bulkimporting.jsp">Create Bulk</a></li>
-            <li><a class="dropdown-item" href="updatedetails.jsp">Update Student Details</a></li>
+            <li><a class="dropdown-item" href="newupdates.jsp">Update Student Details</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Payments</a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="allpayments.jsp">All Payment Details</a></li>
-            <li><a class="dropdown-item" href="apbme.jsp">Admin Payment</a></li>
-            <li><a class="dropdown-item" href="paymentdetails.jsp">Payment Details</a></li>
+            <li><a class="dropdown-item" href="apbme.jsp">Payment By Admin </a></li>
+            <li><a class="dropdown-item" href="paymentdetails.jsp">All Payment Status</a></li>
           </ul>
         </li>
         <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
@@ -109,7 +110,7 @@
          
       <!-- Right side Login and Signup buttons -->
       <div class="d-flex">
-        <a class="btn btn-outline-light me-2" href="AdminLogin.jsp">Login</a>
+        <a class="btn btn-outline-light me-2" href="AdminLogin.jsp">Logout</a>
         <a class="btn btn-outline-warning" href="createaccount.jsp">Signup</a>
       </div>
     </div>
@@ -136,6 +137,8 @@
                     <th>Student Name</th>
                     <th>Phone.no</th>
                     <th>Amount</th>
+                    <th>Date</th>
+                    <th>Time</th>
                     <th>Order Status</th>
                     <th>Razorpay OrderID</th>
                     <th>Billed By</th>
@@ -148,13 +151,16 @@
                 AllPaymentsByAdmin allPaymentsByAdmin = new TransactionPageImp();
                 List<StudentOrder> list = allPaymentsByAdmin.selectAllPaymentDetails();
                 int count = 1;
-                for (StudentOrder fee : list) {
+                for (int i = list.size() - 1; i >= 0; i--) {
+                	StudentOrder fee = list.get(i);
                 %>
                 <tr>
                     <td><%= count++ %></td>
                     <td><%= fee.getName()%></td>
                     <td><%= fee.getPhone()%></td>
                     <td><%= fee.getAmount()%></td>
+                    <td><%= fee.getDateOfPayment()%></td>
+                    <td><%= fee.getTimeOfPayment()%></td>
                     <td><%= fee.getOrderStatus()%></td>
                     <td><%= fee.getRazorpayOrderId()%></td>                  
                     <td><%= fee.getAdminName() %></td>

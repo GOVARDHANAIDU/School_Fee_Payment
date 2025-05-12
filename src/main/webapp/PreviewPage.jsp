@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<%@page import="com.DTO.FeePayment"%>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -152,6 +152,27 @@
     .print-btn:hover {
       background-color: #4c6795;
     }
+    .spinner {
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid teal;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+      margin-top:-35%;
+      margin-left:42%;
+      float: left;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    #loading {
+      display: none;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -169,19 +190,21 @@
         <li class="nav-item"><a class="nav-link active" href="home.jsp">Home</a></li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Students</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="allStudents.jsp">All Student Info</a></li>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="studentdetails.jsp">Student Details</a></li>
+            <li><a class="dropdown-item" href="allStudents.jsp">Student Payment Info</a></li>
             <li><a class="dropdown-item" href="BillingPage.jsp">Student Fee Payment</a></li>
-            <li><a class="dropdown-item" href="#">Create Student Details</a></li>
+            <li><a class="dropdown-item" href="studentreg.jsp">Create Student Details</a></li>
             <li><a class="dropdown-item" href="bulkimporting.jsp">Create Bulk</a></li>
-            <li><a class="dropdown-item" href="#">Update Student Details</a></li>
+            <li><a class="dropdown-item" href="newupdates.jsp">Update Student Details</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Payments</a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">All Payment Details</a></li>
-            <li><a class="dropdown-item" href="apbme.jsp">Admin Payment</a></li>
+            <li><a class="dropdown-item" href="allpayments.jsp">All Payment Details</a></li>
+            <li><a class="dropdown-item" href="apbme.jsp">Payment By Admin </a></li>
+            <li><a class="dropdown-item" href="paymentdetails.jsp">All Payment Status</a></li>
           </ul>
         </li>
         <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
@@ -234,19 +257,23 @@
       <hr style="margin-top: 15px;">
       <h3>Student Fee Receipt</h3>
     </div>
-  <%
-  FeePayment feePayment = new FeePayment();
-  
-  %>
+
   <form action="addPayment" method="POST"> 
     <div class="info-section">
       <table>
       
        <tr>
           <td class="label">Admission Number:</td>
-           <%  String admissionNumber = request.getParameter("admissionnumber");
-               session2.setAttribute("admissionNumber", admissionNumber);
-               String studentName = (String)session2.getAttribute("studentName");
+           <%  
+           String studentName = (String)session2.getAttribute("studentName");
+           String email = (String)session2.getAttribute("email");
+           String phone = (String)session2.getAttribute("phone");
+           String  class1 = (String)session2.getAttribute("class1");
+           double payingfee = (double)session2.getAttribute("payingfee");
+           String admissionNumber = (String)session2.getAttribute("admissionNumber");
+           double totalfee = (double)session2.getAttribute("totalamount");
+           double paidfee = (double) session2.getAttribute("paidfee");
+           String paymentMode = (String) session2.getAttribute("paymentMode");
            %>
            
           <td><input value="<%=admissionNumber%>" name="AdmissionNumber" readOnly></td>
@@ -254,16 +281,16 @@
         </tr>
         <tr>
           <td class="label">Student Name:</td>
-          <td><input value="<%=request.getParameter("studentName")%>" name="studentName" readOnly></td>
+          <td><input value="<%=studentName%>" name="studentName" readOnly></td>
         </tr>
         
         <tr>
           <td class="label">Email ID:</td>
-          <td><input value="<%= request.getParameter("email") %>" name="emailId" readOnly></td>
+          <td><input value="<%= email %>" name="emailId" readOnly></td>
         </tr>
         <tr>
           <td class="label">Phone Number:</td>
-          <td><input value="<%= request.getParameter("phone") %>" name="phoneNumber" readOnly></td>
+          <td><input value="<%= phone %>" name="phoneNumber" readOnly></td>
         </tr>
       </table>
     </div>
@@ -272,30 +299,30 @@
       <table>
         <tr>
           <td class="label">Mode of Payment:</td>
-          <td> <input value="<%= request.getParameter("paymentMode") %>" name="modeOfPayment" readOnly></td>
+          <td> <input value="<%= paymentMode %>" name="modeOfPayment" readOnly></td>
             <%
-          session2.setAttribute("modeOfPay", request.getParameter("paymentMode"));
+          session2.setAttribute("paymentMode", paymentMode);
           %>
         </tr>
         <tr>
           <td class="label">Total Fee:</td>
-          <td>&#8377; <input value="<%=request.getParameter("amount")%>" name="totalFee" readOnly></td>
+          <td>&#8377; <input value="<%=totalfee%>" name="totalFee" readOnly></td>
           <%
-          session2.setAttribute("totalFee", request.getParameter("amount"));
+          session2.setAttribute("totalfee", totalfee);
           %>
         </tr>
         <tr>
           <td class="label">Fee Already Paid:</td>
-          <td>&#8377; <input value="<%= request.getParameter("paidfee") %>"name="paidFee" readOnly></td>
+          <td>&#8377; <input value="<%= paidfee %>"name="paidFee" readOnly></td>
             <%
-           session2.setAttribute("paidFee", request.getParameter("paidfee"));
+           session2.setAttribute("paidFee", paidfee);
           %>
         </tr>
         <tr>
           <td class="label">Fee Paid Now:</td>
-          <td>&#8377; <input value="<%= request.getParameter("payingfee") %>"name="payingFee" readOnly></td>
+          <td>&#8377; <input value="<%= payingfee %>"name="payingFee" readOnly></td>
            <%
-          session2.setAttribute("payingFee", request.getParameter("payingfee"));
+          session2.setAttribute("payingfee", payingfee);
           %>
         </tr>
         <tr>
@@ -304,9 +331,9 @@
             &#8377;
             <%
               try {
-                double total = Double.parseDouble(request.getParameter("amount"));
-                double paid = Double.parseDouble(request.getParameter("paidfee"));
-                double now = Double.parseDouble(request.getParameter("payingfee"));
+                double total = totalfee;
+                double paid = paidfee;
+                double now = payingfee;
                 double balance = paid + now;
                 double remainingBalance = total - balance;
                 session2.setAttribute("remainingBalance", remainingBalance);
@@ -320,7 +347,7 @@
         </tr>
         <tr>
           <td class="label">Class&Section:</td>
-          <td><input value="<%= request.getParameter("class1") %>" name="phoneNumber" readOnly></td>
+          <td><input value="<%= class1 %>" name="class" readOnly></td>
         </tr>
       </table>
     </div>
@@ -330,13 +357,40 @@
      
     </div>
      <button class="btn-back" onclick="history.back()">← Back</button>
-    <button type="submit" class="print-btn">Proceed</button>
-    
+    <button type="button" class="print-btn" data-bs-toggle="modal" data-bs-target="#confirmationModal" >
+	  Proceed
+	</button>   
       </form>
   </div>
  
  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
- 
+ <!-- Bootstrap Modal (add this just before the closing </body> tag) -->
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered"> <!-- Centers the modal -->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmationModalLabel">Confirm Submission</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to proceed with the fee payment?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="submitForm()">I Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+        
+<!-- Script to submit the form -->
+<script>
+  function submitForm() {
+	 
+     document.querySelector("form").submit();
+     
+  }
+</script>
 
  
 </body>

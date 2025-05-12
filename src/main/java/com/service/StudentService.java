@@ -7,6 +7,8 @@ import com.razorpay.RazorpayClient;
 import org.json.JSONObject;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -47,8 +49,8 @@ public class StudentService {
         Connection conn = DriverManager.getConnection(
                 "jdbc:mysql://localhost:3306/school_data", "root", "W7301@jqir#");
 
-        String sql = "INSERT INTO student_orders (name, email, phoneNo, course, amount, orderStatus, razorpayOrderID,admin_name,admin_no) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO student_orders (name, email, phoneNo, course, amount, date_of_transaction, time_of_transaction, orderStatus, razorpayOrderID, admin_name, admin_no) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         List<String> list = new ArrayList<String>();
         String adminName = "";
@@ -65,12 +67,13 @@ public class StudentService {
             stmt.setString(2, order.getEmail());
             stmt.setString(3, order.getPhone());
             stmt.setString(4, order.getCourse());
-            System.out.println(order.getCourse());
             stmt.setDouble(5, order.getAmount());
-            stmt.setString(6, order.getOrderStatus());
-            stmt.setString(7, order.getRazorpayOrderId());
-            stmt.setString(8, adminName);
-            stmt.setInt(9, adminNo);
+            stmt.setDate(6, Date.valueOf(LocalDate.now()));
+            stmt.setTime(7, Time.valueOf(LocalTime.now()));
+            stmt.setString(8, order.getOrderStatus());
+            stmt.setString(9, order.getRazorpayOrderId());
+            stmt.setString(10, adminName);
+            stmt.setInt(11, adminNo);
 
             stmt.executeUpdate();
         } finally {

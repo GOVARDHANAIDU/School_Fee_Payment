@@ -3,9 +3,6 @@ package com.DTO;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-
-
-
 public class PaymentTransaction {
 	private  int id;
 	private  String Admin_no;

@@ -179,19 +179,22 @@
     </div>
   </div>
 </nav>
-
+<%
+  String studentName = (String)session2.getAttribute("studentName");
+  String email = (String)session2.getAttribute("email");
+  String phone = (String)session2.getAttribute("phone");
+  String  class1 = (String)session2.getAttribute("class1");
+  double payingfee = (double)session2.getAttribute("payingfee");
+%>
     <div class="container">
         <h2>Student Payment</h2>
         <form id="paymentForm">
-            <input type="text" id="name" value="<%=request.getParameter("studentName") %>" required>
+            <input type="text" id="name" value="<%=studentName%>" placeholder="Student Name" readonly="readonly" required>
             
-            <input type="email" id="email" value="<%=request.getParameter("email") %>" placeholder="Email">
-            <input type="text" id="phone" placeholder="Phone" value="<%=request.getParameter("phone") %>" required>
-            <input type="text" id="course" placeholder="Class" value="<%=request.getParameter("class1") %>" required>
-            <input type="number" id="amount" placeholder="Amount (INR)" value="<%=request.getParameter("payingfee") %>" required>
-            <input type="text" id="admissionnumber" value="<%=request.getParameter("admissionnumber")%>" name="AdmissionNumber" readOnly hidden="true">
-            <input type="number" id="totalamount" value="<%=request.getParameter("amount")%>" readOnly hidden="true">
-            <input type="text" id="paidamount" value="<%=request.getParameter("paidfee")%>" readOnly hidden="true">
+            <input type="email" id="email" value="<%=email%>" placeholder="Email">
+            <input type="text" id="phone" placeholder="Phone" value="<%=phone%>" required>
+            <input type="text" id="course" placeholder="Class" value="<%=class1%>" required>
+            <input type="number" id="amount" placeholder="Amount (INR)" value="<%=payingfee%>" required>
             <button type="button" onclick="payNow()">Pay Now</button>
         </form>
         
@@ -207,16 +210,16 @@
         function payNow() {
             const data = {
                 name: document.getElementById("name").value.trim(),
-                admissionnumber: document.getElementById("admissionnumber").value.trim(),
                 email: document.getElementById("email").value.trim(),
                 phone: document.getElementById("phone").value.trim(),
                 course: document.getElementById("course").value.trim(),
                 amount: parseFloat(document.getElementById("amount").value.trim()),
-                totalamount: parseFloat(document.getElementById("totalamount").value.trim()),
-                paidamount: parseFloat(document.getElementById("paidamount").value.trim())
+                
             };
-
-            if (!data.name || !data.email || !data.phone || !data.course || isNaN(data.amount)) {
+            
+           
+            
+            if (!data.name || !data.phone || !data.course || isNaN(data.amount)) {
                 alert("Please fill all fields correctly.");
                 return;
             }
@@ -235,7 +238,7 @@
                     key: "rzp_test_Jmsp2zqLWnGnkA", // replace with your real test key or live key
                     amount: order.amount,
                     currency: "INR",
-                    name: "Course Payment",
+                    name: "School Payment",
                     description: "Payment for " + data.course,
                     order_id: order.razorpayOrderId,
                     handler: function (response) {
@@ -262,7 +265,7 @@
                 document.getElementById("spinner").style.display = "none";
             })
             .catch(err => {
-                console.error("Error creating order", err);
+                
                 alert("Failed to initiate payment.");
                 document.getElementById("spinner").style.display = "none"; // Hide spinner in case of error
             });

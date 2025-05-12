@@ -10,7 +10,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Student Fee Details</title>
-
+    
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2132/2132732.png" type="image/x-icon">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 

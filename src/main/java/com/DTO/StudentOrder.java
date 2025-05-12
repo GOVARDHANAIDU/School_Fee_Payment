@@ -1,9 +1,16 @@
 package com.DTO;
 
+import java.sql.Date;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 public class StudentOrder {
     private String name;
     private String email;
     private String phone;
+    private Date dateOfPayment;
+    private Time timeOfPayment;
     private String course;
     private double amount;
     private String razorpayOrderId;
@@ -13,6 +20,7 @@ public class StudentOrder {
     private double totalfee;
     private double paidfee;
     private int adminNo;
+    
 	public String getAdminName() {
 		return adminName;
 	}
@@ -93,13 +101,30 @@ public class StudentOrder {
 	public void setOrderStatus(String orderStatus) {
 		this.orderStatus = orderStatus;
 	}
+	
+	
+	
+	public Date getDateOfPayment() {
+		return dateOfPayment;
+	}
+	public void setDateOfPayment(Date dateOfPayment) {
+		this.dateOfPayment = dateOfPayment;
+	}
+	public Time getTimeOfPayment() {
+		return timeOfPayment;
+	}
+	public void setTimeOfPayment(Time timeOfPayment) {
+		this.timeOfPayment = timeOfPayment;
+	}
 	@Override
 	public String toString() {
-		return "StudentOrder [name=" + name + ", email=" + email + ", phone=" + phone + ", course=" + course
-				+ ", amount=" + amount + ", razorpayOrderId=" + razorpayOrderId + ", orderStatus=" + orderStatus
-				+ ", adminName=" + adminName + ", admissionnumber=" + admissionnumber + ", totalfee=" + totalfee
-				+ ", paidfee=" + paidfee + ", adminNo=" + adminNo + "]";
+		return "StudentOrder [name=" + name + ", email=" + email + ", phone=" + phone + ", dateOfPayment="
+				+ dateOfPayment + ", timeOfPayment=" + timeOfPayment + ", course=" + course + ", amount=" + amount
+				+ ", razorpayOrderId=" + razorpayOrderId + ", orderStatus=" + orderStatus + ", adminName=" + adminName
+				+ ", admissionnumber=" + admissionnumber + ", totalfee=" + totalfee + ", paidfee=" + paidfee
+				+ ", adminNo=" + adminNo + "]";
 	}
+	
 	
 	
 	

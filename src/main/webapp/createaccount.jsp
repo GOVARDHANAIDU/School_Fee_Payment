@@ -8,10 +8,22 @@
   <title>Admin Registration</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2132/2132732.png" type="image/x-icon">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+	body {
+	  font-family: 'Segoe UI', sans-serif;
+	  margin: 0;
+	  padding-top: 70px;
+	  padding-bottom: 0;
+	}
+    /* Fixed navbar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1030;
     }
 
     .form-container {
@@ -77,23 +89,20 @@
       color: #2563eb;
     }
 
-    button {
-      background-color: #3b82f6;
-      color: white;
+    .register{
+      border: 1px solid black;
+      width: 20%;
+      background: #3b82f6;
+      color: black;
       padding: 0.75rem 1.5rem;
       font-weight: 600;
-      border-radius: 0.5rem;
-      transition: background-color 0.3s ease, transform 0.2s ease;
+      border-radius: 0.5rem; 
+      height: 25px; 
+      text-align: center;  
+      padding-bottom: 30px;  
     }
 
-    button:hover {
-      background-color: #2563eb;
-      transform: scale(1.03);
-    }
-
-    button:active {
-      transform: scale(0.97);
-    }
+    
 
     @media (min-width: 768px) {
       .form-grid {
@@ -115,6 +124,22 @@
   </style>
 </head>
 <body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">SAS School</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    
+      <div class="d-flex">
+        <a class="btn btn-outline-light me-2" href="AdminLogin.jsp">Login</a>
+        <a class="btn btn-outline-warning" href="createaccount.jsp">Signup</a>
+      </div>
+    </div>
+  </div>
+</nav>
 
 <%
     if(request.getParameter("name") != null) {
@@ -179,13 +204,13 @@
                         "showPopup('Admin Registered Successfully!', true);" +
                         "</script>");
                 } else {
-                    out.println("<script>showPopup('Registration Failed!', false);</script>");
+                    out.println("<script>alert('Registration Failed!')</script>");
                 }
             } catch(Exception e) {
                 if (e.getMessage().contains("Duplicate entry")) {
-                    out.println("<script>showPopup('Error: Email or Aadhar number already exists!', false);</script>");
+                    out.println("<script>alert('Error: Email or Aadhar number already exists!')</script>");
                 } else {
-                    out.println("<script>showPopup('Database error: " + e.getMessage().replace("'", "\\'") + "', false);</script>");
+                    out.println("<script>alert('Database error: " + e.getMessage().replace("'", "\\'") + "')</script>");
                 }
             } finally {
                 try { if(ps != null) ps.close(); } catch(Exception e) {}
@@ -194,6 +219,8 @@
         }
     }
 %>
+
+
 
 <div class="form-container">
   <h1 class="form-title">Admin Registration</h1>
@@ -251,8 +278,8 @@
       <label for="address">Address <span class="text-red-500">*</span></label>
     </div>
 
-    <div class="text-center mt-4">
-      <button type="submit">Register</button>
+    <div class="text-center">
+      <button type="submit" class="register">Register</button>
     </div>
   </form>
 </div>

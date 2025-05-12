@@ -42,6 +42,7 @@ public class TransactionPageImp implements AllPaymentsByAdmin {
 			preparedStatement.setDouble(12, paymentTransaction.getPaidFee());
 			preparedStatement.setString(13, paymentTransaction.getStudentClass());
 			preparedStatement.setInt(14, paymentTransaction.getAdminId());
+			System.out.println(paymentTransaction.getStudentClass());
 			int result = preparedStatement.executeUpdate();
 			
 			if(result != 0) {
@@ -158,6 +159,8 @@ public class TransactionPageImp implements AllPaymentsByAdmin {
 				studentOrder.setName(resultSet.getString("name"));
 				studentOrder.setEmail(resultSet.getString("email"));
 				studentOrder.setPhone(resultSet.getString("phoneNo"));
+				studentOrder.setDateOfPayment(resultSet.getDate("date_of_transaction"));
+				studentOrder.setTimeOfPayment(resultSet.getTime("time_of_transaction"));
 				studentOrder.setCourse(resultSet.getString("course"));
 				studentOrder.setAmount(resultSet.getDouble("amount"));
 				studentOrder.setOrderStatus(resultSet.getString("orderStatus"));

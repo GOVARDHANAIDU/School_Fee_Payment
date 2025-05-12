@@ -10,11 +10,13 @@ import java.util.List;
 
 import com.DTO.Parallelinsertioninstudentfee;
 import com.DTO.StudentDetails;
+import com.DTO.Students;
 
 
 //Student_id, Admission_Number, Student_Name, Email_ID, Phone_Number, Total_Fee, Paid_Fee, Remaining_fee, Student_Class
 public class StudentDetailsImp implements StudentDetailsInter{
 	private static final String selectAll = "Select * from studentfeedetails";
+	private static final String selectAllStudents = "Select * from students";
 	private static final String update ="UPDATE studentfeedetails SET "
 			+ "    Paid_Fee = ? ,"
 			+ "    Remaining_fee = ? "
@@ -55,6 +57,50 @@ public class StudentDetailsImp implements StudentDetailsInter{
 		}
 		return null;
 	}
+	//student_id, admin_no, student_name, father_name, email, father_number, 
+	//mother_name, mother_number, guardian_name, guardian_number, address, class,
+	//aadhar_number, total_fee, gender, age, dob, pincode, paid_fee
+	@Override
+	public List<Students> allStudentPersonalDetails() {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection connection =
+					DriverManager.getConnection("jdbc:mysql://localhost:3306/school_data","root","W7301@jqir#");
+			PreparedStatement preparedStatement = connection.prepareStatement(selectAllStudents);		
+			ResultSet resultSet = preparedStatement.executeQuery();
+			
+			List<com.DTO.Students> list = new ArrayList<com.DTO.Students>();
+			while (resultSet.next()) {
+				
+				Students studentDetails = new Students();
+				studentDetails.setAdminNo(resultSet.getString("admin_no"));
+				studentDetails.setStudentName(resultSet.getString("student_name"));
+				studentDetails.setFatherName(resultSet.getString("father_name"));
+				studentDetails.setMotherName(resultSet.getString("mother_name"));
+				studentDetails.setFatherNumber(resultSet.getLong("father_number"));
+				studentDetails.setMotherNumber(resultSet.getLong("mother_number"));
+				studentDetails.setGuardianName(resultSet.getString("guardian_name"));
+				studentDetails.setGuardianNumber(resultSet.getLong("guardian_number"));
+				studentDetails.setAddress(resultSet.getString("address"));
+				studentDetails.setStudentClass(resultSet.getString("class"));
+				studentDetails.setAadharNumber(resultSet.getLong("aadhar_number"));
+				studentDetails.setTotalFee(resultSet.getDouble("total_fee"));
+				studentDetails.setGender(resultSet.getString("gender"));
+				studentDetails.setAge(resultSet.getInt("age"));
+				studentDetails.setDob(resultSet.getDate("dob").toLocalDate());
+				studentDetails.setPincode(resultSet.getInt("pincode"));
+				studentDetails.setPaidFee(resultSet.getDouble("paid_fee"));
+				list.add(studentDetails);
+			}
+			return list;		
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+			
+	}
+	
 	@Override
 	public boolean updateRemainingFee(String admissionNumber, double payingfee) {
 		
@@ -184,7 +230,7 @@ public class StudentDetailsImp implements StudentDetailsInter{
 			}
 
 	}
-	
+		
 	 
 	
 

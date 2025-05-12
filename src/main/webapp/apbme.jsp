@@ -13,7 +13,7 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2132/2132732.png" type="image/x-icon">
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.4.0/css/fixedHeader.dataTables.min.css">
@@ -64,12 +64,13 @@
         <li class="nav-item"><a class="nav-link active" href="home.jsp">Home</a></li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Students</a>
-                        <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="allStudents.jsp">All Student Info</a></li>
+             <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="studentdetails.jsp">Student Details</a></li>
+            <li><a class="dropdown-item" href="allStudents.jsp">Student Payment Info</a></li>
             <li><a class="dropdown-item" href="BillingPage.jsp">Student Fee Payment</a></li>
             <li><a class="dropdown-item" href="studentreg.jsp">Create Student Details</a></li>
             <li><a class="dropdown-item" href="bulkimporting.jsp">Create Bulk</a></li>
-           <li><a class="dropdown-item" href="newupdates.jsp">Update Student Details</a></li>
+            <li><a class="dropdown-item" href="newupdates.jsp">Update Student Details</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">
@@ -118,7 +119,7 @@
          
       <!-- Right side Login and Signup buttons -->
       <div class="d-flex">
-        <a class="btn btn-outline-light me-2" href="AdminLogin.jsp">Login</a>
+        <a class="btn btn-outline-light me-2" href="AdminLogin.jsp">Logout</a>
         <a class="btn btn-outline-warning" href="createaccount.jsp">Signup</a>
       </div>
     </div>
@@ -158,7 +159,8 @@
                         AllPaymentsByAdmin allPaymentsByAdmin = new TransactionPageImp();
                         List<PaymentTransaction> list = allPaymentsByAdmin.selectAllPaymentsByAdmin(tempid);
                         int count = 1;
-                        for (PaymentTransaction p : list) {
+                        for (int i = list.size() - 1; i >= 0; i--) {
+        		            PaymentTransaction p = list.get(i);
                     %>
                     <tr>
                         <td><%= count++ %></td>
