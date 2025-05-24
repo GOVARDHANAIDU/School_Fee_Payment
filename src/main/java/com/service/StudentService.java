@@ -30,14 +30,14 @@ public class StudentService {
         options.put("amount", amountInPaise); // amount in paise
         options.put("currency", "INR");
         options.put("receipt", "receipt_" + System.currentTimeMillis());
-   //     options.put("course", );
+   //   options.put("course", );
         // Create the order
         Order order = razorpay.orders.create(options);
 
         // Populate order details in student object
         student.setRazorpayOrderId(order.get("id"));
         student.setOrderStatus(order.get("status"));
-        System.out.println(student.getOrderStatus());
+
         // Optional: Save order info to DB
         saveToDB(student);
 

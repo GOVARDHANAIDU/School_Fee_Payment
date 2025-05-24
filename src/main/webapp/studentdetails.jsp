@@ -164,8 +164,8 @@
                 %>           
                 <tr>
                     <td><%= count %></td>
-                    <td><%= p.getAdminNo() %></td>
-                    <td><a href="home.jsp" style="color:black; text-decoration: none;"><%= p.getStudentName() %></a></td>
+                    <td><a href="student-profile.jsp?admissionNo=" style="text-decoration: none; color:black;"><%=p.getAdminNo()%></a></td>
+                    <td><%= p.getStudentName() %></td>
                     <td><%= p.getFatherName() %></td>
                     <td><%= p.getMotherName() %></td>
                     <td><%= p.getFatherNumber()%></td>

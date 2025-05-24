@@ -30,8 +30,9 @@ public class CreateOrder extends HttpServlet {
         	list1.add(adminNo);
         	
             BufferedReader reader = request.getReader();
-            StudentOrder student = new Gson().fromJson(reader, StudentOrder.class);
-            
+            Gson gson = new Gson();           
+            StudentOrder student = gson.fromJson(reader, StudentOrder.class);
+     
             // ✅ Store each field into separate Java variables
             String name = student.getName();
             String email = student.getEmail();
@@ -39,14 +40,10 @@ public class CreateOrder extends HttpServlet {
             String course = student.getCourse();
             double amount = student.getAmount();
             String admissionNo = student.getAdmissionnumber();
-            
-            System.out.println("Create Order admission number: "+admissionNo);
-            
-            
+                        
             StudentService service = new StudentService();
             StudentOrder createdOrder = service.createRazorpayOrder(student);
             
-            System.out.println("Received from frontend: " + new Gson().toJson(student));
             
             response.setContentType("application/json");
             response.getWriter().write(new Gson().toJson(createdOrder));
