@@ -75,6 +75,7 @@
             <li><a class="dropdown-item" href="allStudents.jsp">Student Payment Info</a></li>
             <li><a class="dropdown-item" href="BillingPage.jsp">Student Fee Payment</a></li>
             <li><a class="dropdown-item" href="studentreg.jsp">Create Student Details</a></li>
+            <li><a class="dropdown-item" href="create-class.jsp">Create Class</a></li>
             <li><a class="dropdown-item" href="bulkimporting.jsp">Create Bulk</a></li>
             <li><a class="dropdown-item" href="newupdates.jsp">Update Student Details</a></li>
           </ul>
