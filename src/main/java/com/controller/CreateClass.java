@@ -92,12 +92,24 @@ public class CreateClass extends HttpServlet {
                 }
                 pstmt.executeBatch();
 
-
-                response.getWriter().write("Class '" + className + "' created and data inserted successfully.");
-                conn.close();
+               PrintWriter writer = response.getWriter();
+               RequestDispatcher dispatcher = request.getRequestDispatcher("create-class.jsp");
+               dispatcher.include(request, response);
+               
+               writer.println("<script>");
+               writer.println("alert('Class Created Successfully..')");
+              
+               writer.println("</script>"); 
+               
             } catch (Exception e) {
                 e.printStackTrace();
-                response.getWriter().write("Error: " + e.getMessage());
+                PrintWriter writer = response.getWriter();
+                RequestDispatcher dispatcher = request.getRequestDispatcher("create-class.jsp");
+                dispatcher.include(request, response);
+                
+                writer.println("<script>");
+                writer.println("alert('Error: " + e.getMessage() + "')");
+                writer.println("</script>"); 
             }
         }
     }

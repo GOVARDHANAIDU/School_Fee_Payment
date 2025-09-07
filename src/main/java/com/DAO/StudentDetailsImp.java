@@ -231,7 +231,4 @@ public class StudentDetailsImp implements StudentDetailsInter{
 
 	}
 		
-	 
-	
-
 }
