@@ -88,6 +88,7 @@
             <li><a class="dropdown-item" href="paymentdetails.jsp">All Payment Status</a></li>
           </ul>
         </li>
+		<li class="nav-item"><a class="nav-link" href="fee-notifications.jsp">Send Notifications</a></li>        
         <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
         <li class="nav-item"><a class="nav-link" href="#">About Us</a></li>
       </ul>
@@ -176,7 +177,7 @@
             </div>  </a>
         </div>
         <div class="col-md-4">
-        <a href="allStudents.jsp" style="text-decoration: none;">
+        <a href="faculty/faculty.jsp" style="text-decoration: none;">
             <div class="card shadow p-3">
                 <img src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png" class="card-img-top w-25 mx-auto my-2" alt="Faculty">
                 <div class="card-body">

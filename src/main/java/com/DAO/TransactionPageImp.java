@@ -14,6 +14,7 @@ import com.DTO.PaymentTransaction;
 import com.DTO.StudentOrder;
 
 public class TransactionPageImp implements AllPaymentsByAdmin {
+
 	private static final String insertDetails =
 			"insert into transactions(student_admission_number, student_name, total_amount, Last_Paid_Amount, remaining_fee_balance, date_of_payment, "
 			+ "time_of_payment, mode_of_payment, admin_name, phone_number, Email_ID,Paid_amount,Student_Class,admin_id)"
@@ -21,12 +22,14 @@ public class TransactionPageImp implements AllPaymentsByAdmin {
 	private static final String selectAll = "Select * from transactions";
 	private static final String selectAllPayment = "Select * from student_orders";
 	private static final String selectAllOfAdmin = "Select * from transactions where admin_id = ?";
+	DatabaseConnectivity databaseConnectivity = new DatabaseConnectivity();
+
 	@Override
 	public boolean insertAllPayments(PaymentTransaction paymentTransaction) {
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection connection =
-					DriverManager.getConnection("jdbc:mysql://localhost:3306/school_data","root","W7301@jqir#");
+						Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection connection = databaseConnectivity.getConnection();
+// DriverManager.getConnection("jdbc:mysql://localhost:3306/school_data","root","W7301@jqir#");
 			PreparedStatement preparedStatement = connection.prepareStatement(insertDetails);
 			preparedStatement.setString(1, paymentTransaction.getAdmin_no());
 			preparedStatement.setString(2, paymentTransaction.getStudentNAme());
@@ -64,8 +67,8 @@ public class TransactionPageImp implements AllPaymentsByAdmin {
 	public List<PaymentTransaction> selectAllPayments() {
 	    try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection connection = 
-					DriverManager.getConnection("jdbc:mysql://localhost:3306/school_data","root","W7301@jqir#");
+			Connection connection = databaseConnectivity.getConnection();
+//					DriverManager.getConnection("jdbc:mysql://localhost:3306/school_data","root","W7301@jqir#");
 			PreparedStatement preparedStatement = connection.prepareStatement(selectAll);
 			
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -105,13 +108,12 @@ public class TransactionPageImp implements AllPaymentsByAdmin {
 	public List<PaymentTransaction> selectAllPaymentsByAdmin(int id) {
 	    try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection connection = 
-					DriverManager.getConnection("jdbc:mysql://localhost:3306/school_data","root","W7301@jqir#");
+			Connection connection = databaseConnectivity.getConnection();
+//					DriverManager.getConnection("jdbc:mysql://localhost:3306/school_data","root","W7301@jqir#");
 			PreparedStatement preparedStatement = connection.prepareStatement(selectAllOfAdmin);
 			
 			preparedStatement.setInt(1,id);
 			ResultSet resultSet = preparedStatement.executeQuery();
-			System.out.println(preparedStatement);
 			List<PaymentTransaction> list = new ArrayList<PaymentTransaction>();
 			while(resultSet.next()) {
 				PaymentTransaction paymentTransaction = new PaymentTransaction();
@@ -148,13 +150,13 @@ public class TransactionPageImp implements AllPaymentsByAdmin {
 		
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection connection = 
-					DriverManager.getConnection("jdbc:mysql://localhost:3306/school_data","root","W7301@jqir#");
+			Connection connection = databaseConnectivity.getConnection();
+//					DriverManager.getConnection("jdbc:mysql://localhost:3306/school_data","root","W7301@jqir#");
 			PreparedStatement preparedStatement = connection.prepareStatement(selectAllPayment);
 			ResultSet resultSet = preparedStatement.executeQuery();
-			System.out.println(preparedStatement);
 			List<StudentOrder> list = new ArrayList<StudentOrder>();
 			while(resultSet.next()) {
+				
 				StudentOrder studentOrder = new StudentOrder();
 				studentOrder.setName(resultSet.getString("name"));
 				studentOrder.setEmail(resultSet.getString("email"));
