@@ -41,6 +41,8 @@
     }
     .navbar {
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      height: 50px;
+      font-size: 0.9rem;
     }
     .modal-80w {
       max-width: 80%;
@@ -111,6 +113,18 @@
         <p style="color: white; margin-right: 40px; padding-top: 10px;">Hello, <%=userName%></p>
       </div>
 
+	<div class="dropdown me-3">
+          <a class="btn btn-sm btn-outline-light dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+            Roles
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="/SchoolData/home.jsp">Channel Admin</a></li>
+            <li><a class="dropdown-item" href="#">Student</a></li>
+            <li><a class="dropdown-item" href="./faculty/faculty.jsp">Faculty</a></li>
+          </ul>
+        </div>
+	
+	
       <!-- Right side Login and Signup buttons -->
       <div class="d-flex">
         <a class="btn btn-outline-light me-2" href="/SchoolData/AdminLogin.jsp">Logout</a>

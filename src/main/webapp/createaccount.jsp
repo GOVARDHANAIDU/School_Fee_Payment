@@ -24,6 +24,7 @@
       top: 0;
       width: 100%;
       z-index: 1030;
+      height:50px;
     }
 
     .form-container {

@@ -15,53 +15,83 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             background-color: #f8f9fa;
+            font-size: 0.9rem; /* Base font size 0.9rem for compactness */
+            padding-top: 70px; /* Account for fixed navbar */
+            padding-bottom: 0;
+        }
+
+        /* Navbar */
+        .navbar {
+          position: fixed;
+          top: 0;
+          width: 100%;
+          z-index: 1030;
+          font-size: 0.9rem; /* Smaller font for attractiveness */
+          height: 50px;
+        }
+
+        .navbar-brand {
+          font-size: 0.9rem;
+          font-weight: 600;
+        }
+
+        .navbar-nav .nav-link {
+          padding: 4px 8px; /* Tighter padding for compact look */
+        }
+
+        .dropdown-menu {
+          font-size: 0.8rem; /* Smaller dropdown font */
+        }
+
+        .dropdown-item {
+          padding: 6px 12px;
         }
 
         .maincontainer {
             width: 210mm;
             margin: auto;
-            padding: 20px;
+            padding: 15px; /* Slightly tighter padding */
             background: white;
             box-shadow: 0 0 10px rgba(0,0,0,0.2);
         }
 
         .copy {
-            margin-bottom: 40px;
-            padding: 20px;
+            margin-bottom: 30px; /* Reduced space */
+            padding: 15px; /* Tighter padding */
             border: 1px dashed #ccc;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 10px;
+            margin-bottom: 8px; /* Tighter margin */
         }
 
         .header h1 {
-            font-size: 1.5rem;
-            margin-bottom: 5px;
+            font-size: 1.3rem; /* Adjusted to ~0.9rem scale */
+            margin-bottom: 3px;
         }
 
         .header p {
-            font-size: 0.9rem;
+            font-size: 0.8rem; /* Smaller */
             margin-bottom: 0;
         }
 
         h2 {
             text-align: center;
-            font-size: 1rem;
+            font-size: 0.9rem; /* 0.9rem */
             text-transform: uppercase;
-            margin: 20px 0;
+            margin: 15px 0; /* Tighter margin */
             color: #007bff;
         }
 
         .details {
-            margin-top: 10px;
-            margin-left: 60px;
+            margin-top: 8px; /* Tighter */
+            margin-left: 40px; /* Adjusted for smaller layout */
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px 30px;
-            font-size: 0.9rem;
-            padding: 10px 20px;
+            gap: 8px 20px; /* Reduced gap */
+            font-size: 0.85rem; /* Slightly smaller for compactness */
+            padding: 8px 15px; /* Tighter padding */
         }
 
         .details p {
@@ -69,25 +99,26 @@
         }
 
         .footer-note {
-            text-align: right;
-            font-size: 0.9rem;
-            margin-top: 30px;
+            text-align: center;
+            font-size: 0.8rem; /* Smaller */
+            margin-top: 20px; /* Tighter */
         }
 
         .print-button {
             text-align: center;
-            margin: 30px 0;
+            margin: 20px 0; /* Tighter */
         }
 
         .print-button button {
-            padding: 10px 25px;
-            font-size: 16px;
+            padding: 8px 20px; /* Tighter padding */
+            font-size: 0.9rem; /* 0.9rem */
             border-radius: 5px;
         }
 
         @media print {
             body {
                 background: none;
+                padding-top: 0; /* No navbar on print */
             }
 
             .print-button {
@@ -97,19 +128,25 @@
             .maincontainer {
                 box-shadow: none;
                 padding: 0;
+                margin: 0;
+            }
+
+            .navbar {
+                display: none; /* Hide navbar on print */
             }
 
             body::before {
                 content: "";
                 position: fixed;
-                top: 35%;
-                left: 25%;
-                width: 50%;
-                height: 50%;
-                background: url('https://example.com/school-logo.png') no-repeat center center;
+                top: 20%;
+                left: 10%;
+                width: 80%;
+                height: 80%;
+                background: url('https://cdn-icons-png.flaticon.com/512/2132/2132732.png') no-repeat center center;
                 background-size: contain;
-                opacity: 0.06;
+                opacity: 0.05;
                 z-index: -1;
+                transform: rotate(-45deg); /* Diagonal for watermark effect */
             }
         }
         
@@ -167,6 +204,7 @@
 %>
 <body>
 
+<!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">SAS School</a>
@@ -178,74 +216,102 @@
       <!-- Left side nav items -->
       <ul class="navbar-nav me-auto">
         <li class="nav-item"><a class="nav-link active" href="home.jsp">Home</a></li>
+		
+		<li class="nav-item"><a class="nav-link" href="about.jsp">About Us</a></li>
+		
+        <!-- Students Dropdown -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Students</a>
- 		 <ul class="dropdown-menu">
+          <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="studentdetails.jsp">Student Details</a></li>
             <li><a class="dropdown-item" href="allStudents.jsp">Student Payment Info</a></li>
             <li><a class="dropdown-item" href="BillingPage.jsp">Student Fee Payment</a></li>
             <li><a class="dropdown-item" href="studentreg.jsp">Create Student Details</a></li>
+            <li><a class="dropdown-item" href="create-class.jsp">Create Class</a></li>
             <li><a class="dropdown-item" href="bulkimporting.jsp">Create Bulk</a></li>
             <li><a class="dropdown-item" href="newupdates.jsp">Update Student Details</a></li>
           </ul>
         </li>
+
+        <!-- Payments Dropdown -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Payments</a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="allpayments.jsp">All Payment Details</a></li>
-            <li><a class="dropdown-item" href="apbme.jsp">Payment By Admin </a></li>
+            <li><a class="dropdown-item" href="apbme.jsp">Payment By Admin</a></li>
             <li><a class="dropdown-item" href="paymentdetails.jsp">All Payment Status</a></li>
           </ul>
         </li>
+
+        <!-- Explore Dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Explore</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">360° View</a></li>
+            <li><a class="dropdown-item" href="#">Videos</a></li>
+            <li><a class="dropdown-item" href="images.jsp">Images</a></li>
+          </ul>
+        </li>
+
+        <!-- Other Links -->
+        <li class="nav-item"><a class="nav-link" href="fee-notifications.jsp">Send Notifications</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">About Us</a></li>
+        
       </ul>
 
+      <!-- Right Side -->
+<%
+    // Session validation: Redirect to login if not authenticated
+    // Check for any login indicator (admin, student, or faculty)
+    HttpSession sessio = request.getSession(false); // Don't create new session if none exists
+    if (sessio == null || 
+        (sessio.getAttribute("adminName") == null && 
+        sessio.getAttribute("studentId") == null && 
+        sessio.getAttribute("facultyId") == null)) {
+        response.sendRedirect("AdminLogin.jsp");
+        return;
+    }
 
-       <%
-       
-        String Aname = (String) session2.getAttribute("adminName");
-        String userName = "";
+    // Prevent caching to avoid back/forward navigation issues after logout or session expiry
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    response.setHeader("Pragma", "no-cache");
+    response.setDateHeader("Expires", 0);
 
-         if (Aname == null) {
-             // Redirect if not logged in
-             response.sendRedirect("AdminLogin.jsp");
-             return;
-         }
-        
-        for(int i= 0 ; i<=Aname.length()-1 ; i++)
-        {
-        	char ch = Aname.charAt(i);
-        	if(ch == ' ' )
-        	{
-        		break;
-        	}
-        	else
-        	{
-        		userName = userName+ch;
-        	}
-        }
-        %>
-        <div style="display: flex; align-items: center; margin-left: 20px; gap: 10px;">
-    <p style="color: white; margin-right: 40px; padding-top: 10px;">Hello, <%=userName%></p>
-    
-</div>
-         
-      <!-- Right side Login and Signup buttons -->
-      <div class="d-flex">
-        <a class="btn btn-outline-light me-2" href="AdminLogin.jsp">Logout</a>
-        <a class="btn btn-outline-warning" href="createaccount.jsp">Signup</a>
+    // Get user name for display (prioritize adminName, fallback to others if needed)
+    String displayName = (String) session.getAttribute("adminName");
+    if (displayName == null) {
+        // For student or faculty, you might set a "userName" attribute in servlet; adjust as needed
+        displayName = "User"; // Fallback
+    }
+    String userName = "";
+    for(int i = 0; i < displayName.length(); i++) {
+        char ch = displayName.charAt(i);
+        if(ch == ' ') break;
+        else userName += ch;
+    }
+%>
+      <div class="d-flex align-items-center ms-3">
+        <p class="text-white mb-0 me-3">Hello, <%=userName%></p>
+
+        <!-- Roles Dropdown -->
+        <div class="dropdown me-3">
+          <a class="btn btn-sm btn-outline-light dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+            Roles
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="home.jsp">Channel Admin</a></li>
+            <li><a class="dropdown-item" href="#">Student</a></li>
+            <li><a class="dropdown-item" href="./faculty/faculty.jsp">Faculty</a></li>
+          </ul>
+        </div>
+
+        <!-- Auth Buttons -->
+        <a class="btn btn-outline-light btn-sm me-2" href="AdminLogin.jsp">Logout</a>
+        <a class="btn btn-outline-warning btn-sm" href="createaccount.jsp">Signup</a>
       </div>
     </div>
   </div>
 </nav>
-
-
-
-
-
-
-
 
 <div class="maincontainer">
 

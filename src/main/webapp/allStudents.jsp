@@ -40,7 +40,9 @@
 
     <style>
         body { font-size: 0.85rem; }
-        .navbar { padding: 0.3rem 1rem; }
+        .navbar { padding: 0.3rem 1rem;
+        font-size: 0.9rem;
+        heigth: 50px; }
         .navbar-brand { font-size: 1rem; }
         .nav-link { font-size: 0.85rem; padding: 0.3rem 0.5rem !important; }
         .navbar-nav .dropdown-menu { font-size: 0.8rem; }
@@ -66,6 +68,10 @@
             border: 2px solid #e0e0e0; /* Light gray border */
             padding: 10px;
             margin-bottom: 20px;
+        }
+        .print-btn {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.4rem;
         }
     </style>
 </head>
@@ -286,6 +292,7 @@
                     <th>Paid Fee</th>
                     <th>Balance</th>
                     <th>Class</th>
+                    <th>Print</th>
                 </tr>
             </thead>
             <tbody>
@@ -304,6 +311,7 @@
                     <td><%= p.getPaidFee()%></td>
                     <td><%= p.getRemainingFee() %></td>
                     <td><%= p.getStudentClass() %></td>
+                    <td><button class="btn btn-sm btn-info print-btn" data-admission="<%= p.getAdmissionNumber() %>" data-name="<%= p.getStudentName() %>" data-phone="<%= p.getPhoneNumber() %>" data-total="<%= p.getTotalFee() %>" data-paid="<%= p.getPaidFee() %>" data-balance="<%= p.getRemainingFee() %>" data-class="<%= p.getStudentClass() %>">Print</button></td>
                 </tr>
                 <% count++; } %>
             </tbody>
@@ -490,7 +498,7 @@
 
             for (let i = 0; i < table.rows.length; i++) {
                 let row = table.rows[i];
-                for (let j = 0; j < row.cells.length; j++) {
+                for (let j = 0; j < row.cells.length - 1; j++) { // Exclude print button
                     content += row.cells[j].innerText + '\t';
                 }
                 content += '\n';
@@ -506,6 +514,133 @@
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, 'FeeDetails');
             XLSX.writeFile(workbook, 'student_fee_details_' + getTodayDate() + '.xlsx');
+        });
+
+        // Print Receipt Popup
+        $('.print-btn').on('click', function() {
+            const admission = $(this).data('admission');
+            const name = $(this).data('name');
+            const phone = $(this).data('phone');
+            const total = $(this).data('total');
+            const paid = $(this).data('paid');
+            const balance = $(this).data('balance');
+            const cls = $(this).data('class');
+            const adminName = '<%= name %>'; // From JSP session
+            const paymentMode = 'Cash'; // Default for print from list
+            const dateOfPayment = new Date().toLocaleString('en-IN', { 
+                day: '2-digit', 
+                month: '2-digit', 
+                year: 'numeric', 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
+            });
+
+            // Create popup window
+            const printWindow = window.open('', '_blank', 'width=800,height=600,scrollbars=yes');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Fee Receipt - ${name}</title>
+                    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+                    <style>
+                        body { font-family: 'Segoe UI', sans-serif; margin: 0; padding: 10px; background: white; font-size: 0.9rem; }
+                        .maincontainer { width: 100%; max-width: 210mm; margin: auto; padding: 10px; background: white; }
+                        .copy { margin-bottom: 15px; padding: 10px; border: 1px dashed #ccc; page-break-inside: avoid; }
+                        .header { text-align: center; margin-bottom: 5px; }
+                        .header h1 { font-size: 1.2rem; margin-bottom: 2px; color: #2a4365; }
+                        .header p { font-size: 0.8rem; margin-bottom: 0; color: #666; }
+                        h2 { text-align: center; font-size: 0.85rem; text-transform: uppercase; margin: 10px 0; color: #007bff; }
+                        .details { margin-top: 5px; margin-left: 30px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px 15px; font-size: 0.8rem; padding: 5px 10px; }
+                        .details p { margin: 0; line-height: 1.3; }
+                        .footer-note { text-align: center; font-size: 0.75rem; margin-top: 10px; }
+                        .footer-sign, .footer-sign2 { text-align: right; font-size: 0.75rem; margin-top: 5px; }
+                        .button-group { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; gap: 10px; }
+                        .button-group button { flex: 1; padding: 6px 12px; font-size: 0.85rem; border-radius: 4px; cursor: pointer; }
+                        .print-btn-popup { background: #2a4365; color: white; border: none; }
+                        .close-btn { background: #6c757d; color: white; border: none; }
+                        @media print { 
+                            body { background: none; padding: 0; } 
+                            .maincontainer { box-shadow: none; padding: 5px; width: 100%; margin: 0; }
+                            .copy { border: 1px solid #000; margin-bottom: 10px; page-break-inside: avoid; }
+                            .copy:first-of-type { page-break-after: avoid; }
+                            .copy:last-of-type { page-break-before: avoid; }
+                            .button-group { display: none; }
+                            body::before { content: ""; position: fixed; top: 20%; left: 10%; width: 80%; height: 80%; background: url('https://cdn-icons-png.flaticon.com/512/2132/2132732.png') no-repeat center center; background-size: contain; opacity: 0.05; z-index: -1; transform: rotate(-45deg); }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="maincontainer">
+                        <!-- Student Copy -->
+                        <div class="copy">
+                            <div class="header">
+                                <h1>SAS School</h1>
+                                <p>123 Learning Lane, Education City, Country | Ph: +1 123 456 7890</p>
+                                <hr>
+                            </div>
+                            <h2>Student Copy</h2>
+                            <div class="details">
+                                <p><strong>Admission No:</strong> ${admission}</p>
+                                <p><strong>Class:</strong> ${cls}</p>
+                                <p><strong>Name:</strong> ${name}</p>
+                                <p><strong>Phone:</strong> ${phone}</p>
+                            </div>
+                            <div class="details">
+                                <p><strong>Mode of Pay:</strong> ${paymentMode}</p>
+                                <p><strong>Total Fee:</strong> ₹${total}</p>
+                                <p><strong>Paid Fee:</strong> ₹${paid}</p>
+                                <p><strong>Paid Now:</strong> ₹0.00</p>
+                                <p><strong>Balance Fee:</strong> ₹${balance}</p>
+                                <p><strong>Billed By:</strong> ${adminName}</p>
+                            </div>
+                            <div class="footer-note">
+                                <p>Generated On: ${dateOfPayment}<br>Thank you for your payment</p>
+                            </div>
+                            <div class="footer-sign">  
+                                <p>Signature of Admin.<br>${adminName}</p>
+                            </div>
+                        </div>
+
+                        <!-- School Copy -->
+                        <div class="copy">
+                            <div class="header">
+                                <h1>SAS School</h1>
+                                <p>123 Learning Lane, Education City, Country | Ph: +1 123 456 7890</p>
+                                <hr>
+                            </div>
+                            <h2>School Copy</h2>
+                            <div class="details">
+                                <p><strong>Admission No:</strong> ${admission}</p>
+                                <p><strong>Class:</strong> ${cls}</p>
+                                <p><strong>Name:</strong> ${name}</p>
+                                <p><strong>Phone:</strong> ${phone}</p>
+                            </div>
+                            <div class="details">
+                                <p><strong>Mode of Pay:</strong> ${paymentMode}</p>
+                                <p><strong>Total Fee:</strong> ₹${total}</p>
+                                <p><strong>Paid Fee:</strong> ₹${paid}</p>
+                                <p><strong>Paid Now:</strong> ₹0.00</p>
+                                <p><strong>Balance Fee:</strong> ₹${balance}</p>
+                                <p><strong>Billed By:</strong> ${adminName}</p>
+                            </div>
+                            <div class="footer-note">
+                                <p>Generated On: ${dateOfPayment}<br>Thank you for your payment</p>
+                            </div>
+                            <div class="footer-sign2">  
+                                <p>Signature of Admin.<br>${adminName}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="button-group">
+                        <button onclick="window.print()" class="print-btn-popup">Print Receipt</button>
+                        <button onclick="window.close()" class="close-btn">Close</button>
+                    </div>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
         });
     });
 </script>
