@@ -43,22 +43,3 @@ import com.google.gson.Gson;
             response.getWriter().write(json);
         }
     }
-//schoolstudentdetails.database.windows.net
-    
-    
-//    import java.sql.Connection;
-//    import java.sql.DriverManager;
-//    import java.sql.SQLException;
-//
-//    public class AzureSqlConnection {
-//        public static void main(String[] args) {
-
-//
-//            try (Connection conn = DriverManager.getConnection(url)) {
-//                System.out.println("Connected to Azure SQL Database!");
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
-

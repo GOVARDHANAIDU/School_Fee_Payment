@@ -279,6 +279,7 @@
                     <th>Time</th>
                     <th>Mode</th>
                     <th>Billed By</th>
+                    <th>Print</th>
                 </tr>
             </thead>
             <tbody>
@@ -302,6 +303,7 @@
                 <td><%= fee.getTimeOfTransaction() %></td>
                 <td><%= fee.getModeOfPayment() %></td>
                 <td><%= fee.getAdminName() %></td>
+                <td><button class="btn btn-sm btn-primary" onclick="printReceipt(this)">Print</button></td>
             </tr>
             <%
                 }
@@ -318,7 +320,7 @@
             fixedHeader: true,
             order: [],
             lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
-            columnDefs: [{ orderable: true, targets: "_all" }]
+            columnDefs: [{ orderable: true, targets: "_all" }, { targets: -1, orderable: false }]
         });
 
         // Dashboard calculations
@@ -473,6 +475,118 @@
             XLSX.writeFile(workbook, 'all_payments_details_' + getTodayDate() + '.xlsx');
         });
     });
+
+    function printReceipt(button) {
+        const row = button.closest('tr');
+        const cells = row.cells;
+        const data = {
+            sno: cells[0].textContent.trim(),
+            studentName: cells[1].textContent.trim(),
+            totalFee: cells[2].textContent.trim(),
+            paidFee: cells[3].textContent.trim(),
+            lastPaid: cells[4].textContent.trim(),
+            balance: cells[5].textContent.trim(),
+            className: cells[6].textContent.trim(),
+            date: cells[7].textContent.trim(),
+            time: cells[8].textContent.trim(),
+            mode: cells[9].textContent.trim(),
+            billedBy: cells[10].textContent.trim()
+        };
+
+        const printWindow = window.open('', '_blank', 'width=800,height=600');
+        printWindow.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Payment Receipt - ${data.studentName}</title>
+                <style>
+                    body { font-family: Arial, sans-serif; margin: 20px; font-size: 12px; }
+                    .header { text-align: center; font-size: 18px; font-weight: bold; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 10px; }
+                    .details { margin: 10px 0; display: flex; justify-content: space-between; }
+                    .details div { flex: 1; }
+                    .label { font-weight: bold; }
+                    .copy { page-break-inside: avoid; margin-bottom: 30px; border: 1px dashed #ccc; padding: 15px; }
+                    .copy h3 { text-align: center; margin-bottom: 15px; }
+                    .footer { text-align: center; margin-top: 10px; font-size: 10px; }
+                    @media print { .no-print { display: none !important; } body { margin: 0; } }
+                </style>
+            </head>
+            <body onload="window.print(); window.onafterprint = () => window.close();">
+                <button class="no-print btn btn-secondary" onclick="window.close();">Close</button>
+                <div class="header">SAS School<br>Payment Receipt</div>
+                <div class="details">
+                    <div><span class="label">Student Name:</span> ${data.studentName}</div>
+                    <div><span class="label">Class:</span> ${data.className}</div>
+                </div>
+                <div class="details">
+                    <div><span class="label">Date:</span> ${data.date}</div>
+                    <div><span class="label">Time:</span> ${data.time}</div>
+                </div>
+                <div class="details">
+                    <div><span class="label">Payment Mode:</span> ${data.mode}</div>
+                    <div><span class="label">Billed By:</span> ${data.billedBy}</div>
+                </div>
+                <div class="details">
+                    <div><span class="label">Last Payment Amount:</span> ${data.lastPaid}</div>
+                    <div><span class="label">Total Fee:</span> ${data.totalFee}</div>
+                </div>
+                <div class="details">
+                    <div><span class="label">Total Paid:</span> ${data.paidFee}</div>
+                    <div><span class="label">Balance:</span> ${data.balance}</div>
+                </div>
+                <div class="copy">
+                    <h3>Student Copy</h3>
+                    <div class="details">
+                        <div><span class="label">Student Name:</span> ${data.studentName}</div>
+                        <div><span class="label">Class:</span> ${data.className}</div>
+                    </div>
+                    <div class="details">
+                        <div><span class="label">Date:</span> ${data.date}</div>
+                        <div><span class="label">Time:</span> ${data.time}</div>
+                    </div>
+                    <div class="details">
+                        <div><span class="label">Payment Mode:</span> ${data.mode}</div>
+                        <div><span class="label">Billed By:</span> ${data.billedBy}</div>
+                    </div>
+                    <div class="details">
+                        <div><span class="label">Last Payment Amount:</span> ${data.lastPaid}</div>
+                        <div><span class="label">Total Fee:</span> ${data.totalFee}</div>
+                    </div>
+                    <div class="details">
+                        <div><span class="label">Total Paid:</span> ${data.paidFee}</div>
+                        <div><span class="label">Balance:</span> ${data.balance}</div>
+                    </div>
+                    <p class="footer">Please retain this copy for your records. Thank you!</p>
+                </div>
+                <div class="copy">
+                    <h3>School Copy</h3>
+                    <div class="details">
+                        <div><span class="label">Student Name:</span> ${data.studentName}</div>
+                        <div><span class="label">Class:</span> ${data.className}</div>
+                    </div>
+                    <div class="details">
+                        <div><span class="label">Date:</span> ${data.date}</div>
+                        <div><span class="label">Time:</span> ${data.time}</div>
+                    </div>
+                    <div class="details">
+                        <div><span class="label">Payment Mode:</span> ${data.mode}</div>
+                        <div><span class="label">Billed By:</span> ${data.billedBy}</div>
+                    </div>
+                    <div class="details">
+                        <div><span class="label">Last Payment Amount:</span> ${data.lastPaid}</div>
+                        <div><span class="label">Total Fee:</span> ${data.totalFee}</div>
+                    </div>
+                    <div class="details">
+                        <div><span class="label">Total Paid:</span> ${data.paidFee}</div>
+                        <div><span class="label">Balance:</span> ${data.balance}</div>
+                    </div>
+                    <p class="footer">School receipt copy. For official records.</p>
+                </div>
+            </body>
+            </html>
+        `);
+        printWindow.document.close();
+    }
 </script>
 </body>
 </html>

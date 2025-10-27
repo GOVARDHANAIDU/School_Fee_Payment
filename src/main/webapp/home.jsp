@@ -183,7 +183,7 @@
   <div id="schoolCarousel" class="carousel slide h-100" data-bs-ride="carousel">
     <div class="carousel-inner h-100">
       <div class="carousel-item active h-100">
-        <img src="./images/backgroundimage.jpg" class="d-block w-100" alt="School 1">
+        <img src="https://images.unsplash.com/photo-1571260899304-425eee4c7efc?auto=format&fit=crop&w=1400&q=80" class="d-block w-100" alt="School 1">
       </div>
       <div class="carousel-item h-100">
         <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1400&q=80" class="d-block w-100" alt="School 2">
