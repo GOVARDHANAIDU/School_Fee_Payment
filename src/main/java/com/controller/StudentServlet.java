@@ -3,63 +3,75 @@ package com.controller;
 import java.io.*;
 import java.sql.*;
 import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
+@WebServlet("/GetStudentProfile")
 public class StudentServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     private Connection getConnection() throws Exception {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        return DriverManager.getConnection("jdbc:mysql://localhost:3306/schooldb", "root", "password");
+        return DriverManager.getConnection(
+            "jdbc:mysql://localhost:3306/school_data", "root", "W7301@jqir#"
+        );
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // ✅ Fetch full student details by student_id
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
+        JSONObject result = new JSONObject();
 
-        JSONArray arr = new JSONArray();
-        try (Connection con = getConnection()) {
-            String sql = "SELECT s.student_id, s.admission_no, s.student_name, s.father_name, s.email, s.father_number, s.mother_name, s.mother_number, s.guardian_name, s.guardian_number, s.address, s.class, s.aadhar_number, s.total_fee, s.gender, s.age, s.dob, s.pincode, s.paid_fee, MAX(p.payment_date) as last_paid FROM students s LEFT JOIN payments p ON s.student_id = p.student_id GROUP BY s.student_id";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
+        try {
+            String idStr = request.getParameter("studentId");
+            if (idStr == null || idStr.trim().isEmpty()) {
+                result.put("error", "Missing studentId parameter");
+                out.print(result.toString());
+                return;
+            }
 
-            while (rs.next()) {
-                JSONObject obj = new JSONObject();
-                obj.put("student_id", rs.getInt("student_id"));
-                obj.put("admission_no", rs.getString("admission_no"));
-                obj.put("student_name", rs.getString("student_name"));
-                obj.put("father_name", rs.getString("father_name"));
-                obj.put("email", rs.getString("email"));
-                obj.put("father_number", rs.getString("father_number"));
-                obj.put("mother_name", rs.getString("mother_name"));
-                obj.put("mother_number", rs.getString("mother_number"));
-                obj.put("guardian_name", rs.getString("guardian_name"));
-                obj.put("guardian_number", rs.getString("guardian_number"));
-                obj.put("address", rs.getString("address"));
-                obj.put("class", rs.getString("class"));
-                obj.put("aadhar_number", rs.getString("aadhar_number"));
-                obj.put("total_fee", rs.getDouble("total_fee"));
-                obj.put("gender", rs.getString("gender"));
-                obj.put("age", rs.getInt("age"));
-                obj.put("dob", rs.getString("dob"));
-                obj.put("pincode", rs.getString("pincode"));
-                obj.put("paid_fee", rs.getDouble("paid_fee"));
-                obj.put("last_paid", rs.getTimestamp("last_paid") != null ? rs.getTimestamp("last_paid").toString() : null);
-                obj.put("photoUrl", ""); // Placeholder
-                obj.put("avatarUrl", ""); // Placeholder
-                arr.put(obj);
+            try (Connection con = getConnection()) {
+                String sql = "SELECT * FROM students WHERE student_id = ?";
+                PreparedStatement ps = con.prepareStatement(sql);
+                ps.setInt(1, Integer.parseInt(idStr));
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    result.put("student_id", rs.getInt("student_id"));
+                    result.put("admin_no", rs.getString("admin_no"));
+                    result.put("student_name", rs.getString("student_name"));
+                    result.put("email", rs.getString("email"));
+                    result.put("class1", rs.getString("class"));
+                    result.put("father_name", rs.getString("father_name"));
+                    result.put("father_number", rs.getString("father_number"));
+                    result.put("mother_name", rs.getString("mother_name"));
+                    result.put("mother_number", rs.getString("mother_number"));
+                    result.put("guardian_name", rs.getString("guardian_name"));
+                    result.put("guardian_number", rs.getString("guardian_number"));
+                    result.put("address", rs.getString("address"));
+                    result.put("aadhar_number", rs.getString("aadhar_number"));
+                    result.put("total_fee", rs.getDouble("total_fee"));
+                    result.put("paid_fee", rs.getDouble("paid_fee"));
+                    result.put("gender", rs.getString("gender"));
+                    result.put("age", rs.getInt("age"));
+                    result.put("dob", rs.getString("dob"));
+                    result.put("pincode", rs.getString("pincode"));
+//                    result.put("photo", rs.getString("photo"));
+//                    result.put("fullPhoto", rs.getString("fullPhoto"));
+                } else {
+                    result.put("error", "Student not found");
+                }
+
+                out.print(result.toString());
             }
         } catch (Exception e) {
             e.printStackTrace();
-            out.print(new JSONArray().put(new JSONObject().put("error", "Database error: " + e.getMessage())).toString());
-            return;
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            result.put("error", "Server error: " + e.getMessage());
+            out.print(result.toString());
         }
-        out.print(arr.toString());
-    }
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.getWriter().write("Method not allowed");
     }
 }

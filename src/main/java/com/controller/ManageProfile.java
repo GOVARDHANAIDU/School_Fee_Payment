@@ -10,7 +10,7 @@ import javax.servlet.http.*;
 import com.DAO.DatabaseConnectivity;
 import com.google.gson.Gson;
 
-@WebServlet("/Servleeet")
+@WebServlet("/manageStudentDetails")
 public class ManageProfile extends HttpServlet {
     private Gson gson = new Gson();
     

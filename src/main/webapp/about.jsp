@@ -90,6 +90,8 @@
       text-decoration: none;
     }
   </style>
+  
+  <link href="./student-profile.css" rel="stylesheet">
 </head>
 <body>
 

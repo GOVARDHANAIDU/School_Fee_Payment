@@ -49,10 +49,11 @@
       margin-bottom: 1.5rem;
     }
   </style>
+    <link href="./student-profile.css" rel="stylesheet" >
+  
 </head>
 <body>
 
-<!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">SAS School</a>
@@ -64,6 +65,10 @@
       <!-- Left side nav items -->
       <ul class="navbar-nav me-auto">
         <li class="nav-item"><a class="nav-link active" href="home.jsp">Home</a></li>
+		
+		<li class="nav-item"><a class="nav-link" href="about.jsp">About Us</a></li>
+		
+        <!-- Students Dropdown -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Students</a>
           <ul class="dropdown-menu">
@@ -76,6 +81,8 @@
             <li><a class="dropdown-item" href="newupdates.jsp">Update Student Details</a></li>
           </ul>
         </li>
+
+        <!-- Payments Dropdown -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Payments</a>
           <ul class="dropdown-menu">
@@ -84,37 +91,72 @@
             <li><a class="dropdown-item" href="paymentdetails.jsp">All Payment Status</a></li>
           </ul>
         </li>
+
+        <!-- Explore Dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Explore</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">360° View</a></li>
+            <li><a class="dropdown-item" href="#">Videos</a></li>
+            <li><a class="dropdown-item" href="images.jsp">Images</a></li>
+          </ul>
+        </li>
+
+        <!-- Other Links -->
+        <li class="nav-item"><a class="nav-link" href="fee-notifications.jsp">Send Notifications</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">About Us</a></li>
+        
       </ul>
 
-      <%
-        HttpSession session2 = request.getSession();
-        String name = (String) session2.getAttribute("adminName");
+      <!-- Right Side -->
+<%
+    // Session validation: Redirect to login if not authenticated
+    // Check for any login indicator (admin, student, or faculty)
+    HttpSession sessio = request.getSession(false); // Don't create new session if none exists
+    if (sessio == null || 
+        (sessio.getAttribute("adminName") == null && 
+        sessio.getAttribute("studentId") == null && 
+        sessio.getAttribute("facultyId") == null)) {
+        response.sendRedirect("AdminLogin.jsp");
+        return;
+    }
 
-        if (name == null) {
-            response.sendRedirect("AdminLogin.jsp");
-            return;
-        }
+    // Prevent caching to avoid back/forward navigation issues after logout or session expiry
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    response.setHeader("Pragma", "no-cache");
+    response.setDateHeader("Expires", 0);
 
-        String userName = "";
-        for (int i = 0; i <= name.length() - 1; i++) {
-            char ch = name.charAt(i);
-            if (ch == ' ') {
-                break;
-            } else {
-                userName = userName + ch;
-            }
-        }
-      %>
-      <div style="display: flex; align-items: center; margin-left: 20px; gap: 10px;">
-        <p style="color: white; margin-right: 40px; padding-top: 10px;">Hello, <%=userName%></p>
-      </div>
+    // Get user name for display (prioritize adminName, fallback to others if needed)
+    String displayName = (String) session.getAttribute("adminName");
+    if (displayName == null) {
+        // For student or faculty, you might set a "userName" attribute in servlet; adjust as needed
+        displayName = "User"; // Fallback
+    }
+    String userName = "";
+    for(int i = 0; i < displayName.length(); i++) {
+        char ch = displayName.charAt(i);
+        if(ch == ' ') break;
+        else userName += ch;
+    }
+%>
+      <div class="d-flex align-items-center ms-3">
+        <p class="text-white mb-0 me-3">Hello, <%=userName%></p>
 
-      <!-- Right side Login and Signup buttons -->
-      <div class="d-flex">
-        <a class="btn btn-outline-light me-2" href="AdminLogin.jsp">Logout</a>
-        <a class="btn btn-outline-warning" href="createaccount.jsp">Signup</a>
+        <!-- Roles Dropdown -->
+        <div class="dropdown me-3">
+          <a class="btn btn-sm btn-outline-light dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+            Roles
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="home.jsp">Channel Admin</a></li>
+            <li><a class="dropdown-item" href="#">Student</a></li>
+            <li><a class="dropdown-item" href="./faculty/faculty.jsp">Faculty</a></li>
+          </ul>
+        </div>
+
+        <!-- Auth Buttons -->
+        <a class="btn btn-outline-light btn-sm me-2" href="AdminLogin.jsp">Logout</a>
+        <a class="btn btn-outline-warning btn-sm" href="createaccount.jsp">Signup</a>
       </div>
     </div>
   </div>
@@ -122,7 +164,7 @@
 
 <!-- Student Feature Cards -->
 <div class="container py-5">
-  <h2 class="text-center mb-4 fw-bold">Student Features</h2>
+  <h2 class="text-center mb-4 fw-bold"><br>Student Features</h2>
   <div class="row g-4">
     <!-- Student Profile -->
     <div class="col-md-4">

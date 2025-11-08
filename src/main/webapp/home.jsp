@@ -24,13 +24,10 @@
       width: 100%;
       z-index: 1030;
       font-size: 0.9rem; /* Smaller font */
-      heigth: 50px;
+      heigth: 52px;
     }
 
-    .navbar-brand {
-      font-size: 1rem;
-      font-weight: 600;
-    }
+
 
     .navbar-nav .nav-link {
       padding: 6px 12px;
@@ -66,6 +63,7 @@
       object-fit: cover;
     }
   </style>
+  <link href="./student-profile.css" rel="stylesheet">
 </head>
 <body>
 

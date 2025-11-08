@@ -346,7 +346,7 @@
     	    }
     	  })
     	  .catch(error => {
-    	    console.error("Error:", error);
+    	    console.error("Error at Billing page", error);
     	  });
     	});
     
