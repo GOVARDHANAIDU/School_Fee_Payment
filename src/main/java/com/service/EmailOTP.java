@@ -67,7 +67,7 @@ public class EmailOTP {
                     + " Admission No: " + studentAdmissionNo + ". A payment of ₹" + String.format("%.2f", payingFee)
                     + " has been received via " + paymentMode + " towards the total payable fee of ₹" + String.format("%.2f", totalFee)
                     + ". Your total paid amount so far stands at ₹" + String.format("%.2f", paidFee)
-                    + ", and the remaining balance is ₹" + String.format("%.2f", balance) + ".\n\n"
+                    + ", and the remaining balance is ₹" + String.format("%.2f", balance) + ".\n"
                     + "We thank you for your prompt response and continued support. Should you have any questions or require further assistance, please do not hesitate to reach out to the school administration.\n\n"
                     + "Warm regards,\n"
                     + "Accounts Department\n"

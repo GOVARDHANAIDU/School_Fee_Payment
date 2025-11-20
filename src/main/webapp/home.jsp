@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>School Management Home</title>
   <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2132/2132732.png" type="image/x-icon">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <style>
     body {
@@ -16,7 +16,7 @@
       padding-top: 70px;
       padding-bottom: 0;
     }
-
+ 
     /* Navbar */
     .navbar {
       position: fixed;
@@ -24,49 +24,130 @@
       width: 100%;
       z-index: 1030;
       font-size: 0.9rem; /* Smaller font */
-      heigth: 52px;
+      height: 52px;
     }
-
-
-
+ 
+ 
+ 
     .navbar-nav .nav-link {
       padding: 6px 12px;
     }
 
+    /* Mobile Navbar Collapse Styles */
+    @media (max-width: 991.98px) {
+      .navbar-collapse {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: #343a40;
+        z-index: 1029;
+        padding: 1rem;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+      }
+      .navbar-collapse .navbar-nav {
+        flex-direction: column;
+        width: 100%;
+      }
+      .navbar-collapse .navbar-nav .nav-item {
+        width: 100%;
+      }
+      .navbar-collapse .navbar-nav .nav-link {
+        padding: 0.5rem 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .navbar-collapse .d-flex {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .navbar-collapse .dropdown-menu {
+        position: static;
+        float: none;
+        width: 100%;
+        margin-top: 0;
+        background-color: #495057;
+        border: 0;
+        box-shadow: none;
+      }
+      .navbar-collapse .dropdown-item {
+        padding: 0.5rem 1rem;
+        color: #fff;
+      }
+      .navbar-collapse .dropdown-item:hover {
+        background-color: #6c757d;
+      }
+    }
+ 
     /* Footer */
     .footer {
       margin-bottom: 0;
       padding-bottom: 0;
     }
-
+ 
     .footer a {
       color: #ffc107;
       text-decoration: none;
     }
-
+ 
     /* Card Hover */
     .col-md-4:hover {
       transform: scale(1.01);
     }
 
-    /* Carousel */
-    .carousel-container {
-      width: 85vw;
-      height: calc(85vw * 0.3);
-      margin: auto;
-      overflow: hidden;
+    /* Responsive Cards: Decrease width on small screens (half screen or less) */
+    @media (max-width: 768px) {
+      .col-md-4 {
+        padding: 0 1rem;
+      }
+      .col-md-4 .card {
+        max-width: 80%;
+        margin: 0 auto 2rem;
+      }
     }
+ 
+.carousel-inner,
+.carousel-item {
+    width: 100%;
+    height: 350px; /* or whatever height you want */
+    position: relative;
+    overflow: hidden;
+}
 
-    .carousel-inner img {
-      width: 100%;
-      height: 450px;
-      object-fit: cover;
-    }
+video,
+.carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    display: block;
+    min-height: 100%;
+    min-width: 100%;
+}
+.announcement-bar {
+    background: linear-gradient(90deg, #e3f2fd, #bbdefb);
+    color: #0d47a1;
+    padding: 0px;
+    font-size: 16px;
+    font-weight: 500;
+    border-bottom: 1px solid #90caf9;
+    text-align: center;
+}
+
+.announcement-bar marquee {
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    color: #0d47a1;
+}
+
   </style>
   <link href="./student-profile.css" rel="stylesheet">
 </head>
 <body>
-
+ 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
   <div class="container-fluid">
@@ -74,14 +155,14 @@
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
-
+ 
     <div class="collapse navbar-collapse" id="navbarNav">
       <!-- Left side nav items -->
       <ul class="navbar-nav me-auto">
         <li class="nav-item"><a class="nav-link active" href="home.jsp">Home</a></li>
-		
-		<li class="nav-item"><a class="nav-link" href="about.jsp">About Us</a></li>
-		
+ 
+<li class="nav-item"><a class="nav-link" href="about.jsp">About Us</a></li>
+ 
         <!-- Students Dropdown -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Students</a>
@@ -95,17 +176,17 @@
             <li><a class="dropdown-item" href="newupdates.jsp">Update Student Details</a></li>
           </ul>
         </li>
-
+ 
         <!-- Payments Dropdown -->
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Payments</a>
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" id="hideFunction()">Payments</a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="allpayments.jsp">All Payment Details</a></li>
             <li><a class="dropdown-item" href="apbme.jsp">Payment By Admin</a></li>
             <li><a class="dropdown-item" href="paymentdetails.jsp">All Payment Status</a></li>
           </ul>
         </li>
-
+ 
         <!-- Explore Dropdown -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Explore</a>
@@ -115,31 +196,20 @@
             <li><a class="dropdown-item" href="images.jsp">Images</a></li>
           </ul>
         </li>
-
+ 
         <!-- Other Links -->
-        <li class="nav-item"><a class="nav-link" href="fee-notifications.jsp">Send Notifications</a></li>
+        <li class="nav-item"><a class="nav-link" href="fee-notifications.jsp" id="hideFunction()">Send Notifications</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
-        
+ 
       </ul>
-
+ 
       <!-- Right Side -->
 <%
-    // Session validation: Redirect to login if not authenticated
-    // Check for any login indicator (admin, student, or faculty)
-    HttpSession sessio = request.getSession(false); // Don't create new session if none exists
-    if (sessio == null || 
-        (sessio.getAttribute("adminName") == null && 
-        sessio.getAttribute("studentId") == null && 
-        sessio.getAttribute("facultyId") == null)) {
-        response.sendRedirect("AdminLogin.jsp");
-        return;
-    }
-
     // Prevent caching to avoid back/forward navigation issues after logout or session expiry
     response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
     response.setHeader("Pragma", "no-cache");
     response.setDateHeader("Expires", 0);
-
+ 
     // Get user name for display (prioritize adminName, fallback to others if needed)
     String displayName = (String) session.getAttribute("adminName");
     if (displayName == null) {
@@ -152,22 +222,27 @@
         if(ch == ' ') break;
         else userName += ch;
     }
+    
+    String role = (String)session.getAttribute("Roles");
+    String admissionNo = (String)session.getAttribute("admissionNo");
+    //System.out.println(role);
+	    
 %>
       <div class="d-flex align-items-center ms-3">
         <p class="text-white mb-0 me-3">Hello, <%=userName%></p>
-
+ 
         <!-- Roles Dropdown -->
         <div class="dropdown me-3">
           <a class="btn btn-sm btn-outline-light dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
             Roles
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="home.jsp">Channel Admin</a></li>
-            <li><a class="dropdown-item" href="#">Student</a></li>
-            <li><a class="dropdown-item" href="./faculty/faculty.jsp">Faculty</a></li>
+            <li><a class="dropdown-item" href="home.jsp" id="hideFunction()">Channel Admin</a></li>
+            <li><a class="dropdown-item" href="home.jsp" >Student</a></li>
+            <li><a class="dropdown-item" href="./faculty/faculty.jsp" id="hideFunction()">Faculty</a></li>
           </ul>
         </div>
-
+ 
         <!-- Auth Buttons -->
         <a class="btn btn-outline-light btn-sm me-2" href="AdminLogin.jsp">Logout</a>
         <a class="btn btn-outline-warning btn-sm" href="createaccount.jsp">Signup</a>
@@ -176,26 +251,66 @@
   </div>
 </nav>
 
+ <!-- marquee -->
+ <div class="announcement-bar">
+  <marquee behavior="scroll" direction="left" scrollamount="6">
+    📢 Welcome to Bright Future High School — Latest Announcements:  
+    <a href="announcement.jsp" style="color:#0d47a1; text-decoration:none; font-weight:600;">
+        Admission Open 2025
+    </a>
+    |
+    <a href="announcement.jsp" style="color:#0d47a1; text-decoration:none; font-weight:600;">
+        Annual Sports Meet on 12th December
+    </a>
+    |
+    <a href="announcement.jsp" style="color:#0d47a1; text-decoration:none; font-weight:600;">
+        Fee Payment Portal Updated
+    </a>
+    |
+    <a href="announcement.jsp" style="color:#0d47a1; text-decoration:none; font-weight:600;">
+        Parent–Teacher Meeting on Friday
+    </a>
+    |
+    <a href="announcement.jsp" style="color:#0d47a1; text-decoration:none; font-weight:600;">
+        New Computer Lab Inauguration
+    </a>
+</marquee>
+
+</div>
+ 
+ 
 <!-- Carousel -->
 <div class="carousel-container my-4">
   <div id="schoolCarousel" class="carousel slide h-100" data-bs-ride="carousel">
+
     <div class="carousel-inner h-100">
+
       <div class="carousel-item active h-100">
-        <img src="https://images.unsplash.com/photo-1571260899304-425eee4c7efc?auto=format&fit=crop&w=1400&q=80" class="d-block w-100" alt="School 1">
+        <video class="d-block w-600 h-100" autoplay muted loop playsinline>
+          <source src="images/20251120-1902-27.8452048.mp4" type="video/mp4">
+        </video>
       </div>
+
       <div class="carousel-item h-100">
-        <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1400&q=80" class="d-block w-100" alt="School 2">
+        <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1400&q=80" 
+             class="d-block w-100" alt="School 2">
       </div>
+
       <div class="carousel-item h-100">
-        <img src="https://images.unsplash.com/photo-1571260899304-425eee4c7efc?auto=format&fit=crop&w=1400&q=80" class="d-block w-100" alt="School 3">
+        <img src="https://images.unsplash.com/photo-1571260899304-425eee4c7efc?auto=format&fit=crop&w=1400&q=80" 
+             class="d-block w-100" alt="School 3">
       </div>
+
     </div>
+
     <button class="carousel-control-prev" type="button" data-bs-target="#schoolCarousel" data-bs-slide="prev">
       <span class="carousel-control-prev-icon"></span>
     </button>
+
     <button class="carousel-control-next" type="button" data-bs-target="#schoolCarousel" data-bs-slide="next">
       <span class="carousel-control-next-icon"></span>
     </button>
+
   </div>
 </div>
 
@@ -203,7 +318,7 @@
   <h2>Welcome to SAS School</h2>
   <p class="lead">Empowering Students for a Brighter Future</p>
 </div>
-
+ 
 <!-- Info Cards -->
 <div class="container my-4">
   <div class="row text-center">
@@ -240,7 +355,7 @@
     </div>
   </div>
 </div>
-
+ 
 <!-- Vision & Mission -->
 <div class="container my-5">
   <div class="row">
@@ -254,7 +369,7 @@
     </div>
   </div>
 </div>
-
+ 
 <!-- Stats Section -->
 <div class="container text-center my-5">
   <div class="row">
@@ -272,7 +387,7 @@
     </div>
   </div>
 </div>
-
+ 
 <!-- Footer -->
 <footer class="footer bg-dark text-white py-4">
   <div class="container">
@@ -293,6 +408,30 @@
     </div>
   </div>
 </footer>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const video = document.querySelector("#schoolCarousel video");
+    const carousel = document.querySelector("#schoolCarousel");
+    let firstLoopDone = false;
 
+    video.addEventListener("timeupdate", function () {
+        if (!firstLoopDone && (video.currentTime / video.duration) > 0.95) {
+            firstLoopDone = true;
+
+            // After first full video loop → enable auto slide
+            const bsCarousel = bootstrap.Carousel.getInstance(carousel);
+            bsCarousel.cycle(); // start sliding automatically
+        }
+    });
+});
+
+  window.userRole = "<%= role.replace("\"", "\\\"") %>";
+  window.admissionNo = "<%= admissionNo.replace("\"", "\\\"") %>";
+  console.log("User role:", window.userRole);
+  
+</script>
+
+ <script src="js/roleControl.js"></script>
+ 
 </body>
 </html>

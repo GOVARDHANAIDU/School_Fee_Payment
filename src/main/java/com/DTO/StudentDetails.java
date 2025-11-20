@@ -22,7 +22,5 @@ public class StudentDetails {
 	private double remainingFee;
 	private String studentClass;
 	
-
-	
 }
 

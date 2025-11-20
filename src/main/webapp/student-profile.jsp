@@ -6,15 +6,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Profile Management</title>
+    
+    <!-- CSS: Bootstrap, Select2, custom -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="./student-profile.css" rel="stylesheet">
     <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2132/2132732.png" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="./student-profile.js"></script>
 </head>
 <body>
 <!-- Navbar -->
@@ -75,6 +73,8 @@
             if(ch == ' ') break;
             else userName += ch;
         }
+        String role = (String)session.getAttribute("Roles");
+        String admissionNo = (String)session.getAttribute("admissionNo");
       %>
       <div class="d-flex align-items-center">
         <span class="text-white me-2 fs-6">Hello, <%=userName%></span>
@@ -94,21 +94,26 @@
     </div>
   </div>
 </nav>
+
 <div class="main-content d-flex flex-column min-vh-100">
     <!-- Search Section - Compact -->
-    <div class="search-container py-3 text-center bg-light">
-        <h3 class="fw-bold text-primary mb-3"><i class="bi bi-person-lines-fill me-2"></i>Manage Profile</h3>
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <label for="studentDropdown" class="form-label fw-bold mb-2 d-block">Select Student:</label>
-                <div class="input-group">
-                    <select id="studentDropdown" class="form-select form-select-sm">
-                        <option></option>
-                    </select>
+    <!-- Wrapped in a wrapper so we can hide everything easily for students -->
+    <div id="studentSearchWrapper">
+        <div class="search-container py-3 text-center bg-light">
+            <h3 class="fw-bold text-primary mb-3"><i class="bi bi-person-lines-fill me-2"></i>Manage Profile</h3>
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <label for="studentDropdown" class="form-label fw-bold mb-2 d-block">Select Student:</label>
+                    <div class="input-group">
+                        <select id="studentDropdown" class="form-select form-select-sm">
+                            <option></option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
     <!-- Loading Spinner -->
     <div id="profileLoading" class="text-center py-5 d-none">
         <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
@@ -116,6 +121,7 @@
         </div>
         <p class="mt-2 text-muted">Loading profile...</p>
     </div>
+
     <!-- Profile Container - Hidden initially -->
     <div id="profileContainer" class="container-fluid px-3 pb-3 flex-grow-1" style="display: none;">
         <div class="row justify-content-center">
@@ -125,11 +131,18 @@
                     <div class="row g-0 align-items-center bg-light">
                         <div class="col-md-3 text-center py-3">
                             <img id="photo" src="" class="img-fluid mb-2 rounded-3 shadow-sm d-none" style="max-height: 180px; object-fit: cover; width: 100%;">
-                            <div class="avatar-container position-relative d-inline-block mb-2">
-                                <img id="avatarPreview" src="https://via.placeholder.com/100x100/007bff/ffffff?text=AV" class="rounded-circle border border-2 border-primary shadow" style="width: 100px; height: 100px; object-fit: cover;">
-                                <div class="position-absolute bottom-0 end-0 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 25px; height: 25px; font-size: 14px; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#avatarModal">+</div>
-                            </div>
-                            <h4 class="fw-bold text-primary mb-1" id="studentNameHeader">Student Name</h4>
+				<div class="avatar-container position-relative d-inline-block mb-2">
+				    <img id="avatarPreview"
+				     src=""
+				     class="rounded-circle border border-2 border-primary shadow"
+				     style="width: 100px; height: 100px; object-fit: contain; background:white;">
+				         
+				    <div class="position-absolute bottom-0 end-0 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
+				         style="width: 25px; height: 25px; font-size: 14px; cursor: pointer;"
+				         data-bs-toggle="modal" data-bs-target="#avatarModal">+</div>
+				</div>
+
+                            <h4 class="fw-bold text-primary mb-1" id="student_name">Student Name</h4>
                             <p class="text-muted small mb-0" id="adminNoDisplay">ADM No.</p>
                         </div>
                         <div class="col-md-9 p-3">
@@ -191,8 +204,8 @@
                                         <div class="col-4 fw-bold text-muted small">Aadhaar:</div>
                                         <div class="col-8"><input type="text" class="form-control form-control-sm" id="aadharNumber" readonly></div>
                                     </div>
-                                    <div class="row g-2 align-items-center mb-2">
-                                        <div class="col-4 fw-bold text-muted small">Address:</div>
+                                    <div class="row g-2 align-items-start mb-2"> <!-- align-items-start for textarea -->
+                                        <div class="col-4 fw-bold text-muted small pt-1">Address:</div>
                                         <div class="col-8"><textarea class="form-control form-control-sm" id="address" rows="3" readonly></textarea></div>
                                     </div>
                                     <div class="row g-2 align-items-center mb-2">
@@ -265,10 +278,10 @@
                                             <tr><th>Subject</th><th>Marks</th><th>Grade</th></tr>
                                         </thead>
                                         <tbody>
-                                            <tr><td>Math</td><td><input type="text" class="form-control form-control-sm" id="mathMarks" readonly value="85"></td><td><input type="text" class="form-control form-control-sm" id="mathGrade" readonly value="A"></td></tr>
-                                            <tr><td>Science</td><td><input type="text" class="form-control form-control-sm" id="scienceMarks" readonly value="92"></td><td><input type="text" class="form-control form-control-sm" id="scienceGrade" readonly value="A+"></td></tr>
-                                            <tr><td>English</td><td><input type="text" class="form-control form-control-sm" id="englishMarks" readonly value="78"></td><td><input type="text" class="form-control form-control-sm" id="englishGrade" readonly value="B"></td></tr>
-                                            <tr><td>Average</td><td><input type="text" class="form-control form-control-sm" id="avgMarks" readonly value="85"></td><td><input type="text" class="form-control form-control-sm" id="avgGrade" readonly value="A"></td></tr>
+                                            <tr><td>Math</td><td><input type="text" class="form-control form-control-sm" value="85" readonly></td><td><input type="text" class="form-control form-control-sm" value="A" readonly></td></tr>
+                                            <tr><td>Science</td><td><input type="text" class="form-control form-control-sm" value="90" readonly></td><td><input type="text" class="form-control form-control-sm" value="O" readonly></td></tr>
+                                            <tr><td>English</td><td><input type="text" class="form-control form-control-sm" value="80" readonly></td><td><input type="text" class="form-control form-control-sm" value="A" readonly></td></tr>
+                                            <tr><td>Average</td><td><input type="text" class="form-control form-control-sm" value="83" readonly></td><td><input type="text" class="form-control form-control-sm" value="A" readonly></td></tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -280,46 +293,46 @@
                                 <div class="col-md-6">
                                     <div class="row g-2 align-items-center mb-2">
                                         <div class="col-4 fw-bold text-muted small">Total Days:</div>
-                                        <div class="col-8"><input type="text" class="form-control form-control-sm" id="totalDays" readonly value="180"></div>
+                                        <div class="col-8"><input type="text" class="form-control form-control-sm"  readonly value="180"></div>
                                     </div>
                                     <div class="row g-2 align-items-center mb-2">
                                         <div class="col-4 fw-bold text-muted small">Present Days:</div>
-                                        <div class="col-8"><input type="text" class="form-control form-control-sm" id="presentDays" readonly value="162"></div>
+                                        <div class="col-8"><input type="text" class="form-control form-control-sm"  readonly value="162"></div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="row g-2 align-items-center mb-2">
                                         <div class="col-4 fw-bold text-muted small">Attendance %:</div>
-                                        <div class="col-8"><input type="text" class="form-control form-control-sm" id="attendancePct" readonly value="90%"></div>
+                                        <div class="col-8"><input type="text" class="form-control form-control-sm" readonly value="90%"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <!-- Class/Section Tab -->
-                        <div class="tab-pane fade" id="class" role="tabpanel">
+                         <div class="tab-pane fade" id="class" role="tabpanel">
                             <div class="row g-2">
                                 <div class="col-md-6">
                                     <div class="row g-2 align-items-center mb-2">
                                         <div class="col-4 fw-bold text-muted small">Class:</div>
-                                        <div class="col-8"><input type="text" class="form-control form-control-sm" id="className" readonly value="10th Grade"></div>
+                                        <div class="col-8"><input type="text" class="form-control form-control-sm"  readonly value="10th Grade"></div>
                                     </div>
                                     <div class="row g-2 align-items-center mb-2">
                                         <div class="col-4 fw-bold text-muted small">Section:</div>
-                                        <div class="col-8"><input type="text" class="form-control form-control-sm" id="section" readonly value="A"></div>
+                                        <div class="col-8"><input type="text" class="form-control form-control-sm"  readonly value="A"></div>
                                     </div>
                                     <div class="row g-2 align-items-center mb-2">
                                         <div class="col-4 fw-bold text-muted small">Academic Year:</div>
-                                        <div class="col-8"><input type="text" class="form-control form-control-sm" id="academicYear" readonly value="2025-2026"></div>
+                                        <div class="col-8"><input type="text" class="form-control form-control-sm"  readonly value="2025-2026"></div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="row g-2 align-items-center mb-2">
                                         <div class="col-4 fw-bold text-muted small">Roll No:</div>
-                                        <div class="col-8"><input type="text" class="form-control form-control-sm" id="rollNo" readonly value="15"></div>
+                                        <div class="col-8"><input type="text" class="form-control form-control-sm"  readonly value="15"></div>
                                     </div>
                                     <div class="row g-2 align-items-center mb-2">
                                         <div class="col-4 fw-bold text-muted small">Teacher:</div>
-                                        <div class="col-8"><input type="text" class="form-control form-control-sm" id="classTeacher" readonly value="John Doe"></div>
+                                        <div class="col-8"><input type="text" class="form-control form-control-sm" readonly value="John Doe"></div>
                                     </div>
                                 </div>
                             </div>
@@ -327,6 +340,7 @@
                     </div>
                     <!-- Hidden Student ID -->
                     <input type="hidden" id="studentId">
+
                     <!-- Action Buttons -->
                     <div class="card-footer bg-light text-center p-2">
                         <div class="btn-group" role="group">
@@ -335,11 +349,13 @@
                             <button type="button" class="btn btn-danger btn-sm d-none" id="resetBtn"><i class="bi bi-arrow-clockwise me-1"></i>Reset</button>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 <!-- Avatar Modal -->
 <div class="modal fade" id="avatarModal" tabindex="-1">
   <div class="modal-dialog modal-sm">
@@ -358,10 +374,15 @@
             <p id="cameraError" class="text-danger small mt-2 d-none">Camera access denied.</p>
         </div>
         <canvas id="canvas" style="display:none;"></canvas>
+        <!-- Upload Button - Shown after image selection/capture for upload check -->
+        <button id="uploadPhotoBtn" class="btn btn-success btn-sm w-100 mt-3 d-none">
+            <i class="bi bi-cloud-upload me-1"></i> Upload Photo
+        </button>
       </div>
     </div>
   </div>
 </div>
+
 <!-- Compact Footer -->
 <footer class="bg-dark text-white py-2 mt-auto">
   <div class="container">
@@ -381,5 +402,33 @@
     </div>
   </div>
 </footer>
+
+<!-- Toast Container -->
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055">
+  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    
+    <div class="toast-body">
+      <span id="toastMessage" data-bs-dismiss="toast"></span>
+    </div>
+  </div>
+</div>
+
+<!-- JS: jQuery, Select2, Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- expose role/admission to client before loading student-profile.js -->
+<script>
+  window.userRole = "<%= (role != null ? role.replace("\"", "\\\"") : "") %>";
+  window.admissionNo = "<%= (admissionNo != null ? admissionNo.replace("\"", "\\\"") : "") %>";
+  console.log("User role:", window.userRole, "admissionNo:", window.admissionNo);
+</script>
+
+<!-- Load corrected client script (must be after window.userRole is set) -->
+<script src="./student-profile.js"></script>
+
+<!-- optional role control -->
+<script src="js/roleControl.js"></script>
 </body>
 </html>

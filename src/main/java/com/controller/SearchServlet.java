@@ -30,14 +30,14 @@ public class SearchServlet extends HttpServlet {
                 student.put("name", rs.getString("Student_Name"));
                 student.put("email", rs.getString("Email_ID"));
                 student.put("phone", rs.getString("Phone_Number"));
-                student.put("amount", rs.getString("Total_Fee"));
-                student.put("paidfee", rs.getString("Paid_Fee"));
+                student.put("total_fee", rs.getString("Total_Fee"));
+                student.put("paid_fee", rs.getString("Paid_Fee"));
                 student.put("admissionnumber", rs.getString("Admission_Number"));
                 student.put("class1", rs.getString("Student_Class"));
                 student.put("payingfee", rs.getString("Remaining_fee"));
                 students.add(student);
             }
-
+//            System.out.println("Hello "+students);
             conn.close();
         } catch (Exception e) {
             e.printStackTrace();

@@ -25,14 +25,15 @@ public class AdminLoginImp implements AdminLoginInter {
 			preparedStatement.setString(1,emailid);
 			preparedStatement.setString(2, password);
 			ResultSet resultSet = preparedStatement.executeQuery();
-			// System.out.println(resultSet);
 			
 			while (resultSet.isBeforeFirst()) {				
 	     	     if(resultSet.next())
 			     { 	     	    	
 	     	    	String name = resultSet.getString("name");	     	    	
-	     	    	int id = resultSet.getInt("id");	     	    	
-	     			adminLogin.userName(name, id);
+	     	    	int id = resultSet.getInt("id");	
+	     	    	String admissString = resultSet.getString("phone_number");
+	     			adminLogin.userName(name, id,admissString);
+	     			System.out.println(admissString);
 			        return true;
 			     }
 			     else {			    	 
@@ -65,8 +66,9 @@ public class AdminLoginImp implements AdminLoginInter {
 	     	     if(resultSet.next())
 			     { 	
 	     	    	String name = resultSet.getString("student_name");	
-	     	    	int id = resultSet.getInt("student_id");	     	    	
-	     			adminLogin.userName(name, id);
+	     	    	int id = resultSet.getInt("student_id");	
+			        String admissionNo = resultSet.getString("admin_no");
+	     			adminLogin.userName(name, id,admissionNo);
 			        return true;
 			     }
 			     else {	
@@ -84,31 +86,25 @@ public class AdminLoginImp implements AdminLoginInter {
 	@Override
 	public boolean selectFacultyLoginDetails(String facultyId, String facultyPassword) {
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection connection = databaseConnectivity.getConnection();
-			PreparedStatement preparedStatement = connection.prepareStatement(select_all_faculty_details);
-			preparedStatement.setString(1, facultyId);
-			preparedStatement.setString(2, facultyPassword);
-			ResultSet resultSet = preparedStatement.executeQuery();
-			
-			while(resultSet.isBeforeFirst()) {
-				if(resultSet.next() && resultSet.getString("status").equalsIgnoreCase("Active")) {
-					String name = resultSet.getString("name");	
-	     	    	int id = resultSet.getInt("id");	     	    	
-	     			adminLogin.userName(name, id);
-			        return true;
-			     }
-			     else {	
-			       return false;
-			     }			
-			}
-			
-		} catch (ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
+		    // Class.forName("com.mysql.cj.jdbc.Driver"); // Not necessary for modern JDBC drivers
+		    Connection connection = databaseConnectivity.getConnection();
+		    PreparedStatement preparedStatement = connection.prepareStatement(select_all_faculty_details);
+		    preparedStatement.setString(1, facultyId);
+		    preparedStatement.setString(2, facultyPassword);
+		    ResultSet resultSet = preparedStatement.executeQuery();
+		    if (resultSet.next()) {
+		        String name = resultSet.getString("name");
+		        int id = resultSet.getInt("id");
+		        String admissionNo = resultSet.getString("aadhar_number");
+		        adminLogin.userName(name, id,admissionNo);
+		        return true;
+		    } else {
+		        return false;
+		    }
+		} catch (SQLException e) {
+		    // TODO Auto-generated catch block
+		    e.printStackTrace();
+		    return false;
 		}
-		return false;
-
 	}
 }

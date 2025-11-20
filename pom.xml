@@ -5,7 +5,7 @@
   <artifactId>secure</artifactId>
   <packaging>war</packaging>
   <version>0.0.1-SNAPSHOT</version>
-  <name>SchoolData Maven Webapp</name>
+  <name>secure Maven Webapp</name>
   <url>http://maven.apache.org</url>
   <dependencies>
     <dependency>
@@ -90,6 +90,6 @@
 	
   </dependencies>
   <build>
-    <finalName>SchoolData</finalName>
+    <finalName>secure</finalName>
   </build>
 </project>

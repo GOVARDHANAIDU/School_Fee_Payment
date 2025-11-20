@@ -20,12 +20,19 @@ public class StudentDetailsImp implements StudentDetailsInter{
 	private static final String update ="UPDATE studentfeedetails SET "
 			+ "    Paid_Fee = ? ,"
 			+ "    Remaining_fee = ? "
-			+ "WHERE Admission_Number = ? ; " ;
+			+ "WHERE Admission_Number = ? ;" ;
 	private static final String selectPaidFee = "Select Paid_Fee from studentfeedetails where Admission_Number =?";
 	private static final String selectTotalFee = "Select Total_Fee from studentfeedetails where Admission_Number =?";
 	private static final String selectRemainingFee = "Select Remaining_fee from studentfeedetails where Admission_Number=?";
 	private static final String insertall = "insert into studentfeedetails(Admission_Number, Student_Name, Email_ID, Phone_Number, Total_Fee, Paid_Fee, Remaining_fee, Student_Class)"
 			+ " values(?,?,?,?,?,?,?,?)";
+	private static final String getStudentId = "Select student_id from students where admin_no = ?";
+	private static final String updateStudentFee = "update studentfeedetails set "
+		    + "Student_Name = ? , Email_ID = ?, Phone_Number=?, Total_Fee = ? , Paid_Fee = ?, "
+		    + "Remaining_fee = ? "
+		    + "where Student_id = ?;";
+//	Student_id, Admission_Number, Student_Name, Email_ID, Phone_Number, Total_Fee, Paid_Fee, Remaining_fee, Student_Class
+	DatabaseConnectivity dbConnectivity = new DatabaseConnectivity();
 	@Override
 	public List<StudentDetails> allStudentDetails() {
 		try {
@@ -230,5 +237,58 @@ public class StudentDetailsImp implements StudentDetailsInter{
 			}
 
 	}
+	@Override
+	public int getStudentId(String admissionNumber) {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection connection =
+					DriverManager.getConnection("jdbc:mysql://localhost:3306/school_data","root","W7301@jqir#");	
+			PreparedStatement preparedStatement = connection.prepareStatement(getStudentId);
+			preparedStatement.setString(1, admissionNumber);
+			ResultSet rs = preparedStatement.executeQuery();
+			
+			if (rs.next()) {
+	            int tempId = rs.getInt("student_id");
+	            return tempId;
+	        }
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return 0;
+	}
+	@Override
+	public boolean updateStudentFeeFromManageProfile(List<StudentDetails> studentsFeeUpdatesList) {
+		try {
+			Connection connection = dbConnectivity.getConnection();
+			
+			PreparedStatement preparedStatement = connection.prepareStatement(updateStudentFee);
+			for(StudentDetails studentlist :studentsFeeUpdatesList ) {
+			preparedStatement.setString(1, studentlist.getStudentName());
+			preparedStatement.setString(2, studentlist.getEmailID());
+			preparedStatement.setLong(3, studentlist.getPhoneNumber());
+			preparedStatement.setDouble(4, studentlist.getTotalFee());
+			preparedStatement.setDouble(5, studentlist.getPaidFee());
+			preparedStatement.setDouble(6, studentlist.getTotalFee() - studentlist.getPaidFee());
+			preparedStatement.setInt(7, studentlist.getStudentId());
+			}
+			int result = preparedStatement.executeUpdate();
+			if(result != 0) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
 		
 }

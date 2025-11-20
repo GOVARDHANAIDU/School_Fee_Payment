@@ -6,8 +6,6 @@ import com.DTO.Parallelinsertioninstudentfee;
 import com.DTO.StudentDetails;
 import com.DTO.Students;
 
-
-
 public interface StudentDetailsInter {
 	List<StudentDetails> allStudentDetails();
 	List<Students> allStudentPersonalDetails();
@@ -16,5 +14,6 @@ public interface StudentDetailsInter {
 	double getTotalFee(String admissionNumber);
 	double getbalanceFee(String admissionNumber);
 	boolean insertStudenttofeeDetails(Parallelinsertioninstudentfee studentDetails);
-	
+	int getStudentId(String admissionNumber);
+	boolean updateStudentFeeFromManageProfile(List<StudentDetails> studentsFeeUpdatesList);
 }

@@ -78,14 +78,14 @@
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
-
+ 
     <div class="collapse navbar-collapse" id="navbarNav">
       <!-- Left side nav items -->
       <ul class="navbar-nav me-auto">
         <li class="nav-item"><a class="nav-link active" href="home.jsp">Home</a></li>
-		
-		<li class="nav-item"><a class="nav-link" href="about.jsp">About Us</a></li>
-		
+ 
+<li class="nav-item"><a class="nav-link" href="about.jsp">About Us</a></li>
+ 
         <!-- Students Dropdown -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Students</a>
@@ -99,17 +99,17 @@
             <li><a class="dropdown-item" href="newupdates.jsp">Update Student Details</a></li>
           </ul>
         </li>
-
+ 
         <!-- Payments Dropdown -->
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Payments</a>
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" id="hideFunction()">Payments</a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="allpayments.jsp">All Payment Details</a></li>
             <li><a class="dropdown-item" href="apbme.jsp">Payment By Admin</a></li>
             <li><a class="dropdown-item" href="paymentdetails.jsp">All Payment Status</a></li>
           </ul>
         </li>
-
+ 
         <!-- Explore Dropdown -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Explore</a>
@@ -119,31 +119,20 @@
             <li><a class="dropdown-item" href="images.jsp">Images</a></li>
           </ul>
         </li>
-
+ 
         <!-- Other Links -->
-        <li class="nav-item"><a class="nav-link" href="fee-notifications.jsp">Send Notifications</a></li>
+        <li class="nav-item"><a class="nav-link" href="fee-notifications.jsp" id="hideFunction()">Send Notifications</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
-        
+ 
       </ul>
-
+ 
       <!-- Right Side -->
 <%
-    // Session validation: Redirect to login if not authenticated
-    // Check for any login indicator (admin, student, or faculty)
-    HttpSession sessio = request.getSession(false); // Don't create new session if none exists
-    if (sessio == null || 
-        (sessio.getAttribute("adminName") == null && 
-        sessio.getAttribute("studentId") == null && 
-        sessio.getAttribute("facultyId") == null)) {
-        response.sendRedirect("AdminLogin.jsp");
-        return;
-    }
-
     // Prevent caching to avoid back/forward navigation issues after logout or session expiry
     response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
     response.setHeader("Pragma", "no-cache");
     response.setDateHeader("Expires", 0);
-
+ 
     // Get user name for display (prioritize adminName, fallback to others if needed)
     String displayName = (String) session.getAttribute("adminName");
     if (displayName == null) {
@@ -156,22 +145,27 @@
         if(ch == ' ') break;
         else userName += ch;
     }
+    
+    String role = (String)session.getAttribute("Roles");
+    String admissionNo = (String)session.getAttribute("admissionNo");
+    //System.out.println(role);
+	    
 %>
       <div class="d-flex align-items-center ms-3">
         <p class="text-white mb-0 me-3">Hello, <%=userName%></p>
-
+ 
         <!-- Roles Dropdown -->
         <div class="dropdown me-3">
           <a class="btn btn-sm btn-outline-light dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
             Roles
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="home.jsp">Channel Admin</a></li>
-            <li><a class="dropdown-item" href="#">Student</a></li>
-            <li><a class="dropdown-item" href="./faculty/faculty.jsp">Faculty</a></li>
+            <li><a class="dropdown-item" href="home.jsp" id="hideFunction()">Channel Admin</a></li>
+            <li><a class="dropdown-item" href="home.jsp" >Student</a></li>
+            <li><a class="dropdown-item" href="./faculty/faculty.jsp" id="hideFunction()">Faculty</a></li>
           </ul>
         </div>
-
+ 
         <!-- Auth Buttons -->
         <a class="btn btn-outline-light btn-sm me-2" href="AdminLogin.jsp">Logout</a>
         <a class="btn btn-outline-warning btn-sm" href="createaccount.jsp">Signup</a>
@@ -625,5 +619,12 @@
         printWindow.document.close();
     }
 </script>
+<script>
+  window.userRole = "<%= role.replace("\"", "\\\"") %>";
+  window.admissionNo = "<%= admissionNo.replace("\"", "\\\"") %>";
+  console.log("User role:", window.userRole);
+  
+</script>
+
 </body>
 </html>

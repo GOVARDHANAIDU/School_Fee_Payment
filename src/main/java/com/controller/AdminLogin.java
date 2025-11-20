@@ -18,7 +18,7 @@ import com.DAO.AdminLoginInter;
 public class AdminLogin extends HttpServlet {
     private static String name;
     private static int adminId;
-    
+    private static String admissionNo;
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String emailid = req.getParameter("emailid");
@@ -28,20 +28,18 @@ public class AdminLogin extends HttpServlet {
         String facultyId = req.getParameter("facultyid");
         String facultyPassword = req.getParameter("facultypassword");
         AdminLoginInter adminLoginInter = new AdminLoginImp();	
-        
-//        System.out.println(studentId);
-//        System.out.println(studentPassword);
-//        System.out.println(facultyId);
-//        System.out.println(facultyPassword);
+        HttpSession session = req.getSession();
+        String role = "";
 
         if (emailid != null && password != null) {
             // Checking admin login
             if (adminLoginInter.selectLoginDetails(emailid, password)) {
-                HttpSession session = req.getSession();
                 session.setAttribute("email", emailid);
                 session.setAttribute("adminName", name);
                 session.setAttribute("adminId", adminId);
-                System.out.println("Admin ID:" + adminId);
+                session.setAttribute("admissionNo", admissionNo);
+                role = "admin";
+                session.setAttribute("Roles", role);
                 RequestDispatcher requestDispatcher = req.getRequestDispatcher("home.jsp");
                 requestDispatcher.include(req, resp);
             } else {
@@ -52,11 +50,12 @@ public class AdminLogin extends HttpServlet {
         } else if (studentId != null && studentPassword != null) {
             // Checking Student login
             if (adminLoginInter.selectStudentLoginDetails(studentId, studentPassword)) {
-                HttpSession session = req.getSession();
                 session.setAttribute("email", emailid);
                 session.setAttribute("adminName", name);
                 session.setAttribute("adminId", adminId);
-                System.out.println("Admin ID:" + adminId);
+                session.setAttribute("admissionNo", admissionNo);
+                role = "student";
+                session.setAttribute("Roles", role);
                 RequestDispatcher requestDispatcher = req.getRequestDispatcher("home.jsp");
                 requestDispatcher.include(req, resp);
             } else {
@@ -67,11 +66,12 @@ public class AdminLogin extends HttpServlet {
         } else {
             // Checking Faculty Login
             if (adminLoginInter.selectFacultyLoginDetails(facultyId, facultyPassword)) {
-                HttpSession session = req.getSession();
                 session.setAttribute("email", emailid);
                 session.setAttribute("adminName", name);
                 session.setAttribute("adminId", adminId);
-                System.out.println("Admin ID:" + adminId);
+                session.setAttribute("admissionNo", admissionNo);
+                role = "faculty";
+                session.setAttribute("Roles", role);
                 RequestDispatcher requestDispatcher = req.getRequestDispatcher("home.jsp");
                 requestDispatcher.include(req, resp);
             } else {
@@ -82,8 +82,9 @@ public class AdminLogin extends HttpServlet {
         }
     }
     
-    public static void userName(String userName, int id) {
+    public static void userName(String userName, int id, String admissionNumber) {
         name = userName;
         adminId = id;
+        admissionNo = admissionNumber;
     }
 }

@@ -128,13 +128,13 @@
                 margin: 1rem;
                 padding: 2rem;
             }
-            
+
             .nav-tabs .nav-link {
                 min-width: auto;
                 font-size: 0.9rem;
                 margin: 0 1px;
             }
-            
+
             /* Keep tabs in row but allow wrap if necessary */
             .nav-tabs {
                 flex-wrap: wrap;
@@ -176,7 +176,7 @@
     <div class="container">
         <div class="login-card mx-auto">
             <h3 class="text-center mb-4">Login Portal</h3>
-            
+
             <!-- Tabs Navigation -->
             <ul class="nav nav-tabs" id="loginTabs" role="tablist">
                 <li class="nav-item" role="presentation">
@@ -189,7 +189,7 @@
                     <button class="nav-link" id="admin-tab" data-bs-toggle="tab" data-bs-target="#admin" type="button" role="tab">Admin Login</button>
                 </li>
             </ul>
-            
+
             <!-- Tab Content -->
             <div class="tab-content" id="loginTabContent">
                 <!-- Student Tab -->
@@ -220,7 +220,7 @@
                         <button type="button" class="btn btn-primary w-100" onclick="validateAndSubmitStudent()">Login</button>
                     </form>
                 </div>
-                
+
                 <!-- Faculty Tab -->
                 <div class="tab-pane fade" id="faculty" role="tabpanel">
                     <form id="facultyForm" action="loginpage" method="post" novalidate>
@@ -252,7 +252,7 @@
                         <a href="forgotpassword.jsp" class="text-decoration-none">Forgot Password?</a>
                     </div>
                 </div>
-                
+
                 <!-- Admin Tab -->
                 <div class="tab-pane fade" id="admin" role="tabpanel">
                     <form id="adminForm" action="loginpage" method="post" novalidate>
@@ -325,6 +325,7 @@
             }
 
             if (isValid) {
+                console.log('Logging in as: student');
                 loading.classList.add('show');
                 setTimeout(() => {
                     document.getElementById('studentForm').submit();
@@ -359,6 +360,7 @@
             }
 
             if (isValid) {
+                console.log('Logging in as: faculty');
                 loading.classList.add('show');
                 setTimeout(() => {
                     document.getElementById('facultyForm').submit();
@@ -395,6 +397,7 @@
             }
 
             if (isValid) {
+                console.log('Logging in as: admin');
                 loading.classList.add('show');
                 setTimeout(() => {
                     document.getElementById('adminForm').submit();
@@ -411,7 +414,7 @@
             notification.classList.add('show');
             setTimeout(hideNotification, 3000); // Auto-hide after 3 seconds
         }
-        
+
         function hideNotification() {
             const notification = document.getElementById('errorNotification');
             notification.classList.remove('show');
@@ -419,7 +422,7 @@
                 notification.style.display = 'none';
             }, 300);
         }
-        
+
         // Check for error message on page load
         window.onload = function() {
             <%

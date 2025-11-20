@@ -9,10 +9,10 @@
   <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2132/2132732.png" type="image/x-icon">
   <!-- Select2 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-  
+ 
   <!-- Fonts and custom CSS -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <style>
     body {
@@ -22,7 +22,7 @@
       padding-bottom: 0;
       background: linear-gradient(135deg, #dff6ff, #b6e3f9);
     }
-
+ 
     /* Navbar */
     .navbar {
       position: fixed;
@@ -32,35 +32,35 @@
       font-size: 0.9rem; /* Smaller font for attractiveness */
       height: 50px;
     }
-
+ 
     .navbar-brand {
       font-size: 0.9rem;
       font-weight: 600;
     }
-
+ 
     .navbar-nav .nav-link {
       padding: 4px 8px; /* Tighter padding for compact look */
     }
-
+ 
     .dropdown-menu {
       font-size: 0.8rem; /* Smaller dropdown font */
     }
-
+ 
     .dropdown-item {
       padding: 6px 12px;
     }
-
+ 
     /* Footer */
     .footer {
       margin-bottom: 0;
       padding-bottom: 0;
     }
-
+ 
     .footer a {
       color: #ffc107;
       text-decoration: none;
     }
-
+ 
     .maincontainer {
       background: white;
       padding: 30px 40px;
@@ -70,14 +70,14 @@
       margin: auto;
       margin-bottom: 50px; /* Adjusted for better spacing */
     }
-
+ 
     .leftcontainer, .rightcontainer {
       width: 45%;
       display: inline-block;
       vertical-align: top;
       margin: 0 2%;
     }
-
+ 
     h2 {
       text-align: center;
       color: #2b6cb0;
@@ -85,7 +85,7 @@
       font-size: 1.5rem; /* Smaller header font */
       font-weight: 600;
     }
-
+ 
     label {
       font-weight: bold;
       margin-top: 15px;
@@ -93,7 +93,7 @@
       color: #2a4365;
       font-size: 0.9rem; /* Smaller label font */
     }
-
+ 
     input, select {
       width: 100%;
       padding: 8px; /* Slightly smaller padding */
@@ -103,25 +103,25 @@
       border-radius: 6px;
       font-size: 14px; /* Smaller input font */
     }
-
+ 
     input[readonly] {
       background-color: #f1f5f9;
       cursor: not-allowed;
     }
-
+ 
     .select2-container .select2-selection--single {
       height: 38px; /* Adjusted height for smaller font */
       padding: 4px 8px;
     }
-
+ 
     .select2-container--default .select2-selection--single .select2-selection__rendered {
       font-size: 14px;
     }
-
+ 
     .rightcontainer {
       margin-top: -3%;
     }
-
+ 
     .preview {
       width: 28%;
       margin-left: 35%;
@@ -133,11 +133,11 @@
       font-weight: 500;
       transition: transform 0.2s ease; /* Hover effect for attractiveness */
     }
-
+ 
     .preview:hover:not(:disabled) {
       transform: scale(1.02);
     }
-
+ 
     .preview:disabled {
       opacity: 0.6;
       cursor: not-allowed;
@@ -145,7 +145,7 @@
   </style>
 </head>
 <body>
-
+ 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
   <div class="container-fluid">
@@ -153,14 +153,14 @@
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
-
+ 
     <div class="collapse navbar-collapse" id="navbarNav">
       <!-- Left side nav items -->
       <ul class="navbar-nav me-auto">
         <li class="nav-item"><a class="nav-link active" href="home.jsp">Home</a></li>
-		
-		<li class="nav-item"><a class="nav-link" href="about.jsp">About Us</a></li>
-		
+ 
+<li class="nav-item"><a class="nav-link" href="about.jsp">About Us</a></li>
+ 
         <!-- Students Dropdown -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Students</a>
@@ -174,7 +174,7 @@
             <li><a class="dropdown-item" href="newupdates.jsp">Update Student Details</a></li>
           </ul>
         </li>
-
+ 
         <!-- Payments Dropdown -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Payments</a>
@@ -184,7 +184,7 @@
             <li><a class="dropdown-item" href="paymentdetails.jsp">All Payment Status</a></li>
           </ul>
         </li>
-
+ 
         <!-- Explore Dropdown -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Explore</a>
@@ -194,31 +194,31 @@
             <li><a class="dropdown-item" href="images.jsp">Images</a></li>
           </ul>
         </li>
-
+ 
         <!-- Other Links -->
         <li class="nav-item"><a class="nav-link" href="fee-notifications.jsp">Send Notifications</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
-        
+ 
       </ul>
-
+ 
       <!-- Right Side -->
 <%
     // Session validation: Redirect to login if not authenticated
     // Check for any login indicator (admin, student, or faculty)
     HttpSession sessio = request.getSession(false); // Don't create new session if none exists
-    if (sessio == null || 
-        (sessio.getAttribute("adminName") == null && 
-        sessio.getAttribute("studentId") == null && 
+    if (sessio == null ||
+        (sessio.getAttribute("adminName") == null &&
+        sessio.getAttribute("studentId") == null &&
         sessio.getAttribute("facultyId") == null)) {
         response.sendRedirect("AdminLogin.jsp");
         return;
     }
-
+ 
     // Prevent caching to avoid back/forward navigation issues after logout or session expiry
     response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
     response.setHeader("Pragma", "no-cache");
     response.setDateHeader("Expires", 0);
-
+ 
     // Get user name for display (prioritize adminName, fallback to others if needed)
     String displayName = (String) session.getAttribute("adminName");
     if (displayName == null) {
@@ -231,10 +231,14 @@
         if(ch == ' ') break;
         else userName += ch;
     }
+    String role = (String)session.getAttribute("Roles");
+    String admissionNo = (String)session.getAttribute("admissionNo");
+    //System.out.println(role);
+ 
 %>
       <div class="d-flex align-items-center ms-3">
         <p class="text-white mb-0 me-3">Hello, <%=userName%></p>
-
+ 
         <!-- Roles Dropdown -->
         <div class="dropdown me-3">
           <a class="btn btn-sm btn-outline-light dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
@@ -246,7 +250,7 @@
             <li><a class="dropdown-item" href="./faculty/faculty.jsp">Faculty</a></li>
           </ul>
         </div>
-
+ 
         <!-- Auth Buttons -->
         <a class="btn btn-outline-light btn-sm me-2" href="AdminLogin.jsp">Logout</a>
         <a class="btn btn-outline-warning btn-sm" href="createaccount.jsp">Signup</a>
@@ -254,7 +258,7 @@
     </div>
   </div>
 </nav>
-
+ 
   <div class="maincontainer">
     <h2>Search Student Info</h2>
     <div class="leftcontainer">
@@ -262,147 +266,76 @@
       <select id="studentDropdown" name="studentName" style="width: 100%">
         <option></option>
       </select>
-      <% 
+      <%
         HttpSession session2 = request.getSession();
         session2.setAttribute("studentName", request.getParameter("studentName"));
         System.out.println(request.getParameter("studentName"));
       %>
       <label for="email">Email:</label>
       <input type="text" id="email" readonly name="email" />
-
+ 
       <label for="amount">Total Fee:</label>
       <input type="text" id="amount" readonly name="amount" />
-
+ 
       <label for="paidfee">Paid Fee:</label>
       <input type="text" id="paidfee" readonly name="paidfee" />
-
+ 
       <label for="class1">Class:</label>
-      <input type="text" id="class1" placeholder="Class 1 to 10" name="class1" />
+      <input type="text" id="class1" placeholder="Class 1 to 10" name="class1" readonly />
     </div>
-
+ 
     <div class="rightcontainer">
       <label for="admissionnumber">Admission.no:</label>
       <input type="text" id="admissionnumber" readonly name="admissionnumber" />
-
+ 
       <label for="phone">Phone Number:</label>
       <input type="text" id="phone" readonly name="phone" />
-
+ 
       <label for="payingfee">Paying fee:</label>
-      <input type="number" id="payingfee" name="payingfee" />
-
+      <input type="number" id="payingfee" name="payingfee">
+ 
       <label for="modeOfPayment">Mode of payment:</label>
       <select name="paymentMode" id="paymentMode" required="required">
         <option value="Cash">Cash</option>
         <option value="Online">Online</option>
       </select>
-
+ 
       <label>Billed By:</label>
       <input type="text" value="<%=displayName%>" readonly>
     </div>
-
+ 
     <button id="proceedBtn" class="preview" disabled>Proceed</button>
-
+ 
   </div>
-
+ 
 <!-- jQuery and JS -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
+ 
 <script>
-  let studentData = [];
+  window.userRole = "<%= role.replace("\"", "\\\"") %>";
+  window.admissionNo = "<%= admissionNo.replace("\"", "\\\"") %>";
+  console.log("User role:", window.userRole);
+  
+  document.addEventListener("DOMContentLoaded", function () {
+      const role = window.userRole;
+      
+      if (role && role.toLowerCase() === "student") {
+          const cashOption = document.querySelector('#paymentMode option[value="Cash"]');
+          const paymentMode = document.getElementById("paymentMode");
 
-  $(document).ready(function () {
-    const $payingFee = $('#payingfee');
-    const $proceedBtn = $('.preview');
-    
-    document.getElementById("proceedBtn").addEventListener("click", function () {
-    	  const formData = new URLSearchParams();
+          // Disable and hide Cash option
+          if (cashOption) cashOption.hidden = true;
 
-    	  formData.append("studentName", document.getElementById("studentDropdown").value);
-    	  formData.append("email", document.getElementById("email").value);
-    	  formData.append("amount", document.getElementById("amount").value);
-    	  formData.append("paidfee", document.getElementById("paidfee").value);
-    	  formData.append("class1", document.getElementById("class1").value);
-    	  formData.append("admissionnumber", document.getElementById("admissionnumber").value);
-    	  formData.append("phone", document.getElementById("phone").value);
-    	  formData.append("payingfee", document.getElementById("payingfee").value);
-    	  formData.append("paymentMode", document.querySelector("select[name='paymentMode']").value);
-          
-    	  fetch("previewthebill", {
-    	    method: "POST", // Switch to POST for better practice
-    	    headers: {
-    	      "Content-Type": "application/x-www-form-urlencoded"
-    	    },
-    	    body: formData.toString()
-    	  })
-    	  .then(response => response.text())
-    	  .then(html => {
-    	    if (html.includes("<!--payment-page-->")) {
-    	      window.location.href = "PreviewPage.jsp"; // fallback if servlet doesn't redirect
-    	    } else {
-    	      document.open();
-    	      document.write(html);
-    	      document.close();
-    	    }
-    	  })
-    	  .catch(error => {
-    	    console.error("Error at Billing page", error);
-    	  });
-    	});
-    
-    function toggleProceedButton() {
-      const value = parseFloat($payingFee.val());
-      if (!value || value <= 0) {
-        $proceedBtn.prop('disabled', true);
-      } else {
-        $proceedBtn.prop('disabled', false);
+          // Force Online as selected for students
+          paymentMode.value = "Online";
       }
-    }
-
-    // Initially disable the button
-    toggleProceedButton();
-
-    // Run on input change
-    $payingFee.on('input', toggleProceedButton);
-
-    $.ajax({
-      url: 'SearchServlet',
-      method: 'GET',
-      success: function (data) {
-        studentData = data;
-
-        data.forEach(function (student) {
-          $('#studentDropdown').append(new Option(student.name, student.name));
-        });
-
-        $('#studentDropdown').select2({
-          placeholder: 'Search or select a student',
-          allowClear: true
-        });
-
-       
-        
-        $('#studentDropdown').on('select2:select', function (e) {
-          const selectedName = e.params.data.text;
-          const selectedStudent = studentData.find(s => s.name === selectedName);
-
-          if (selectedStudent) {
-            $('#email').val(selectedStudent.email);
-            $('#phone').val(selectedStudent.phone);
-            $('#amount').val(selectedStudent.amount);
-            $('#paidfee').val(selectedStudent.paidfee);
-            $('#admissionnumber').val(selectedStudent.admissionnumber);
-            $('#class1').val(selectedStudent.class1);
-            $('#payingfee').val(selectedStudent.payingfee);
-            toggleProceedButton(); // update button state when selecting new student
-          }
-        });
-      }
-    });
   });
   
 </script>
-
+<script src="js/billing.js"></script>
+ <script src="js/roleControl.js"></script>
+ 
 <!-- Footer (added to match home.jsp structure for consistency) -->
 <footer class="footer bg-dark text-white py-3 mt-4">
   <div class="container">
@@ -423,6 +356,6 @@
     </div>
   </div>
 </footer>
-
+ 
 </body>
 </html>

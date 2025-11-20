@@ -138,6 +138,10 @@
         if(ch == ' ') break;
         else userName += ch;
     }
+    String role = (String)session.getAttribute("Roles");
+    String admissionNo = (String)session.getAttribute("admissionNo");
+    //System.out.println(role);
+
 %>
       <div class="d-flex align-items-center ms-3">
         <p class="text-white mb-0 me-3">Hello, <%=userName%></p>
@@ -311,5 +315,14 @@
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  window.userRole = "<%= role.replace("\"", "\\\"") %>";
+  window.admissionNo = "<%= admissionNo.replace("\"", "\\\"") %>";
+  console.log("User role:", window.userRole);
+  
+</script>
+
+ <script src="js/roleControl.js"></script>
+
 </body>
 </html>
