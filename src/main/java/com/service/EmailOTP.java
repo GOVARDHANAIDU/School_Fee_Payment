@@ -41,8 +41,8 @@ public class EmailOTP {
     public static boolean sendFeeAck(String recipient, String studentName, String studentAdmissionNo, double totalFee,
             double paidFee, double payingFee, double balance, String paymentMode) {
 
-        final String senderEmail = "govardhannaiduece@gmail.com";
-        final String senderPassword = "gnxr sykp reze jrcu"; 
+        final String senderEmail = "dgnaidu19@gmail.com";
+        final String senderPassword = "mrks kbsu yrkm lxty"; 
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", true);

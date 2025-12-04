@@ -5,17 +5,7 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
 public class StudentOrder {
     private String name;
     private String email;
@@ -31,6 +21,121 @@ public class StudentOrder {
     private double totalfee;
     private double paidfee;
     private int adminNo;
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	public Date getDateOfPayment() {
+		return dateOfPayment;
+	}
+	public void setDateOfPayment(Date dateOfPayment) {
+		this.dateOfPayment = dateOfPayment;
+	}
+	public Time getTimeOfPayment() {
+		return timeOfPayment;
+	}
+	public void setTimeOfPayment(Time timeOfPayment) {
+		this.timeOfPayment = timeOfPayment;
+	}
+	public String getCourse() {
+		return course;
+	}
+	public void setCourse(String course) {
+		this.course = course;
+	}
+	public double getAmount() {
+		return amount;
+	}
+	public void setAmount(double amount) {
+		this.amount = amount;
+	}
+	public String getRazorpayOrderId() {
+		return razorpayOrderId;
+	}
+	public void setRazorpayOrderId(String razorpayOrderId) {
+		this.razorpayOrderId = razorpayOrderId;
+	}
+	public String getOrderStatus() {
+		return orderStatus;
+	}
+	public void setOrderStatus(String orderStatus) {
+		this.orderStatus = orderStatus;
+	}
+	public String getAdminName() {
+		return adminName;
+	}
+	public void setAdminName(String adminName) {
+		this.adminName = adminName;
+	}
+	public String getAdmissionnumber() {
+		return admissionnumber;
+	}
+	public void setAdmissionnumber(String admissionnumber) {
+		this.admissionnumber = admissionnumber;
+	}
+	public double getTotalfee() {
+		return totalfee;
+	}
+	public void setTotalfee(double totalfee) {
+		this.totalfee = totalfee;
+	}
+	public double getPaidfee() {
+		return paidfee;
+	}
+	public void setPaidfee(double paidfee) {
+		this.paidfee = paidfee;
+	}
+	public int getAdminNo() {
+		return adminNo;
+	}
+	public void setAdminNo(int adminNo) {
+		this.adminNo = adminNo;
+	}
+	@Override
+	public String toString() {
+		return "StudentOrder [name=" + name + ", email=" + email + ", phone=" + phone + ", dateOfPayment="
+				+ dateOfPayment + ", timeOfPayment=" + timeOfPayment + ", course=" + course + ", amount=" + amount
+				+ ", razorpayOrderId=" + razorpayOrderId + ", orderStatus=" + orderStatus + ", adminName=" + adminName
+				+ ", admissionnumber=" + admissionnumber + ", totalfee=" + totalfee + ", paidfee=" + paidfee
+				+ ", adminNo=" + adminNo + "]";
+	}
+	public StudentOrder(String name, String email, String phone, Date dateOfPayment, Time timeOfPayment, String course,
+			double amount, String razorpayOrderId, String orderStatus, String adminName, String admissionnumber,
+			double totalfee, double paidfee, int adminNo) {
+		super();
+		this.name = name;
+		this.email = email;
+		this.phone = phone;
+		this.dateOfPayment = dateOfPayment;
+		this.timeOfPayment = timeOfPayment;
+		this.course = course;
+		this.amount = amount;
+		this.razorpayOrderId = razorpayOrderId;
+		this.orderStatus = orderStatus;
+		this.adminName = adminName;
+		this.admissionnumber = admissionnumber;
+		this.totalfee = totalfee;
+		this.paidfee = paidfee;
+		this.adminNo = adminNo;
+	}
+	public StudentOrder() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
     
 
 }

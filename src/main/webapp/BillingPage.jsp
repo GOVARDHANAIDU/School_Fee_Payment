@@ -274,9 +274,10 @@
       <label for="email">Email:</label>
       <input type="text" id="email" readonly name="email" />
  
-      <label for="amount">Total Fee:</label>
-      <input type="text" id="amount" readonly name="amount" />
- 
+      <label for="totalFee">Total Fee:</label>
+      <input type="text" id="totalFee" readonly name="totalFee">
+
+
       <label for="paidfee">Paid Fee:</label>
       <input type="text" id="paidfee" readonly name="paidfee" />
  

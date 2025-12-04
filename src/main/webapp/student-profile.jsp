@@ -264,7 +264,7 @@
                                 <div class="col-md-6">
                                     <div class="row g-2 align-items-center mb-3">
                                         <div class="col-4 fw-bold text-muted small">Balance:</div>
-                                        <div class="col-8"><span id="balance" class="fw-bold fs-5 d-block"></span></div>
+                                        <div class="col-8"><span id="balance" class="fw-bold fs-5 d-block" style = "color : red;"></span></div>
                                     </div>
                                 </div>
                             </div>

@@ -146,8 +146,14 @@ video,
   </style>
   <link href="./student-profile.css" rel="stylesheet">
 </head>
-<body>
- 
+<!-- FULL SCREEN SUN LOADER -->
+<div id="sun-loader">
+    <div class="sun">
+        <div class="rays"></div>
+        <div class="rays rays2"></div>
+    </div>
+</div>
+
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
   <div class="container-fluid">
@@ -420,7 +426,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // After first full video loop → enable auto slide
             const bsCarousel = bootstrap.Carousel.getInstance(carousel);
-            bsCarousel.cycle(); // start sliding automatically
+            bsCarousel.cycle();
         }
     });
 });
@@ -429,6 +435,30 @@ document.addEventListener("DOMContentLoaded", function () {
   window.admissionNo = "<%= admissionNo.replace("\"", "\\\"") %>";
   console.log("User role:", window.userRole);
   
+  window.addEventListener("load", function () {
+      setTimeout(() => {
+          document.getElementById("sun-loader").style.display = "none";
+      }, 2000); // 4 seconds
+  });
+
+  
+  document.addEventListener("DOMContentLoaded", function () {
+
+      const loader = document.getElementById("sun-loader");
+
+      // Fade-out after 4 seconds
+      setTimeout(() => {
+          loader.style.opacity = "0";
+          loader.style.transition = "opacity 1s ease";
+
+          // Remove loader after fade
+          setTimeout(() => loader.style.display = "none", 1000);
+
+      }, 4000);
+
+  });
+
+
 </script>
 
  <script src="js/roleControl.js"></script>

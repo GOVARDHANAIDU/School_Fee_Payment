@@ -91,7 +91,7 @@ $(document).ready(function () {
             motherNumber: $("#motherNumber").val(),
             guardianName: $("#guardianName").val(),
             guardianNumber: $("#guardianNumber").val(),
-            totalFee: $("#totalFee").val(),
+            amount: $("#amount").val(),
             paidFee: $("#paidFee").val()
         };
 

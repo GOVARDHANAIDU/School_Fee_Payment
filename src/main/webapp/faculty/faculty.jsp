@@ -67,21 +67,21 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <!-- Left side nav items -->
       <ul class="navbar-nav me-auto">
-        <li class="nav-item"><a class="nav-link active" href="home.jsp">Home</a></li>
+        <li class="nav-item"><a class="nav-link active" href="../home.jsp">Home</a></li>
  
-<li class="nav-item"><a class="nav-link" href="about.jsp">About Us</a></li>
+<li class="nav-item"><a class="nav-link" href="../about.jsp">About Us</a></li>
  
         <!-- Students Dropdown -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Students</a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="studentdetails.jsp">Student Details</a></li>
-            <li><a class="dropdown-item" href="allStudents.jsp">Student Payment Info</a></li>
-            <li><a class="dropdown-item" href="BillingPage.jsp">Student Fee Payment</a></li>
-            <li><a class="dropdown-item" href="studentreg.jsp">Create Student Details</a></li>
-            <li><a class="dropdown-item" href="create-class.jsp">Create Class</a></li>
-            <li><a class="dropdown-item" href="bulkimporting.jsp">Create Bulk</a></li>
-            <li><a class="dropdown-item" href="newupdates.jsp">Update Student Details</a></li>
+            <li><a class="dropdown-item" href="../studentdetails.jsp">Student Details</a></li>
+            <li><a class="dropdown-item" href="../allStudents.jsp">Student Payment Info</a></li>
+            <li><a class="dropdown-item" href="../BillingPage.jsp">Student Fee Payment</a></li>
+            <li><a class="dropdown-item" href="../studentreg.jsp">Create Student Details</a></li>
+            <li><a class="dropdown-item" href="../create-class.jsp">Create Class</a></li>
+            <li><a class="dropdown-item" href="../bulkimporting.jsp">Create Bulk</a></li>
+            <li><a class="dropdown-item" href="../newupdates.jsp">Update Student Details</a></li>
           </ul>
         </li>
  
@@ -89,9 +89,9 @@
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" id="hideFunction()">Payments</a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="allpayments.jsp">All Payment Details</a></li>
-            <li><a class="dropdown-item" href="apbme.jsp">Payment By Admin</a></li>
-            <li><a class="dropdown-item" href="paymentdetails.jsp">All Payment Status</a></li>
+            <li><a class="dropdown-item" href="../allpayments.jsp">All Payment Details</a></li>
+            <li><a class="dropdown-item" href="../apbme.jsp">Payment By Admin</a></li>
+            <li><a class="dropdown-item" href="../paymentdetails.jsp">All Payment Status</a></li>
           </ul>
         </li>
  
@@ -101,12 +101,12 @@
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="#">360° View</a></li>
             <li><a class="dropdown-item" href="#">Videos</a></li>
-            <li><a class="dropdown-item" href="images.jsp">Images</a></li>
+            <li><a class="dropdown-item" href="../images.jsp">Images</a></li>
           </ul>
         </li>
  
         <!-- Other Links -->
-        <li class="nav-item"><a class="nav-link" href="fee-notifications.jsp" id="hideFunction()">Send Notifications</a></li>
+        <li class="nav-item"><a class="nav-link" href="../fee-notifications.jsp" id="hideFunction()">Send Notifications</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
  
       </ul>
@@ -161,11 +161,11 @@
 
 <!-- Student Feature Cards -->
 <div class="container py-5">
-  <h2 class="text-center mb-4 fw-bold">Student Features</h2>
+  <h2 class="text-center mb-4 fw-bold">Faculty Features</h2>
   <div class="row g-4">
     <!-- Student Profile -->
     <div class="col-md-4">
-      <a href="#" class="card-link">
+      <a href="faculty-profile.jsp" class="card-link">
         <div class="p-4 text-center feature-card h-100">
           <i class="bi bi-person-badge feature-icon"></i>
           <div class="card-body">

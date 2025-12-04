@@ -21,6 +21,7 @@ public class PreviewReceipt extends HttpServlet {
 	    String studentName = request.getParameter("studentName");
 	    String email = request.getParameter("email");
 	    String temp_amount = request.getParameter("amount");
+	    System.out.println("Hello "+temp_amount);
 	    double amount = Double.parseDouble(temp_amount);
 	    String temp_paidfee = request.getParameter("paidfee");
 	    double paidfee = Double.parseDouble(temp_paidfee);

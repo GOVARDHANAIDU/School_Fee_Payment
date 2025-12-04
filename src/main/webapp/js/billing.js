@@ -1,3 +1,4 @@
+// js/billing.js
 let studentData = [];
 
 $(document).ready(function () {
@@ -129,17 +130,29 @@ function fetchStudentByAdmissionNo(admissionNo) {
 }
 
 function fillStudentFields(s) {
-    $('#email').val(s.email);
-    $('#phone').val(s.phone);
-    $('#amount').val(s.amount);
-    $('#paidfee').val(s.paidfee);
+    $('#email').val(s.email || '');
+    $('#phone').val(s.phone || '');
+    
+    // Handle total fee: Use s.amount, fallback to paidfee + payingfee calc
+    let totalAmount = s.amount;
+    if (!totalAmount || isNaN(parseFloat(totalAmount))) {
+        totalAmount = (parseFloat(s.paidfee) || 0) + (parseFloat(s.payingfee) || 0);
+        console.warn("⚠️ Total Fee was null/NaN; calculated from paid + paying:", totalAmount);
+    }
+    $('#totalFee').val(totalAmount);
+    console.log("💰 Total Fee Set:", totalAmount);
 
-    // Auto calculate remaining fee
-    const remaining = parseFloat(s.amount) - parseFloat(s.paidfee);
+    $('#paidfee').val(s.paidfee || 0);
+
+    // Use passed payingfee (with fallback to total - paid if undefined)
+    let remaining = s.payingfee;
+    if (remaining === undefined || isNaN(parseFloat(remaining))) {
+        remaining = parseFloat(totalAmount) - parseFloat(s.paidfee || 0);
+    }
     $('#payingfee').val(remaining);
 
-    $('#admissionnumber').val(s.admissionnumber);
-    $('#class1').val(s.class1);
+    $('#admissionnumber').val(s.admissionnumber || '');
+    $('#class1').val(s.class1 || '');
 
     toggleProceedButton();
 }
@@ -150,21 +163,29 @@ function toggleProceedButton() {
 }
 
 function handleProceed() {
+    // Prevent submission if total fee is empty/invalid
+    const totalFee = parseFloat($('#totalFee').val());
+    if (isNaN(totalFee) || totalFee <= 0) {
+        alert("❌ Total Fee is missing or invalid. Please select a valid student.");
+        return;
+    }
 
     const studentName = $('#studentNameField').length
         ? $('#studentNameField').val()
         : $('#studentDropdown').val();
 
     const formData = new URLSearchParams();
-    formData.append("studentName", studentName);
-    formData.append("email", $('#email').val());
-    formData.append("amount", $('#total_fee').val());
-    formData.append("paidfee", $('#paidfee').val());
-    formData.append("class1", $('#class1').val());
-    formData.append("admissionnumber", $('#admissionnumber').val());
-    formData.append("phone", $('#phone').val());
-    formData.append("payingfee", $('#payingfee').val());
-    formData.append("paymentMode", $('#paymentMode').val());
+    formData.append("studentName", studentName || '');
+    formData.append("email", $('#email').val() || '');
+    formData.append("amount", totalFee.toString());  // Use calculated total, ensure string
+    formData.append("paidfee", ($('#paidfee').val() || '0'));
+    formData.append("class1", $('#class1').val() || '');
+    formData.append("admissionnumber", $('#admissionnumber').val() || '');
+    formData.append("phone", $('#phone').val() || '');
+    formData.append("payingfee", ($('#payingfee').val() || '0'));
+    formData.append("paymentMode", $('#paymentMode').val() || 'Cash');
+
+    console.log("📤 Submitting formData:", Object.fromEntries(formData));  // Debug log
 
     fetch("previewthebill", {
         method: "POST",
@@ -179,8 +200,8 @@ function handleProceed() {
             document.open(); document.write(html); document.close();
         }
     })
-    .catch(err => console.error("❌ Error at Billing page:", err));
+    .catch(err => {
+        console.error("❌ Error at Billing page:", err);
+        alert("⚠️ Submission failed. Check console for details.");
+    });
 }
-
-
-

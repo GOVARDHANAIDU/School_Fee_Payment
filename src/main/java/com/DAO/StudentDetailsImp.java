@@ -42,7 +42,7 @@ public class StudentDetailsImp implements StudentDetailsInter{
 			PreparedStatement preparedStatement = connection.prepareStatement(selectAll);		
 			ResultSet resultSet = preparedStatement.executeQuery();
 			
-			List<com.DTO.StudentDetails> list = new ArrayList<com.DTO.StudentDetails>();
+			List<StudentDetails> list = new ArrayList<com.DTO.StudentDetails>();
 			while (resultSet.next()) {
 				
 				com.DTO.StudentDetails studentDetails = new com.DTO.StudentDetails();
