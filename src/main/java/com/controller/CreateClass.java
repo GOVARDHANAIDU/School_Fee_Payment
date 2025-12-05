@@ -10,13 +10,17 @@ import javax.servlet.http.*;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.DAO.DatabaseConnectivity;
+
 @WebServlet("/uploadExcel")
 @MultipartConfig
 public class CreateClass extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+    	
+    	DatabaseConnectivity databaseConnectivity = new DatabaseConnectivity();
+    	
         System.out.println("Connected to Database...");
         String className = request.getParameter("className");
         Part filePart = request.getPart("excelFile");
@@ -51,8 +55,7 @@ public class CreateClass extends HttpServlet {
 
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection conn = DriverManager.getConnection(
-                        "jdbc:mysql://localhost:3306/academic_details", "root", "W7301@jqir#");
+                Connection conn = databaseConnectivity.getConnection();
 
                 Statement stmt = conn.createStatement();
                 stmt.executeUpdate(createSQL.toString());

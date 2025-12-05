@@ -6,6 +6,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.sql.*;
 import java.util.*;
+
+import com.DAO.DatabaseConnectivity;
 import com.google.gson.Gson;
 
 @WebServlet("/SearchServlet")
@@ -15,9 +17,7 @@ public class SearchServlet extends HttpServlet {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection conn = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/school_data", "root", "W7301@jqir#"
-            );
+            Connection conn = DatabaseConnectivity.getConnection();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(
                 "SELECT student_id, Student_Name, Email_ID, Phone_Number, Total_Fee, Paid_Fee, " +

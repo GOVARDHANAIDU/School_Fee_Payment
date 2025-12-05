@@ -7,18 +7,12 @@ import javax.servlet.*;
 import javax.servlet.annotation.*;
 import javax.servlet.http.*;
 
+import com.DAO.DatabaseConnectivity;
+
 @WebServlet("/UpdateFacultyProfile")
 @MultipartConfig
 public class UpdateFacultyProfile extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
-    private Connection getConnection() throws Exception {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        return DriverManager.getConnection(
-            "jdbc:mysql://localhost:3306/school_data", "root", "W7301@jqir#"
-        );
-    }
-
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
@@ -29,7 +23,9 @@ public class UpdateFacultyProfile extends HttpServlet {
             out.write("Missing faculty ID");
             return;
         }
-
+        
+        DatabaseConnectivity databaseConnectivity = new DatabaseConnectivity();
+        
         // ✅ Get logged-in user (from session)
         HttpSession session = request.getSession(false);
         String updatedBy = "Unknown";
@@ -56,7 +52,7 @@ public class UpdateFacultyProfile extends HttpServlet {
             e.printStackTrace();
         }
 
-        try (Connection con = getConnection()) {
+        try (Connection con = databaseConnectivity.getConnection()) {
             // Build UPDATE query for faculty columns (exclude passwords, use relevant profile fields)
             StringBuilder sql = new StringBuilder(
                 "UPDATE faculty SET name=?, email=?, phone_number=?, aadhar_number=?, gender=?, dob=?, " +

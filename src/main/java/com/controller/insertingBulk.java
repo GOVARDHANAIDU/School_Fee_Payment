@@ -11,11 +11,14 @@ import javax.servlet.http.*;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.DAO.DatabaseConnectivity;
+
 @WebServlet("/upload")
 @MultipartConfig
 public class insertingBulk extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        DatabaseConnectivity databaseConnectivity = new DatabaseConnectivity();
 
         Part filePart = request.getPart("file");
         InputStream fileContent = filePart.getInputStream();
@@ -23,8 +26,7 @@ public class insertingBulk extends HttpServlet {
         try {
             Workbook workbook = new XSSFWorkbook(fileContent);
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection conn = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/school_data", "root", "W7301@jqir#");
+            Connection conn = databaseConnectivity.getConnection();
 
             Sheet sheet = workbook.getSheetAt(0);
 

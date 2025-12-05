@@ -1,5 +1,6 @@
 package com.service;
 
+import com.DAO.DatabaseConnectivity;
 import com.DTO.StudentOrder;
 import com.controller.CreateOrder;
 import com.razorpay.Order;
@@ -17,8 +18,10 @@ public class StudentService {
 
     // Replace with your Razorpay Test API credentials
     private static final String RAZORPAY_KEY = "rzp_test_Jmsp2zqLWnGnkA";
+    
     private static final String RAZORPAY_SECRET = "dpOUGulZbsgfmreDYTooz36u";
-
+    
+    DatabaseConnectivity databaseConnectivity = new DatabaseConnectivity();
     public StudentOrder createRazorpayOrder(StudentOrder student) throws Exception {
         RazorpayClient razorpay = new RazorpayClient(RAZORPAY_KEY, RAZORPAY_SECRET);
 
@@ -46,8 +49,7 @@ public class StudentService {
 
     private void saveToDB(StudentOrder order) throws Exception {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection conn = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/school_data", "root", "W7301@jqir#");
+        Connection conn = databaseConnectivity.getConnection();
 
         String sql = "INSERT INTO student_orders (name, email, phoneNo, course, amount, date_of_transaction, time_of_transaction, orderStatus, razorpayOrderID, admin_name, admin_no) " +
                      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";

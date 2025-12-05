@@ -7,18 +7,14 @@ import javax.servlet.*;
 import javax.servlet.annotation.*;
 import javax.servlet.http.*;
 
+import com.DAO.DatabaseConnectivity;
+
 @WebServlet("/UploadPhotoServlet")
 @MultipartConfig
 public class UploadPhotoServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
-    private Connection getConnection() throws Exception {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        return DriverManager.getConnection(
-            "jdbc:mysql://localhost:3306/school_data", "root", "W7301@jqir#"
-        );
-    }
-
+    DatabaseConnectivity databaseConnectivity = new DatabaseConnectivity();
+    
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         response.setContentType("text/plain");
@@ -119,7 +115,7 @@ public class UploadPhotoServlet extends HttpServlet {
             return;
         }
 
-        try (Connection con = getConnection()) {
+        try (Connection con = databaseConnectivity.getConnection()) {
             try (PreparedStatement ps = con.prepareStatement(
                     "UPDATE students SET photo=?, last_upload_by=?, last_upload_time=NOW() WHERE student_id=?"
             )) {

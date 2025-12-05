@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.DAO.DatabaseConnectivity;
 import com.google.gson.Gson;
 
 @WebServlet("/facultyServlet")
@@ -24,15 +25,14 @@ public class FacultySearch extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        DatabaseConnectivity databaseConnectivity = new DatabaseConnectivity();
 
         List<Map<String, String>> facultyList = new ArrayList<>();
 
         try {
             // MySQL Connection
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection conn = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/school_data", "root", "W7301@jqir#"
-            );
+            Connection conn = databaseConnectivity.getConnection();
 
             Statement stmt = conn.createStatement();
 

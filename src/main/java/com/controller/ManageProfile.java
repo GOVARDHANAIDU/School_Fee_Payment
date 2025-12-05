@@ -17,9 +17,9 @@ public class ManageProfile extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        DatabaseConnectivity DBConnection = new DatabaseConnectivity();
+        DatabaseConnectivity databaseConnectivity = new DatabaseConnectivity();
         List<Map<String, String>> students = new ArrayList<>();
-        try (Connection conn = DBConnection.getConnection()) {
+        try (Connection conn = databaseConnectivity.getConnection()) {
             String sql = "SELECT admin_no, student_name AS name FROM students ORDER BY admin_no"; // Fixed: Added missing comma after 'name'
             PreparedStatement pstmt = conn.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();

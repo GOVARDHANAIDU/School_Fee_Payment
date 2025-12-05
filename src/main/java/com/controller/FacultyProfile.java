@@ -7,18 +7,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import org.json.JSONObject;
 
+import com.DAO.DatabaseConnectivity;
+
 @WebServlet("/GetFacultyProfile")
 public class FacultyProfile extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    private Connection getConnection() throws Exception {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        return DriverManager.getConnection(
-            "jdbc:mysql://localhost:3306/school_data",
-            "root",
-            "W7301@jqir#"
-        );
-    }
+    DatabaseConnectivity databaseConnectivity = new DatabaseConnectivity();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -52,7 +47,7 @@ public class FacultyProfile extends HttpServlet {
 
             // If facultyID code is provided, convert to internal numeric ID
             if (finalFacultyId == null && finalFacultyCode != null) {
-                try (Connection con = getConnection()) {
+                try (Connection con = databaseConnectivity.getConnection()) {
                     PreparedStatement ps = con.prepareStatement(
                         "SELECT id FROM faculty WHERE facultyID = ?"
                     );
@@ -77,7 +72,7 @@ public class FacultyProfile extends HttpServlet {
             }
 
             // Fetch faculty details (exclude sensitive fields like password)
-            try (Connection con = getConnection()) {
+            try (Connection con = databaseConnectivity.getConnection()) {
                 String sql = "SELECT id, facultyID, name, email, phone_number, aadhar_number, gender, dob, " +
                              "qualification, department, designation, experience_years, join_date, salary, " +
                              "address, city, state, pincode, status, created_at, updated_at " +

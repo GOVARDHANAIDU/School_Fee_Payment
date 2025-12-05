@@ -32,13 +32,12 @@ public class StudentDetailsImp implements StudentDetailsInter{
 		    + "Remaining_fee = ? "
 		    + "where Student_id = ?;";
 //	Student_id, Admission_Number, Student_Name, Email_ID, Phone_Number, Total_Fee, Paid_Fee, Remaining_fee, Student_Class
-	DatabaseConnectivity dbConnectivity = new DatabaseConnectivity();
+	DatabaseConnectivity databaseConnectivity = new DatabaseConnectivity();
 	@Override
 	public List<StudentDetails> allStudentDetails() {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection connection =
-					DriverManager.getConnection("jdbc:mysql://localhost:3306/school_data","root","W7301@jqir#");
+			Connection connection = databaseConnectivity.getConnection();
 			PreparedStatement preparedStatement = connection.prepareStatement(selectAll);		
 			ResultSet resultSet = preparedStatement.executeQuery();
 			
@@ -72,7 +71,7 @@ public class StudentDetailsImp implements StudentDetailsInter{
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection connection =
-					DriverManager.getConnection("jdbc:mysql://localhost:3306/school_data","root","W7301@jqir#");
+					databaseConnectivity.getConnection();
 			PreparedStatement preparedStatement = connection.prepareStatement(selectAllStudents);		
 			ResultSet resultSet = preparedStatement.executeQuery();
 			
@@ -117,7 +116,7 @@ public class StudentDetailsImp implements StudentDetailsInter{
 			
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection connection =
-					DriverManager.getConnection("jdbc:mysql://localhost:3306/school_data","root","W7301@jqir#");
+					databaseConnectivity.getConnection();
 			PreparedStatement preparedStatement = connection.prepareStatement(update);	
      		preparedStatement.setDouble(1, paidFee);
      		preparedStatement.setDouble(2, remainingFee);
@@ -141,7 +140,7 @@ public class StudentDetailsImp implements StudentDetailsInter{
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection connection =
-					DriverManager.getConnection("jdbc:mysql://localhost:3306/school_data","root","W7301@jqir#");
+					databaseConnectivity.getConnection();
 			PreparedStatement preparedStatement = connection.prepareStatement(selectPaidFee);		
 			preparedStatement.setString(1, admissionNumber);
 			ResultSet result = preparedStatement.executeQuery();
@@ -162,7 +161,7 @@ public class StudentDetailsImp implements StudentDetailsInter{
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection connection =
-					DriverManager.getConnection("jdbc:mysql://localhost:3306/school_data","root","W7301@jqir#");
+					databaseConnectivity.getConnection();
 			PreparedStatement preparedStatement = connection.prepareStatement(selectTotalFee);		
 			preparedStatement.setString(1, admissionNumber);
 			ResultSet result = preparedStatement.executeQuery();
@@ -185,7 +184,7 @@ public class StudentDetailsImp implements StudentDetailsInter{
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection connection =
-					DriverManager.getConnection("jdbc:mysql://localhost:3306/school_data","root","W7301@jqir#");
+					databaseConnectivity.getConnection();
 			PreparedStatement preparedStatement = connection.prepareStatement(selectRemainingFee);		
 			preparedStatement.setString(1, admissionNumber);
 			ResultSet result = preparedStatement.executeQuery();
@@ -210,7 +209,7 @@ public class StudentDetailsImp implements StudentDetailsInter{
 			try {
 				Class.forName("com.mysql.cj.jdbc.Driver");
 				Connection connection =
-						DriverManager.getConnection("jdbc:mysql://localhost:3306/school_data","root","W7301@jqir#");
+						databaseConnectivity.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(insertall);
 				preparedStatement.setString(1, studentDetails.getAdmissionNumber());
 				preparedStatement.setString(2, studentDetails.getStudentName());
@@ -242,7 +241,7 @@ public class StudentDetailsImp implements StudentDetailsInter{
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection connection =
-					DriverManager.getConnection("jdbc:mysql://localhost:3306/school_data","root","W7301@jqir#");	
+					databaseConnectivity.getConnection();	
 			PreparedStatement preparedStatement = connection.prepareStatement(getStudentId);
 			preparedStatement.setString(1, admissionNumber);
 			ResultSet rs = preparedStatement.executeQuery();
@@ -264,7 +263,7 @@ public class StudentDetailsImp implements StudentDetailsInter{
 	@Override
 	public boolean updateStudentFeeFromManageProfile(List<StudentDetails> studentsFeeUpdatesList) {
 		try {
-			Connection connection = dbConnectivity.getConnection();
+			Connection connection = databaseConnectivity.getConnection();
 			
 			PreparedStatement preparedStatement = connection.prepareStatement(updateStudentFee);
 			for(StudentDetails studentlist :studentsFeeUpdatesList ) {

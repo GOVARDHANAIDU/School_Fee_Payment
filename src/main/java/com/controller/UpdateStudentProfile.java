@@ -9,6 +9,7 @@ import javax.servlet.*;
 import javax.servlet.annotation.*;
 import javax.servlet.http.*;
 
+import com.DAO.DatabaseConnectivity;
 import com.DAO.StudentDetailsImp;
 import com.DAO.StudentDetailsInter;
 import com.DTO.StudentDetails;
@@ -18,14 +19,10 @@ import com.DTO.StudentDetails;
 public class UpdateStudentProfile extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    private Connection getConnection() throws Exception {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        return DriverManager.getConnection(
-            "jdbc:mysql://localhost:3306/school_data", "root", "W7301@jqir#"
-        );
-    }
-    StudentDetailsInter studeDetailsInter = new StudentDetailsImp();
 
+    StudentDetailsInter studeDetailsInter = new StudentDetailsImp();
+    DatabaseConnectivity databaseConnectivity = new DatabaseConnectivity();
+    
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         response.setContentType("text/plain");
@@ -64,7 +61,7 @@ public class UpdateStudentProfile extends HttpServlet {
             e.printStackTrace();
         }
 
-        try (Connection con = getConnection()) {
+        try (Connection con = databaseConnectivity.getConnection()) {
             StringBuilder sql = new StringBuilder(
                 "UPDATE students SET student_name=?, email=?, father_name=?, father_number=?, mother_name=?, mother_number=?, guardian_name=?, guardian_number=?, address=?, aadhar_number=?, total_fee=?, paid_fee=?, gender=?, age=?, dob=?, pincode=?, last_upload_by=?, last_upload_time=NOW()"
             );

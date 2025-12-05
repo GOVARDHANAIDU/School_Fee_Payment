@@ -7,6 +7,8 @@ import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
 
+import com.DAO.DatabaseConnectivity;
+
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -19,11 +21,10 @@ public class ChartServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         DefaultPieDataset dataset = new DefaultPieDataset();
         System.out.println("Connecting to database...");
-
+        DatabaseConnectivity databaseConnectivity = new DatabaseConnectivity();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/school_data", "root", "W7301@jqir#");
+            Connection con = databaseConnectivity.getConnection();
 
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT Pass, COUNT(*) AS count FROM Class_3 GROUP BY Pass");

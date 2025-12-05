@@ -12,11 +12,12 @@ public class ForgotPasswordImp implements ForgotPassword {
 	String url = "jdbc:mysql://sql12.freesqldatabase.com:3306/sql12773883"; // Host & DB name
         String username = "sql12773883";   // Hosting DB username
         String password = "r71iFqJHWT";   // Hosting DB password
+        DatabaseConnectivity databaseConnectivity = new DatabaseConnectivity();
 	@Override
 	public boolean checkingEmailID(String emailid) {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_data","root","W7301@jqir#");
+			Connection connection = databaseConnectivity.getConnection();
 			PreparedStatement preparedStatement = connection.prepareStatement(select);
 			preparedStatement.setString(1, emailid);
 			ResultSet resultSet = preparedStatement.executeQuery();
@@ -45,7 +46,7 @@ public class ForgotPasswordImp implements ForgotPassword {
 		try {
 			
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_data","root","W7301@jqir#");
+			Connection connection = databaseConnectivity.getConnection();
 			PreparedStatement preparedStatement = connection.prepareStatement(update);
 			
 			preparedStatement.setString(1, password);

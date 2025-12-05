@@ -7,6 +7,8 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import org.json.JSONObject;
+
+import com.DAO.DatabaseConnectivity;
 import com.DAO.StudentDetailsImp;
 import com.DAO.StudentDetailsInter;
 
@@ -14,18 +16,12 @@ import com.DAO.StudentDetailsInter;
 public class StudentServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    private Connection getConnection() throws Exception {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        return DriverManager.getConnection(
-            "jdbc:mysql://localhost:3306/school_data", "root", "W7301@jqir#"
-        );
-    }
-
     private final StudentDetailsInter studentDetailsInter = new StudentDetailsImp();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
+    	DatabaseConnectivity databaseConnectivity = new DatabaseConnectivity();
         response.setContentType("application/json");
         JSONObject result = new JSONObject();
         PrintWriter out = response.getWriter();
@@ -66,7 +62,7 @@ public class StudentServlet extends HttpServlet {
             }
 
             // ✅ Fetch student details (extend query if needed for additional fields like section, marks)
-            try (Connection con = getConnection()) {
+            try (Connection con = databaseConnectivity.getConnection()) {
                 String sql = "SELECT * FROM students WHERE student_id = ?";
                 PreparedStatement ps = con.prepareStatement(sql);
                 ps.setInt(1, Integer.parseInt(finalStudentId));
