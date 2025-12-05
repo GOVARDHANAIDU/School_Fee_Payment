@@ -248,7 +248,7 @@
             PreparedStatement ps = null;
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_data", "root", "W7301@jqir#");
+                con = DriverManager.getConnection("jdbc:mysql://trolley.proxy.rlwy.net:49592/school_data?useSSL=false&allowPublicKeyRetrieval=true", "root", "IIoeacGMfpglDLjgmSkwWIQoajFikXvz");
 
                 String sql = "INSERT INTO admin_registration(name, email, phone_number, aadhar_number, password, confirm_password, dob, address, pincode) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 ps = con.prepareStatement(sql);

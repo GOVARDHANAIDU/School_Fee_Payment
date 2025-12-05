@@ -69,7 +69,7 @@
         Class.forName("com.mysql.cj.jdbc.Driver");
 
         // 5. Connect to database
-        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_data", "root", "W7301@jqir#");
+        conn = DriverManager.getConnection("jdbc:mysql://trolley.proxy.rlwy.net:49592/school_data?useSSL=false&allowPublicKeyRetrieval=true", "root", "IIoeacGMfpglDLjgmSkwWIQoajFikXvz");
 
         // 6. Prepare SQL insert statement
         String sql = "INSERT INTO students (admin_no, student_name, father_name, email, father_number, mother_name, mother_number, guardian_name, guardian_number, address, class, aadhar_number, total_fee, gender, age, dob, pincode, paid_fee) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
