@@ -79,7 +79,7 @@ public class InsertIntoTransactionHistory extends HttpServlet{
 		
 //	    public static boolean sendFeeAck(String recipient, String studentName, String studentAdmissionNo, double totalFee,
 //	            double paidFee, double payingFee, double balance, String paymentMode)
-		boolean status = EmailOTP.sendFeeAck("govardhannaiduece@gmail.com", studentName, adminNo, totalFee, paidFee, payingfee, balance, paymentMode);
+		boolean status = EmailOTP.sendFeeAck("dgnaidu19@gmail.com", studentName, adminNo, totalFee, paidFee, payingfee, balance, paymentMode);
 		if (status == true) {
 		    // Acknowledgement email sent successfully
 //		    JOptionPane.showMessageDialog(null, "Fee payment acknowledgement email sent successfully to " + emailID + ".", 

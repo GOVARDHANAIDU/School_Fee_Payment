@@ -147,9 +147,10 @@ video,
   <link href="./student-profile.css" rel="stylesheet">
 </head>
 <!-- FULL SCREEN SUN LOADER -->
+
 <div id="sun-loader">
     <div class="sun">
-        <div class="rays"></div>
+        <div class="rays rays1"></div>
         <div class="rays rays2"></div>
     </div>
 </div>
@@ -165,7 +166,7 @@ video,
     <div class="collapse navbar-collapse" id="navbarNav">
       <!-- Left side nav items -->
       <ul class="navbar-nav me-auto">
-        <li class="nav-item"><a class="nav-link active" href="home.jsp">Home</a></li>
+        <li class="nav-item"><a class="nav-link active" href="home.jsp">&#127969; Home</a></li>
  
 <li class="nav-item"><a class="nav-link" href="about.jsp">About Us</a></li>
  
@@ -234,25 +235,38 @@ video,
     //System.out.println(role);
 	    
 %>
-      <div class="d-flex align-items-center ms-3">
-        <p class="text-white mb-0 me-3">Hello, <%=userName%></p>
- 
-        <!-- Roles Dropdown -->
-        <div class="dropdown me-3">
-          <a class="btn btn-sm btn-outline-light dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+      <div class="ms-lg-auto mt-3 mt-lg-0 
+            d-flex flex-column flex-lg-row 
+            align-items-start align-items-lg-center 
+            gap-2">
+
+    <!-- Hello Admin -->
+    <span class="text-white fw-semibold">
+        Hello, <%= userName %>
+    </span>
+
+    <!-- Roles Dropdown -->
+    <div class="dropdown">
+        <button class="btn btn-sm btn-outline-light dropdown-toggle" 
+                data-bs-toggle="dropdown">
             Roles
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="home.jsp" id="hideFunction()">Channel Admin</a></li>
-            <li><a class="dropdown-item" href="home.jsp" >Student</a></li>
-            <li><a class="dropdown-item" href="./faculty/faculty.jsp" id="hideFunction()">Faculty</a></li>
-          </ul>
-        </div>
- 
-        <!-- Auth Buttons -->
-        <a class="btn btn-outline-light btn-sm me-2" href="AdminLogin.jsp">Logout</a>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="home.jsp">Channel Admin</a></li>
+            <li><a class="dropdown-item" href="home.jsp">Student</a></li>
+            <li><a class="dropdown-item" href="./faculty/faculty.jsp">Faculty</a></li>
+        </ul>
+    </div>
+
+    <!-- Auth Buttons (ALWAYS UNDER Roles in mobile) -->
+    <div class="d-flex flex-column flex-lg-row gap-2 mt-2 mt-lg-0">
+        <a class="btn btn-outline-light btn-sm" href="AdminLogin.jsp">Logout</a>
         <a class="btn btn-outline-warning btn-sm" href="createaccount.jsp">Signup</a>
-      </div>
+    </div>
+
+</div>
+
+      
     </div>
   </div>
 </nav>
@@ -442,22 +456,13 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   
-  document.addEventListener("DOMContentLoaded", function () {
 
-      const loader = document.getElementById("sun-loader");
-
-      // Fade-out after 4 seconds
+  
+  window.addEventListener("load", function() {
       setTimeout(() => {
-          loader.style.opacity = "0";
-          loader.style.transition = "opacity 1s ease";
-
-          // Remove loader after fade
-          setTimeout(() => loader.style.display = "none", 1000);
-
-      }, 4000);
-
+          document.getElementById("sun-loader").style.display = "none";
+      }, 1200); // fade delay
   });
-
 
 </script>
 

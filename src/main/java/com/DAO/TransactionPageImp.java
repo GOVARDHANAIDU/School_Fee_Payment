@@ -45,7 +45,6 @@ public class TransactionPageImp implements AllPaymentsByAdmin {
 			preparedStatement.setDouble(12, paymentTransaction.getPaidFee());
 			preparedStatement.setString(13, paymentTransaction.getStudentClass());
 			preparedStatement.setInt(14, paymentTransaction.getAdminId());
-			System.out.println(paymentTransaction.getStudentClass());
 			int result = preparedStatement.executeUpdate();
 			
 			if(result != 0) {

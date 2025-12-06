@@ -142,7 +142,7 @@
 				         data-bs-toggle="modal" data-bs-target="#avatarModal">+</div>
 				</div>
 
-                            <h4 class="fw-bold text-primary mb-1" id="student_name">Student Name</h4>
+                            <h4 class="fw-bold text-primary mb-1" id="studentNameHeader">Student Name</h4>
                             <p class="text-muted small mb-0" id="adminNoDisplay">ADM No.</p>
                         </div>
                         <div class="col-md-9 p-3">

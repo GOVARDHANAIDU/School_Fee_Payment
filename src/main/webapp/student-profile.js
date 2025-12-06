@@ -1,8 +1,3 @@
-/* -----------------------------------------
-   STUDENT PROFILE MANAGEMENT JS (FINAL)
-   Compatible with your current backend ONLY
-------------------------------------------*/
-
 let studentData = [];
 
 /* -----------------------------------------
@@ -91,7 +86,7 @@ $(document).ready(function () {
             motherNumber: $("#motherNumber").val(),
             guardianName: $("#guardianName").val(),
             guardianNumber: $("#guardianNumber").val(),
-            amount: $("#amount").val(),
+            totalFee: $("#totalFee").val(),
             paidFee: $("#paidFee").val()
         };
 
