@@ -5,10 +5,10 @@ import java.sql.DriverManager;
 
 public class DatabaseConnectivity {
 
-    private static final String URL = "jdbc:mysql://trolley.proxy.rlwy.net:49592/school_data?useSSL=false&allowPublicKeyRetrieval=true";
-    private static final String USER = "root";
-    private static final String PASSWORD = "IIoeacGMfpglDLjgmSkwWIQoajFikXvz";
-    private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
+	private static final String URL = "jdbc:mysql://mysql.railway.internal:3306/railway?useSSL=false&allowPublicKeyRetrieval=true";
+	private static final String USER = "root"; 
+	private static final String PASSWORD = "IIoeacGMfpglDLjgmSkwTIQoajFikXvz";  
+	private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
 
 //  private static final String URL = "jdbc:mysql://localhost/school_data";
 //  private static final String USER = "root";
