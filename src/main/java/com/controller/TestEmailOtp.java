@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.service.EmailOTP;
+//import com.service.EmailOTP;
 
 import java.util.Random;
 @WebServlet("/otpVerification")
@@ -60,7 +60,7 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws Se
    	   String verifiedEmail = email;
        String recipientEmail = email ;
        
-       boolean sendingVerification =  EmailOTP.sendEmail(recipientEmail, otp1);
+//       boolean sendingVerification =  EmailOTP.sendEmail(recipientEmail, otp1);
               
        return otp1;
     
