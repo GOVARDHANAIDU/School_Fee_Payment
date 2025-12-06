@@ -34,11 +34,15 @@ public class ForgotPasswordOTP extends HttpServlet {
           		String sendedOtp = testEmailOtp.otpVerification(email);
           	    httpSession.setAttribute("sendedOtp",sendedOtp);
           	  list.add(email);
-          		RequestDispatcher requestDispatcher = req.getRequestDispatcher("otppage.jsp");
+          	  
+//          		RequestDispatcher requestDispatcher = req.getRequestDispatcher("otppage.jsp");
+          		RequestDispatcher requestDispatcher = req.getRequestDispatcher("newupdates.jsp");
               requestDispatcher.forward(req, resp);
               
           } else {
-        	  RequestDispatcher requestDispatcher = req.getRequestDispatcher("forgotPassword.jsp");
+//        	  RequestDispatcher requestDispatcher = req.getRequestDispatcher("forgotPassword.jsp");
+        		RequestDispatcher requestDispatcher = req.getRequestDispatcher("newupdates.jsp");
+
               requestDispatcher.forward(req, resp); 	 
          }
 	  }	  

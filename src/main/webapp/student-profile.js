@@ -61,7 +61,7 @@ $(document).ready(function () {
         $(this).addClass("d-none");
     });
 
-    /* ------ UPDATE BUTTON ------ */
+    /* ------ UPDATE BUTTON (UPDATED: Decoupled photo upload - always plain POST to UpdateStudentProfile, separate photo if needed) ------ */
     $("#updateBtn").click(function (e) {
         e.preventDefault();
         if (role === "student") {
@@ -69,8 +69,13 @@ $(document).ready(function () {
             return;
         }
 
-        const formData = {
-            studentId: $("#studentId").val(),
+        const fileInput = $("#fileInput")[0];
+        const hasFile = fileInput && fileInput.files && fileInput.files.length > 0;
+        const studentId = $("#studentId").val();
+
+        // Collect form fields (no file here)
+        const formFields = {
+            studentId: studentId,
             adminNo: $("#adminNo").val(),
             studentName: $("#studentName").val(),
             email: $("#email").val(),
@@ -90,19 +95,70 @@ $(document).ready(function () {
             paidFee: $("#paidFee").val()
         };
 
-        $.ajax({
-            url: "UpdateStudentProfile",
-            method: "POST",
-            data: formData,
-            success: function () {
-                showToast("Profile updated successfully!");
-                resetForm();
-                fetchStudent();
-            },
-            error: function () {
-                showToast("Update failed!", true);
+        // Validate required fields (add more as needed)
+        if (!formFields.studentId) {
+            return showToast("Student ID is required.", true);
+        }
+        if (!formFields.studentName) {
+            return showToast("Student Name is required.", true);
+        }
+
+        // Step 1: If file selected, upload photo first via UploadPhotoServlet
+        function uploadPhotoThenProfile() {
+            if (!hasFile) {
+                // No file: Directly update profile
+                updateProfileOnly(formFields);
+                return;
             }
-        });
+
+            // Has file: Upload photo separately
+            const fd = new FormData();
+            fd.append("studentId", studentId);
+            fd.append("photo", fileInput.files[0]);
+
+            $.ajax({
+                url: "UploadPhotoServlet", // ✅ Call UploadPhotoServlet ONLY for photo
+                type: "POST",
+                data: fd,
+                processData: false,
+                contentType: false,
+                success: function (msg) {
+                    console.log("Photo upload success:", msg);
+                    showToast("Photo uploaded! Updating profile...", false);
+                    // Clear file input
+                    fileInput.value = "";
+                    // Now update profile fields
+                    updateProfileOnly(formFields);
+                },
+                error: function (xhr) {
+                    console.error("Photo upload error:", xhr.responseText);
+                    showToast("Photo upload failed: " + (xhr.responseText || "Unknown error"), true);
+                    // Still try to update profile? Or abort? Here, proceed to avoid blocking
+                    updateProfileOnly(formFields);
+                }
+            });
+        }
+
+        // Helper: Update profile fields only (plain POST)
+        function updateProfileOnly(fields) {
+            $.ajax({
+                url: "UpdateStudentProfile",
+                method: "POST",
+                data: fields, // Plain object → urlencoded, no multipart
+                success: function () {
+                    showToast("Profile updated successfully!");
+                    resetForm();
+                    fetchStudent(); // Refresh profile after update
+                },
+                error: function (xhr, status, error) {
+                    console.error("Profile update error:", error);
+                    showToast("Profile update failed: " + (xhr.responseText || error), true);
+                }
+            });
+        }
+
+        // Start the process
+        uploadPhotoThenProfile();
     });
 
     /* ------ RESET BUTTON ------ */
@@ -132,7 +188,9 @@ function loadStudents() {
 
             data.forEach(function (s) {
                 const label = `${s.name} - ${s.admissionnumber}`;
-                $("#studentDropdown").append(new Option(label, s.student_id));
+                // ✅ FIXED: Use admissionnumber as value (string) for consistency with backend admissionNo param
+                // This ensures fetch uses admissionNo path, which resolves student_id via DAO (avoids potential ID mismatch)
+                $("#studentDropdown").append(new Option(label, s.admissionnumber));
             });
         },
         error: function () {
@@ -154,7 +212,8 @@ function fetchStudent() {
     $.ajax({
         url: "GetStudentProfile",
         method: "POST",
-        data: { studentId: id },
+        // ✅ FIXED: Send as admissionNo (matches the new dropdown value), backend will resolve to student_id via DAO
+        data: { admissionNo: id },
         dataType: "json",
         success: function (data) {
             console.log(" DEBUG: FetchStudent - Full data from backend:", data); // Debug: Log entire response
@@ -214,7 +273,8 @@ function populateProfile(data) {
     $("#adminNo").val(data.admin_no || "");
     $("#adminNoDisplay").text(data.admin_no || "ADM No.");
 
-    const name = data.student_name || data.student_name || "";
+    // ✅ FIXED: Remove duplicate (data.student_name || data.student_name)
+    const name = data.student_name || "";
     console.log("🔍 DEBUG: Student Name from backend:", name); // Debug: Log student name
     $("#studentName").val(name);
     $("#studentNameHeader").text(name || "Student Name");
@@ -236,10 +296,17 @@ function populateProfile(data) {
     $("#guardianNumber").val(data.guardian_number || "");
 
     // PAYMENT
-    const totalFee = parseFloat(data.total_fee || data.total_fee || 0) || 0;
-    const paidFee = parseFloat(data.paid_fee || data.paid_fee || 0) || 0;
-    console.log("🔍 DEBUG: Total Fee from backend:", totalFee, "(raw:", data.total_fee || data.total_fee, ")"); // Debug: Log total fee
-    console.log("🔍 DEBUG: Paid Fee from backend:", paidFee, "(raw:", data.paid_fee || data.paid_fee, ")"); // Debug: Log paid fee
+    // ✅ FIXED: Handle "NA" explicitly, remove duplicate (data.total_fee || data.total_fee)
+    let totalFee = 0;
+    if (data.total_fee && data.total_fee !== "NA") {
+        totalFee = parseFloat(data.total_fee) || 0;
+    }
+    let paidFee = 0;
+    if (data.paid_fee && data.paid_fee !== "NA") {
+        paidFee = parseFloat(data.paid_fee) || 0;
+    }
+    console.log("🔍 DEBUG: Total Fee from backend:", totalFee, "(raw:", data.total_fee, ")"); // Debug: Log total fee
+    console.log("🔍 DEBUG: Paid Fee from backend:", paidFee, "(raw:", data.paid_fee, ")"); // Debug: Log paid fee
 
     $("#totalFee").val(totalFee);
     $("#paidFee").val(paidFee);
@@ -251,13 +318,18 @@ function populateProfile(data) {
     // Other tabs remain empty because backend doesn’t send data
 
     // AVATAR
-    if (data.photo && data.photo !== "") {
+    if (data.photo && data.photo !== "NA" && data.photo !== "") {
         console.log("🔍 DEBUG: Using photo from backend:", data.photo); // Debug: Log photo usage
         $("#avatarPreview").attr("src", data.photo);
     } else {
         const initials = generateInitials(name);
         console.log("🔍 DEBUG: Generating initials avatar:", initials); // Debug: Log initials
         $("#avatarPreview").attr("src", generateAvatarInitials(initials));
+    }
+
+    // ✅ ADDED: Populate class if form field exists (backend sends as "class1")
+    if (data.class1 && $("#classFieldId").length > 0) { // Replace "classFieldId" with actual ID
+        $("#classFieldId").val(data.class1);
     }
 }
 
@@ -285,6 +357,9 @@ function resetForm() {
 
     $("#editBtn").removeClass("d-none");
     $("#updateBtn, #resetBtn").addClass("d-none");
+
+    // Clear file input on reset
+    $("#fileInput").val("");
 }
 
 /* -----------------------------------------
@@ -330,7 +405,7 @@ function previewAvatar(event) {
 }
 
 /* -----------------------------------------
-             UPLOAD PHOTO
+             UPLOAD PHOTO (SEPARATE: Only for photo modal, no profile update)
 ------------------------------------------*/
 $(document).on("click", "#modalUploadBtn", function () {
 
@@ -345,14 +420,16 @@ $(document).on("click", "#modalUploadBtn", function () {
     fd.append("photo", file);
 
     $.ajax({
-        url: "UploadPhotoServlet",
+        url: "UploadPhotoServlet", // ✅ Call UploadPhotoServlet ONLY for photo
         type: "POST",
         data: fd,
         processData: false,
         contentType: false,
         success: function (msg) {
             showToast(msg);
-            fetchStudent();
+            fetchStudent(); // Refresh to show new photo
+            // Clear file input
+            $("#fileInput").val("");
         },
         error: function (xhr) {
             showToast(xhr.responseText, true);
