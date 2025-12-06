@@ -8,7 +8,7 @@ public class DatabaseConnectivity {
 	private static final String URL =
 		    "jdbc:mysql://trolley.proxy.rlwy.net:49592/school_data?useSSL=false&allowPublicKeyRetrieval=true";
 		private static final String USER = "root";
-		private static final String PASSWORD = "ITIoeacGMfpglDLjgmSkwWIQOajFikXvz";
+		private static final String PASSWORD = "IIoeacGMfpglDLjgmSkwWIQoajFikXvz";
 		private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
 
 	
