@@ -68,45 +68,84 @@ public class StudentDetailsImp implements StudentDetailsInter{
 	//aadhar_number, total_fee, gender, age, dob, pincode, paid_fee
 	@Override
 	public List<Students> allStudentPersonalDetails() {
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection connection =
-					databaseConnectivity.getConnection();
-			PreparedStatement preparedStatement = connection.prepareStatement(selectAllStudents);		
-			ResultSet resultSet = preparedStatement.executeQuery();
-			
-			List<com.DTO.Students> list = new ArrayList<com.DTO.Students>();
-			while (resultSet.next()) {
-				
-				Students studentDetails = new Students();
-				studentDetails.setAdminNo(resultSet.getString("admin_no"));
-				studentDetails.setStudentName(resultSet.getString("student_name"));
-				studentDetails.setFatherName(resultSet.getString("father_name"));
-				studentDetails.setMotherName(resultSet.getString("mother_name"));
-				studentDetails.setFatherNumber(resultSet.getLong("father_number"));
-				studentDetails.setMotherNumber(resultSet.getLong("mother_number"));
-				studentDetails.setGuardianName(resultSet.getString("guardian_name"));
-				studentDetails.setGuardianNumber(resultSet.getLong("guardian_number"));
-				studentDetails.setAddress(resultSet.getString("address"));
-				studentDetails.setStudentClass(resultSet.getString("class"));
-				studentDetails.setAadharNumber(resultSet.getLong("aadhar_number"));
-				studentDetails.setTotalFee(resultSet.getDouble("total_fee"));
-				studentDetails.setGender(resultSet.getString("gender"));
-				studentDetails.setAge(resultSet.getInt("age"));
-				studentDetails.setDob(resultSet.getDate("dob").toLocalDate());
-				studentDetails.setPincode(resultSet.getInt("pincode"));
-				studentDetails.setPaidFee(resultSet.getDouble("paid_fee"));
-				list.add(studentDetails);
-			}
-			return list;		
-		} catch (ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-			
-	}
-	
+	    try {
+	        Class.forName("com.mysql.cj.jdbc.Driver");
+	        Connection connection = databaseConnectivity.getConnection();
+	        PreparedStatement preparedStatement = connection.prepareStatement(selectAllStudents);
+	        ResultSet resultSet = preparedStatement.executeQuery();
+	        
+	        List<Students> list = new ArrayList<Students>();
+	        while (resultSet.next()) {
+	            Students studentDetails = new Students();
+	            studentDetails.setAdminNo(resultSet.getString("admin_no"));
+	            studentDetails.setStudentName(resultSet.getString("student_name"));
+	            studentDetails.setFatherName(resultSet.getString("father_name"));
+	            studentDetails.setMotherName(resultSet.getString("mother_name"));
+	            
+	            // Handle potential 'NA' or null for numeric fields
+	            String fatherNumStr = resultSet.getString("father_number");
+	            if (fatherNumStr != null && !"NA".equalsIgnoreCase(fatherNumStr.trim())) {
+	                try {
+	                    studentDetails.setFatherNumber(Long.parseLong(fatherNumStr));
+	                } catch (NumberFormatException e) {
+	                    studentDetails.setFatherNumber(0L); // Default to 0 if parsing fails
+	                }
+	            } else {
+	            	studentDetails.setFatherNumber(0);
+	            }
+	            
+	            String motherNumStr = resultSet.getString("mother_number");
+	            if (motherNumStr != null && !"NA".equalsIgnoreCase(motherNumStr.trim())) {
+	                try {
+	                    studentDetails.setMotherNumber(Long.parseLong(motherNumStr));
+	                } catch (NumberFormatException e) {
+	                    studentDetails.setMotherNumber(0L);
+	                }
+	            } else {
+	                studentDetails.setMotherNumber(0);
+	            }
+	            
+	            studentDetails.setGuardianName(resultSet.getString("guardian_name"));
+	            
+	            String guardianNumStr = resultSet.getString("guardian_number");
+	            if (guardianNumStr != null && !"NA".equalsIgnoreCase(guardianNumStr.trim())) {
+	                try {
+	                    studentDetails.setGuardianNumber(Long.parseLong(guardianNumStr));
+	                } catch (NumberFormatException e) {
+	                    studentDetails.setGuardianNumber(0L);
+	                }
+	            } else {
+	                studentDetails.setGuardianNumber(0);
+	            }
+	            
+	            studentDetails.setAddress(resultSet.getString("address"));
+	            studentDetails.setStudentClass(resultSet.getString("class"));
+	            
+	            String aadharStr = resultSet.getString("aadhar_number");
+	            if (aadharStr != null && !"NA".equalsIgnoreCase(aadharStr.trim())) {
+	                try {
+	                    studentDetails.setAadharNumber(Long.parseLong(aadharStr));
+	                } catch (NumberFormatException e) {
+	                    studentDetails.setAadharNumber(0L);
+	                }
+	            } else {
+	                studentDetails.setAadharNumber(0);
+	            }
+	            
+	            studentDetails.setTotalFee(resultSet.getDouble("total_fee"));
+	            studentDetails.setGender(resultSet.getString("gender"));
+	            studentDetails.setAge(resultSet.getInt("age"));
+	            studentDetails.setDob(resultSet.getDate("dob").toLocalDate());
+	            studentDetails.setPincode(resultSet.getInt("pincode"));
+	            studentDetails.setPaidFee(resultSet.getDouble("paid_fee"));
+	            list.add(studentDetails);
+	        }
+	        return list;
+	    } catch (ClassNotFoundException | SQLException e) {
+	        e.printStackTrace();
+	        return new ArrayList<>(); // Return empty list instead of null to avoid NPE in JSP
+	    }
+	}	
 	@Override
 	public boolean updateRemainingFee(String admissionNumber, double payingfee) {
 		

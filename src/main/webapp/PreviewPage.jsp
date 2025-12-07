@@ -19,65 +19,45 @@
       padding-top: 70px;
       padding-bottom: 0;
     }
-
-    /* Navbar */
-    .navbar {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 1030;
-      font-size: 0.9rem; /* Smaller font for attractiveness */
-      height: 50px;
-    }
-
-    .navbar-brand {
-      font-size: 0.9rem;
-      font-weight: 600;
-    }
-
-    .navbar-nav .nav-link {
-      padding: 4px 8px; /* Tighter padding for compact look */
-    }
-
     .dropdown-menu {
       font-size: 0.8rem; /* Smaller dropdown font */
     }
-
+ 
     .dropdown-item {
       padding: 6px 12px;
     }
-
+ 
     /* Footer */
     .footer {
       margin-bottom: 0;
       padding-bottom: 0;
     }
-
+ 
     .footer a {
       color: #ffc107;
       text-decoration: none;
     }
-
+ 
     @media print {
       body {
         margin: 0;
         padding: 0;
         background: white;
       }
-
+ 
       .print-btn, .btn-back {
         display: none !important; /* Hide buttons */
       }
-
+ 
       .navbar {
         display: none; /* Hide navbar on print */
       }
-
+ 
       @page {
         margin: 0; /* Remove default page margins */
       }
     }
-
+ 
     .receipt {
       max-width: 700px;
       margin: auto;
@@ -87,45 +67,45 @@
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-
+ 
     .header {
       text-align: center;
       margin-bottom: 25px; /* Tighter margin */
     }
-
+ 
     .header h1 {
       margin: 0;
       font-size: 24px; /* Smaller header font */
       color: #2a4365;
       font-weight: 600;
     }
-
+ 
     .header h3 {
       font-size: 18px; /* Smaller subheader */
       color: #2a4365;
       margin-top: 10px;
     }
-
+ 
     .header p {
       margin: 0;
       font-size: 13px; /* Smaller font */
       color: #444;
     }
-
+ 
     .info-section {
       margin-bottom: 18px; /* Tighter spacing */
     }
-
+ 
     .info-section table {
       width: 100%;
       border-collapse: collapse;
     }
-
+ 
     .info-section td {
       padding: 6px; /* Tighter padding */
       font-size: 14px; /* Smaller font */
     }
-
+ 
     .label {
       font-weight: bold;
       color: #333;
@@ -133,37 +113,37 @@
       border: none;
       font-size: 0.9rem; /* Smaller label font */
     }
-
+ 
     .amount-section {
       background: #f1f5f9;
       padding: 12px 18px; /* Tighter padding */
       border-radius: 8px;
       margin-top: 18px; /* Tighter margin */
     }
-
+ 
     .amount-section table {
       width: 100%;
     }
-
+ 
     .amount-section td {
       padding: 8px; /* Tighter padding */
       font-size: 14px; /* Smaller font */
       vertical-align: top; /* Align tops for better alignment */
     }
-
+ 
     .total {
       font-weight: bold;
       font-size: 16px; /* Slightly smaller */
       color: #2a4365;
     }
-
+ 
     .footer {
       text-align: center;
       margin-top: 25px; /* Tighter margin */
       font-size: 12px; /* Smaller font */
       color: #666;
     }
-
+ 
     input {
       border: 0px;
       background-color: transparent;
@@ -171,7 +151,7 @@
       font-size: 14px; /* Consistent smaller font */
       width: 100%;
     }
-
+ 
     /* Button alignment: Back and Proceed side by side, no space */
     .button-group {
       display: flex;
@@ -180,7 +160,7 @@
       margin-top: 15px;
       gap: 10px; /* Minimal gap */
     }
-
+ 
     .print-btn, .btn-back {
       flex: 1;
       padding: 8px 20px; /* Balanced padding */
@@ -194,20 +174,20 @@
       text-align: center;
       max-width: 150px; /* Limit width */
     }
-
+ 
     .print-btn:hover:not(:disabled), .btn-back:hover {
       background-color: #4c6795;
       transform: scale(1.02); /* Subtle hover for attractiveness */
     }
-
+ 
     .btn-back {
       background: #2a4365;
     }
-
+ 
     .btn-back:hover {
       background-color: #4c6795;
     }
-
+ 
     /* Beautiful Loading Spinner */
     .loading-overlay {
       position: fixed;
@@ -219,9 +199,9 @@
       display: none;
       justify-content: center;
       align-items: center;
-      z-index: 1050;
+      z-index: 1200;
     }
-
+ 
     .spinner-beautiful {
       border: 4px solid #f3f3f3;
       border-top: 4px solid #2a4365;
@@ -230,29 +210,38 @@
       height: 50px;
       animation: spin 1s linear infinite;
     }
-
+ 
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
+ 
     }
-
+ 
     .loading-text {
       margin-top: 10px;
       font-size: 16px;
       color: #2a4365;
     }
-
+ 
     #loading {
       display: none;
       text-align: center;
     }
   </style>
+    <link href="./student-profile.css" rel="stylesheet">
+ 
 </head>
+ 
 <body>
-
+ 
+<!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">SAS School</a>
+    <div class="d-flex align-items-center">
+      <img src="https://img.pikbest.com/png-images/20241026/simple-useful-bright-sun-and-cloud-logo-a-clear-sky-icon-design-vector_11001223.png!sw800" alt="SAS Logo"
+      style="height: 40px; margin-right: 10px;" href="home.jsp">
+      <a class="navbar-brand mb-0" href="home.jsp">SAS School</a>
+    </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -262,7 +251,7 @@
       <ul class="navbar-nav me-auto">
         <li class="nav-item"><a class="nav-link active" href="home.jsp">Home</a></li>
  
-<li class="nav-item"><a class="nav-link" href="about.jsp">About Us</a></li>
+        <li class="nav-item"><a class="nav-link" href="about.jsp">About Us</a></li>
  
         <!-- Students Dropdown -->
         <li class="nav-item dropdown">
@@ -301,7 +290,6 @@
         <!-- Other Links -->
         <li class="nav-item"><a class="nav-link" href="fee-notifications.jsp" id="hideFunction()">Send Notifications</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
- 
       </ul>
  
       <!-- Right Side -->
@@ -323,70 +311,82 @@
         if(ch == ' ') break;
         else userName += ch;
     }
-    
+ 
     String role = (String)session.getAttribute("Roles");
     String admissionNo = (String)session.getAttribute("admissionNo");
     //System.out.println(role);
-	    
 %>
-      <div class="d-flex align-items-center ms-3">
-        <p class="text-white mb-0 me-3">Hello, <%=userName%></p>
+      <div class="ms-lg-auto mt-3 mt-lg-0
+            d-flex flex-column flex-lg-row
+            align-items-start align-items-lg-center
+            gap-2">
  
-        <!-- Roles Dropdown -->
-        <div class="dropdown me-3">
-          <a class="btn btn-sm btn-outline-light dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+    <!-- Hello Admin -->
+    <span class="text-white fw-semibold">
+        Hello, <%= userName %>
+    </span>
+ 
+    <!-- Roles Dropdown -->
+    <div class="dropdown">
+        <button class="btn btn-sm btn-outline-light dropdown-toggle"
+                data-bs-toggle="dropdown">
             Roles
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="home.jsp" id="hideFunction()">Channel Admin</a></li>
-            <li><a class="dropdown-item" href="home.jsp" >Student</a></li>
-            <li><a class="dropdown-item" href="./faculty/faculty.jsp" id="hideFunction()">Faculty</a></li>
-          </ul>
-        </div>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="home.jsp">Channel Admin</a></li>
+            <li><a class="dropdown-item" href="home.jsp">Student</a></li>
+            <li><a class="dropdown-item" href="./faculty/faculty.jsp">Faculty</a></li>
+        </ul>
+    </div>
  
-        <!-- Auth Buttons -->
-        <a class="btn btn-outline-light btn-sm me-2" href="AdminLogin.jsp">Logout</a>
+    <!-- Auth Buttons (ALWAYS UNDER Roles in mobile) -->
+    <div class="d-flex flex-column flex-lg-row gap-2 mt-2 mt-lg-0">
+        <a class="btn btn-outline-light btn-sm" href="AdminLogin.jsp">Logout</a>
         <a class="btn btn-outline-warning btn-sm" href="createaccount.jsp">Signup</a>
-      </div>
+    </div>
+ 
+</div>
+ 
     </div>
   </div>
 </nav>
-
   <div class="receipt">
     <div class="header">
-      <h1>&#9925; Bright Future High School</h1>
+      <h1>&#9925; SAS Future High School</h1>
       <p>123 School Lane, Knowledge City, India | Ph: 86456-56789</p>
       <hr style="margin-top: 15px;">
       <h3>Student Fee Receipt</h3>
     </div>
-
-  <form action="addPayment" method="POST" id="paymentForm"> 
+ 
+  <form action="addPayment" method="POST" id="paymentForm">
+    <!-- Hidden CSRF Payment Token -->
+    <input type="hidden" name="paymentToken" value="<%= session.getAttribute("paymentToken") %>">
     <div class="info-section">
       <table>
-      
+ 
        <tr>
           <td class="label">Admission Number:</td>
-           <%  
+           <%
            HttpSession session2 = request.getSession();
            String studentName = (String)session2.getAttribute("studentName");
            String email = (String)session2.getAttribute("email");
            String phone = (String)session2.getAttribute("phone");
-           String  class1 = (String)session2.getAttribute("class1");
+           String class1 = (String)session2.getAttribute("class1");
            double payingfee = (double)session2.getAttribute("payingfee");
            String admissionNumber = (String)session2.getAttribute("admissionNumber");
            double totalfee = (double)session2.getAttribute("totalamount");
            double paidfee = (double) session2.getAttribute("paidfee");
            String paymentMode = (String) session2.getAttribute("paymentMode");
            %>
-           
+ 
           <td><input value="<%=admissionNumber%>" name="AdmissionNumber" readOnly></td>
-        
+ 
         </tr>
         <tr>
           <td class="label">Student Name:</td>
           <td><input value="<%=studentName%>" name="studentName" readOnly></td>
         </tr>
-        
+ 
         <tr>
           <td class="label">Email ID:</td>
           <td><input value="<%= email %>" name="emailId" readOnly></td>
@@ -397,7 +397,7 @@
         </tr>
       </table>
     </div>
-
+ 
     <div class="amount-section">
       <table>
         <tr>
@@ -431,7 +431,7 @@
         <tr>
           <td class="label total">Remaining Balance:</td>
           <td class="total">
-            ₹ 
+            ₹
             <%
               try {
                 double total = totalfee;
@@ -445,7 +445,7 @@
                 out.print("N/A");
               }
             %>
-            
+ 
           </td>
         </tr>
         <tr>
@@ -454,21 +454,21 @@
         </tr>
       </table>
     </div>
-
+ 
     <div class="footer">
       <p>Generated on: <%= new java.util.Date() %></p>
-     
+ 
     </div>
-    
+ 
     <!-- Button Group: Back and Proceed aligned straight with minimal space -->
     <div class="button-group">
      <button type="button" class="btn-back" onclick="window.location.href='BillingPage.jsp'">← Back</button>
-
+ 
       <button type="button" class="print-btn" data-bs-toggle="modal" data-bs-target="#confirmationModal">Proceed</button>
     </div>
       </form>
   </div>
-
+ 
  <!-- Loading Overlay -->
  <div class="loading-overlay" id="loadingOverlay">
    <div style="text-align: center;">
@@ -476,7 +476,7 @@
      <div class="loading-text">Processing your payment...</div>
    </div>
  </div>
-
+ 
  <!-- Bootstrap Modal -->
 <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
@@ -495,58 +495,58 @@
     </div>
   </div>
 </div>
-        
+ 
 <!-- Script to submit the form with loading -->
 <script>
   document.getElementById('confirmBtn').addEventListener('click', function() {
     // Hide modal
     const modal = bootstrap.Modal.getInstance(document.getElementById('confirmationModal'));
     modal.hide();
-    
+ 
     // Show loading overlay
     document.getElementById('loadingOverlay').style.display = 'flex';
-    
+ 
     // Submit form after a short delay for visual effect
     setTimeout(function() {
       document.getElementById('paymentForm').submit();
     }, 500);
   });
-
+ 
   const confirmBtn = document.getElementById("confirmBtn");
-
+ 
   // AUTO TRIGGER PROCEED ON PAGE LOAD (Only for Online mode)
   window.addEventListener("load", function () {
     const paymentMode = "<%= paymentMode %>";
-
+ 
     if (paymentMode === "Online") {
       const proceedBtn = document.querySelector(".print-btn");
-
+ 
       if (proceedBtn) {
-        proceedBtn.click();  // open modal
+        proceedBtn.click(); // open modal
       }
     }
   });
-
+ 
   // WHEN THE MODAL OPENS → START CONFIRM COUNTDOWN
   const modalElement = document.getElementById("confirmationModal");
   modalElement.addEventListener('shown.bs.modal', function () {
     const paymentMode = "<%= paymentMode %>";
-
+ 
     if (paymentMode === "Online") {
       startConfirmCountdown();
     }
   });
-
+ 
   // COUNTDOWN FUNCTION FOR AUTO CONFIRM
   function startConfirmCountdown() {
     let timer = 1;
     confirmBtn.disabled = true;
     confirmBtn.textContent = `Confirming in ${timer}s...`;
-
+ 
     const interval = setInterval(() => {
       timer--;
       confirmBtn.textContent = `Confirming in ${timer}s...`;
-
+ 
       if (timer <= 0) {
         clearInterval(interval);
         confirmBtn.disabled = false;
@@ -555,25 +555,25 @@
       }
     }, 1000);
   }
-
+ 
   // EXISTING SUBMIT LOGIC
   confirmBtn.addEventListener("click", function () {
     const modal = bootstrap.Modal.getInstance(modalElement);
     modal.hide();
-
+ 
     document.getElementById('loadingOverlay').style.display = 'flex';
-
+ 
     setTimeout(function () {
       document.getElementById('paymentForm').submit();
     }, 500);
   });
-
+ 
   window.userRole = "<%= role.replace("\"", "\\\"") %>";
   window.admissionNo = "<%= admissionNo.replace("\"", "\\\"") %>";
   console.log("User role:", window.userRole);
-  
+ 
 </script>
-
+ 
 <!-- Footer (added for consistency, but hidden on print) -->
 <footer class="footer bg-dark text-white py-4 mt-5">
   <div class="container">
@@ -594,6 +594,6 @@
     </div>
   </div>
 </footer>
-
+ 
 </body>
 </html>

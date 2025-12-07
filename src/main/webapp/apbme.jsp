@@ -9,7 +9,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Fee Payment By Admin</title>
-    
+ 
     <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2132/2132732.png" type="image/x-icon">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -29,238 +29,267 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <!-- SheetJS (xlsx) Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
-
+ 
     <style>
-        body { 
-            font-family: Arial, sans-serif;
-            font-size: 0.85rem; 
-            background-color: #f4f6f9; 
+       .section-header {
+            margin: 10px 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-align: center;
+            color: #343a40;
         }
-        .navbar { 
-            padding: 0.3rem 1rem; 
+        .card {
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            position: fixed;
+            margin-bottom: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-3px);
+        }
+        .card-body {
+            padding: 0.5rem;
+        }
+        .card-title {
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+            color: #495057;
+        }
+        .card-text {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #212529;
+        }
+        .table-responsive {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .table {
+            font-size: 0.75rem;
+            margin-bottom: 0;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        .table th, .table td {
+            padding: 0.4rem;
+            text-align: center;
+            vertical-align: middle;
+            border: 1px solid #dee2e6;
+        }
+        .table thead th {
+            position: sticky;
             top: 0;
-            width: 100%;
-            z-index: 1000;
-            background-color: #343a40;
+            background-color: #f8f9fa;
+            z-index: 10;
+            font-weight: 600;
+            color: #343a40;
         }
-        .navbar-brand { 
-            font-size: 1rem; 
+        .table tbody tr:hover {
+            background-color: #f1f3f5;
         }
-        .nav-link { 
-            font-size: 0.85rem; 
-            padding: 0.3rem 0.5rem !important; 
+        .btn-group .btn {
+            font-size: 0.75rem;
+            padding: 0.3rem 0.6rem;
+            margin-right: 2px;
+            border-radius: 6px;
         }
-        .navbar-nav .dropdown-menu { 
-            font-size: 0.8rem; 
-            border-radius: 8px; 
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+        canvas {
+            max-height: 150px !important;
+            width: 100% !important;
         }
-        .dropdown-item:hover { 
-            background-color: #f1f3f5; 
-        }
-        .section-header { 
-            margin: 10px 0; 
-            font-size: 1.2rem; 
-            font-weight: 600; 
-            text-align: center; 
-            color: #343a40; 
-        }
-        .card { 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
-            margin-bottom: 10px; 
-            border: 1px solid #e0e0e0; 
-            border-radius: 10px; 
-            transition: transform 0.2s; 
-        }
-        .card:hover { 
-            transform: translateY(-3px); 
-        }
-        .card-body { 
-            padding: 0.5rem; 
-        }
-        .card-title { 
-            font-size: 0.8rem; 
-            font-weight: 500; 
-            margin-bottom: 0.3rem; 
-            color: #495057; 
-        }
-        .card-text { 
-            font-size: 0.9rem; 
-            font-weight: bold; 
-            color: #212529; 
-        }
-        .table-responsive { 
-            max-height: 300px; 
-            overflow-y: auto; 
-            border: 1px solid #dee2e6; 
-            border-radius: 8px; 
-            margin-bottom: 20px; 
-        }
-        .table { 
-            font-size: 0.75rem; 
-            margin-bottom: 0; 
-            border-collapse: separate; 
-            border-spacing: 0; 
-        }
-        .table th, .table td { 
-            padding: 0.4rem; 
-            text-align: center; 
-            vertical-align: middle; 
-            border: 1px solid #dee2e6; 
-        }
-        .table thead th { 
-            position: sticky; 
-            top: 0; 
-            background-color: #f8f9fa; 
-            z-index: 10; 
-            font-weight: 600; 
-            color: #343a40; 
-        }
-        .table tbody tr:hover { 
-            background-color: #f1f3f5; 
-        }
-        .btn-group .btn { 
-            font-size: 0.75rem; 
-            padding: 0.3rem 0.6rem; 
-            margin-right: 2px; 
-            border-radius: 6px; 
-        }
-        canvas { 
-            max-height: 150px !important; 
-            width: 100% !important; 
-        }
-        .container { 
-            margin-top: 70px; 
-            padding: 20px; 
-            background-color: #fff; 
-            border-radius: 10px; 
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05); 
+        .container {
+            margin-top: 70px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
             max-width: 95%; /* Slightly wider container */
             width: 100%;
         }
-        table.dataTable thead th { 
-            position: sticky; 
-            top: 0; 
-            background-color: #f8f9fa; 
+        table.dataTable thead th {
+            position: sticky;
+            top: 0;
+            background-color: #f8f9fa;
         }
-        .chart-row .col-md-3 { 
-            flex: 0 0 23%; 
-            max-width: 23%; 
-            margin-right: 2%; 
-            margin-bottom: 20px; 
+        .chart-row .col-md-3 {
+            flex: 0 0 23%;
+            max-width: 23%;
+            margin-right: 2%;
+            margin-bottom: 20px;
         }
-        .chart-row .col-md-3:last-child { 
-            margin-right: 0; 
+        .chart-row .col-md-3:last-child {
+            margin-right: 0;
         }
-        #column-list { 
-            max-height: 200px; 
-            overflow-y: auto; 
-            font-size: 0.75rem; 
-            border: 1px solid #dee2e6; 
-            border-radius: 6px; 
+        #column-list {
+            max-height: 200px;
+            overflow-y: auto;
+            font-size: 0.75rem;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
         }
-        #column-list .dropdown-item { 
-            padding: 0.3rem 0.75rem; 
+        #column-list .dropdown-item {
+            padding: 0.3rem 0.75rem;
         }
-        .analytics-section { 
-            border: 2px solid #e0e0e0; 
-            padding: 10px; 
-            margin-bottom: 20px; 
-            border-radius: 10px; 
-            background-color: #fafafa; 
+        .analytics-section {
+            border: 2px solid #e0e0e0;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            background-color: #fafafa;
         }
-        .btn-primary { 
-            background-color: #007bff; 
-            border-color: #007bff; 
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
         }
-        .btn-primary:hover { 
-            background-color: #0056b3; 
-            border-color: #0056b3; 
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
         }
-        .btn-success { 
-            background-color: #28a745; 
-            border-color: #28a745; 
+        .btn-success {
+            background-color: #28a745;
+            border-color: #28a745;
         }
-        .btn-success:hover { 
-            background-color: #218838; 
-            border-color: #218838; 
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #218838;
         }
-        .btn-secondary { 
-            background-color: #6c757d; 
-            border-color: #6c757d; 
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
         }
-        .btn-secondary:hover { 
-            background-color: #5a6268; 
-            border-color: #5a6268; 
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #5a6268;
         }
     </style>
+      <link href="./student-profile.css" rel="stylesheet">
+    
 </head>
 <body>
 
+<!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">SAS School</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link active" href="home.jsp">Home</a></li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Students</a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="studentdetails.jsp">Student Details</a></li>
-                        <li><a class="dropdown-item" href="allStudents.jsp">Student Payment Info</a></li>
-                        <li><a class="dropdown-item" href="BillingPage.jsp">Student Fee Payment</a></li>
-                        <li><a class="dropdown-item" href="studentreg.jsp">Create Student Details</a></li>
-                        <li><a class="dropdown-item" href="bulkimporting.jsp">Create Bulk</a></li>
-                        <li><a class="dropdown-item" href="newupdates.jsp">Update Student Details</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Payments</a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="allpayments.jsp">All Payment Details</a></li>
-                        <li><a class="dropdown-item" href="apbme.jsp">Payment By Admin</a></li>
-                        <li><a class="dropdown-item" href="paymentdetails.jsp">All Payment Status</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">About Us</a></li>
-            </ul>
-            <%
-                HttpSession session2 = request.getSession();
-                String name = (String) session2.getAttribute("adminName");
-                int tempid = (int) session2.getAttribute("adminId");      
-                String userName = "";
-                
-                if (name == null) {
-                    response.sendRedirect("AdminLogin.jsp");
-                    return;
-                }
-                
-                for(int i = 0; i <= name.length() - 1; i++) {
-                    char ch = name.charAt(i);
-                    if(ch == ' ') {
-                        break;
-                    } else {
-                        userName = userName + ch;
-                    }
-                }
-            %>
-            <div style="display: flex; align-items: center; margin-left: 20px; gap: 10px;">
-                <p style="color: white; margin-right: 40px; padding-top: 10px;">Hello, <%=userName%></p>
-            </div>
-            <div class="d-flex">
-                <a class="btn btn-outline-light me-2" href="AdminLogin.jsp">Logout</a>
-                <a class="btn btn-outline-warning" href="createaccount.jsp">Signup</a>
-            </div>
-        </div>
+  <div class="container-fluid">
+    <div class="d-flex align-items-center">
+      <img src="https://img.pikbest.com/png-images/20241026/simple-useful-bright-sun-and-cloud-logo-a-clear-sky-icon-design-vector_11001223.png!sw800" alt="SAS Logo" 
+      style="height: 40px; margin-right: 10px;" href="home.jsp">
+      <a class="navbar-brand mb-0" href="home.jsp">SAS School</a>
     </div>
-</nav>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <!-- Left side nav items -->
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item"><a class="nav-link active" href="home.jsp"> Home</a></li>
+
+        <li class="nav-item"><a class="nav-link" href="about.jsp">About Us</a></li>
+
+        <!-- Students Dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Students</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="studentdetails.jsp">Student Details</a></li>
+            <li><a class="dropdown-item" href="allStudents.jsp">Student Payment Info</a></li>
+            <li><a class="dropdown-item" href="BillingPage.jsp">Student Fee Payment</a></li>
+            <li><a class="dropdown-item" href="studentreg.jsp">Create Student Details</a></li>
+            <li><a class="dropdown-item" href="create-class.jsp">Create Class</a></li>
+            <li><a class="dropdown-item" href="bulkimporting.jsp">Create Bulk</a></li>
+            <li><a class="dropdown-item" href="newupdates.jsp">Update Student Details</a></li>
+          </ul>
+        </li>
+
+        <!-- Payments Dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" id="hideFunction()">Payments</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="allpayments.jsp">All Payment Details</a></li>
+            <li><a class="dropdown-item" href="apbme.jsp">Payment By Admin</a></li>
+            <li><a class="dropdown-item" href="paymentdetails.jsp">All Payment Status</a></li>
+          </ul>
+        </li>
+
+        <!-- Explore Dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Explore</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">360° View</a></li>
+            <li><a class="dropdown-item" href="#">Videos</a></li>
+            <li><a class="dropdown-item" href="images.jsp">Images</a></li>
+          </ul>
+        </li>
+
+        <!-- Other Links -->
+        <li class="nav-item"><a class="nav-link" href="fee-notifications.jsp" id="hideFunction()">Send Notifications</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
+      </ul>
+
+      <!-- Right Side -->
+<%
+    // Prevent caching to avoid back/forward navigation issues after logout or session expiry
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    response.setHeader("Pragma", "no-cache");
+    response.setDateHeader("Expires", 0);
+
+    // Get user name for display (prioritize adminName, fallback to others if needed)
+    String displayName = (String) session.getAttribute("adminName");
+    int tempid = (int) session.getAttribute("adminId");
+
+    if (displayName == null) {
+        // For student or faculty, you might set a "userName" attribute in servlet; adjust as needed
+        displayName = "User"; // Fallback
+    }
+    String userName = "";
+    for(int i = 0; i < displayName.length(); i++) {
+        char ch = displayName.charAt(i);
+        if(ch == ' ') break;
+        else userName += ch;
+    }
+
+    String role = (String)session.getAttribute("Roles");
+    String admissionNo = (String)session.getAttribute("admissionNo");
+    //System.out.println(role);
+%>
+     <div class="ms-lg-auto mt-3 mt-lg-0
+            d-flex flex-column flex-lg-row
+            align-items-start align-items-lg-center
+            gap-2">
+
+    <!-- Hello Admin -->
+    <span class="text-white fw-semibold">
+        Hello, <%= userName %>
+    </span>
+
+    <!-- Roles Dropdown -->
+    <div class="dropdown">
+        <button class="btn btn-sm btn-outline-light dropdown-toggle"
+                data-bs-toggle="dropdown">
+            Roles
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="home.jsp">Channel Admin</a></li>
+            <li><a class="dropdown-item" href="home.jsp">Student</a></li>
+            <li><a class="dropdown-item" href="./faculty/faculty.jsp">Faculty</a></li>
+        </ul>
+    </div>
+
+    <!-- Auth Buttons (ALWAYS UNDER Roles in mobile) -->
+    <div class="d-flex flex-column flex-lg-row gap-2 mt-2 mt-lg-0">
+        <a class="btn btn-outline-light btn-sm" href="AdminLogin.jsp">Logout</a>
+        <a class="btn btn-outline-warning btn-sm" href="createaccount.jsp">Signup</a>
+    </div>
+
+</div>
+
+    </div>
+  </div>
+</nav>
 <div class="container">
     <h2 class="section-header">Fee Payment By Admin</h2>
 
@@ -580,26 +609,26 @@ $(document).ready(function () {
         data: {
             labels: classes,
             datasets: [
-                { 
-                    label: 'Paid', 
-                    data: classPaid, 
-                    backgroundColor: 'rgba(75, 192, 192, 0.8)', 
-                    borderColor: '#fff', 
-                    borderWidth: 1 
+                {
+                    label: 'Paid',
+                    data: classPaid,
+                    backgroundColor: 'rgba(75, 192, 192, 0.8)',
+                    borderColor: '#fff',
+                    borderWidth: 1
                 },
-                { 
-                    label: 'Balance', 
-                    data: classBalance, 
-                    backgroundColor: 'rgba(255, 99, 132, 0.8)', 
-                    borderColor: '#fff', 
-                    borderWidth: 1 
+                {
+                    label: 'Balance',
+                    data: classBalance,
+                    backgroundColor: 'rgba(255, 99, 132, 0.8)',
+                    borderColor: '#fff',
+                    borderWidth: 1
                 }
             ]
         },
         options: {
-            scales: { 
-                y: { beginAtZero: true, stacked: true, grid: { color: '#e0e0e0' } }, 
-                x: { stacked: true } 
+            scales: {
+                y: { beginAtZero: true, stacked: true, grid: { color: '#e0e0e0' } },
+                x: { stacked: true }
             },
             responsive: true,
             maintainAspectRatio: false,
@@ -645,8 +674,8 @@ $(document).ready(function () {
             }]
         },
         options: {
-            scales: { 
-                y: { beginAtZero: true, max: 100, grid: { color: '#e0e0e0' } } 
+            scales: {
+                y: { beginAtZero: true, max: 100, grid: { color: '#e0e0e0' } }
             },
             responsive: true,
             maintainAspectRatio: false,

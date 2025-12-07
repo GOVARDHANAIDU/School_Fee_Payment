@@ -27,88 +27,11 @@
       height: 52px;
     }
  
- 
- 
     .navbar-nav .nav-link {
       padding: 6px 12px;
     }
 
-    /* Mobile Navbar Collapse Styles */
-    @media (max-width: 991.98px) {
-      .navbar-collapse {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background-color: #343a40;
-        z-index: 1029;
-        padding: 1rem;
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-      }
-      .navbar-collapse .navbar-nav {
-        flex-direction: column;
-        width: 100%;
-      }
-      .navbar-collapse .navbar-nav .nav-item {
-        width: 100%;
-      }
-      .navbar-collapse .navbar-nav .nav-link {
-        padding: 0.5rem 1rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      }
-      .navbar-collapse .d-flex {
-        flex-direction: column;
-        align-items: flex-start;
-        width: 100%;
-        margin-top: 1rem;
-        padding-top: 1rem;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-      }
-      .navbar-collapse .dropdown-menu {
-        position: static;
-        float: none;
-        width: 100%;
-        margin-top: 0;
-        background-color: #495057;
-        border: 0;
-        box-shadow: none;
-      }
-      .navbar-collapse .dropdown-item {
-        padding: 0.5rem 1rem;
-        color: #fff;
-      }
-      .navbar-collapse .dropdown-item:hover {
-        background-color: #6c757d;
-      }
-    }
- 
-    /* Footer */
-    .footer {
-      margin-bottom: 0;
-      padding-bottom: 0;
-    }
- 
-    .footer a {
-      color: #ffc107;
-      text-decoration: none;
-    }
- 
-    /* Card Hover */
-    .col-md-4:hover {
-      transform: scale(1.01);
-    }
-
-    /* Responsive Cards: Decrease width on small screens (half screen or less) */
-    @media (max-width: 768px) {
-      .col-md-4 {
-        padding: 0 1rem;
-      }
-      .col-md-4 .card {
-        max-width: 80%;
-        margin: 0 auto 2rem;
-      }
-    }
- 
+    
 .carousel-inner,
 .carousel-item {
     width: 100%;
@@ -158,18 +81,22 @@ video,
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">SAS School</a>
+    <div class="d-flex align-items-center">
+      <img src="https://img.pikbest.com/png-images/20241026/simple-useful-bright-sun-and-cloud-logo-a-clear-sky-icon-design-vector_11001223.png!sw800" alt="SAS Logo" 
+      style="height: 40px; margin-right: 10px;" href="home.jsp">
+      <a class="navbar-brand mb-0" href="home.jsp">SAS School</a>
+    </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
- 
+
     <div class="collapse navbar-collapse" id="navbarNav">
       <!-- Left side nav items -->
       <ul class="navbar-nav me-auto">
-        <li class="nav-item"><a class="nav-link active" href="home.jsp">&#127969; Home</a></li>
- 
-<li class="nav-item"><a class="nav-link" href="about.jsp">About Us</a></li>
- 
+        <li class="nav-item"><a class="nav-link active" href="home.jsp">Home</a></li>
+
+        <li class="nav-item"><a class="nav-link" href="about.jsp">About Us</a></li>
+
         <!-- Students Dropdown -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Students</a>
@@ -183,7 +110,7 @@ video,
             <li><a class="dropdown-item" href="newupdates.jsp">Update Student Details</a></li>
           </ul>
         </li>
- 
+
         <!-- Payments Dropdown -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" id="hideFunction()">Payments</a>
@@ -193,7 +120,7 @@ video,
             <li><a class="dropdown-item" href="paymentdetails.jsp">All Payment Status</a></li>
           </ul>
         </li>
- 
+
         <!-- Explore Dropdown -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Explore</a>
@@ -203,20 +130,19 @@ video,
             <li><a class="dropdown-item" href="images.jsp">Images</a></li>
           </ul>
         </li>
- 
+
         <!-- Other Links -->
         <li class="nav-item"><a class="nav-link" href="fee-notifications.jsp" id="hideFunction()">Send Notifications</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
- 
       </ul>
- 
+
       <!-- Right Side -->
 <%
     // Prevent caching to avoid back/forward navigation issues after logout or session expiry
     response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
     response.setHeader("Pragma", "no-cache");
     response.setDateHeader("Expires", 0);
- 
+
     // Get user name for display (prioritize adminName, fallback to others if needed)
     String displayName = (String) session.getAttribute("adminName");
     if (displayName == null) {
@@ -229,15 +155,14 @@ video,
         if(ch == ' ') break;
         else userName += ch;
     }
-    
+
     String role = (String)session.getAttribute("Roles");
     String admissionNo = (String)session.getAttribute("admissionNo");
     //System.out.println(role);
-	    
 %>
-      <div class="ms-lg-auto mt-3 mt-lg-0 
-            d-flex flex-column flex-lg-row 
-            align-items-start align-items-lg-center 
+      <div class="ms-lg-auto mt-3 mt-lg-0
+            d-flex flex-column flex-lg-row
+            align-items-start align-items-lg-center
             gap-2">
 
     <!-- Hello Admin -->
@@ -247,7 +172,7 @@ video,
 
     <!-- Roles Dropdown -->
     <div class="dropdown">
-        <button class="btn btn-sm btn-outline-light dropdown-toggle" 
+        <button class="btn btn-sm btn-outline-light dropdown-toggle"
                 data-bs-toggle="dropdown">
             Roles
         </button>
@@ -266,11 +191,9 @@ video,
 
 </div>
 
-      
     </div>
   </div>
 </nav>
-
  <!-- marquee -->
  <div class="announcement-bar">
   <marquee behavior="scroll" direction="left" scrollamount="6">

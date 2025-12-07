@@ -1,3 +1,4 @@
+<%@page import="com.DAO.DatabaseConnectivity"%>
 <%@ page import="java.sql.*" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -18,25 +19,6 @@
             font-size: 0.9rem; /* Base font size 0.9rem for compactness */
             padding-top: 70px; /* Account for fixed navbar */
             padding-bottom: 0;
-        }
-
-        /* Navbar */
-        .navbar {
-          position: fixed;
-          top: 0;
-          width: 100%;
-          z-index: 1030;
-          font-size: 0.9rem; /* Smaller font for attractiveness */
-          height: 50px;
-        }
-
-        .navbar-brand {
-          font-size: 0.9rem;
-          font-weight: 600;
-        }
-
-        .navbar-nav .nav-link {
-          padding: 4px 8px; /* Tighter padding for compact look */
         }
 
         .dropdown-menu {
@@ -169,6 +151,8 @@
         
         }
     </style>
+      <link href="./student-profile.css" rel="stylesheet">
+    
 </head>
 
 <%
@@ -181,7 +165,7 @@
 
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/school_data", "root", "W7301@jqir#");
+        Connection con = DatabaseConnectivity.getConnection();
 
         PreparedStatement ps = con.prepareStatement("SELECT * FROM studentfeedetails WHERE Admission_Number = ?");
         ps.setString(1, studentNo);
@@ -207,7 +191,11 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">SAS School</a>
+    <div class="d-flex align-items-center">
+      <img src="https://img.pikbest.com/png-images/20241026/simple-useful-bright-sun-and-cloud-logo-a-clear-sky-icon-design-vector_11001223.png!sw800" alt="SAS Logo" 
+      style="height: 40px; margin-right: 10px;" href="home.jsp">
+      <a class="navbar-brand mb-0" href="home.jsp">SAS School</a>
+    </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -216,9 +204,9 @@
       <!-- Left side nav items -->
       <ul class="navbar-nav me-auto">
         <li class="nav-item"><a class="nav-link active" href="home.jsp">Home</a></li>
-		
-		<li class="nav-item"><a class="nav-link" href="about.jsp">About Us</a></li>
-		
+
+        <li class="nav-item"><a class="nav-link" href="about.jsp">About Us</a></li>
+
         <!-- Students Dropdown -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Students</a>
@@ -235,7 +223,7 @@
 
         <!-- Payments Dropdown -->
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Payments</a>
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" id="hideFunction()">Payments</a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="allpayments.jsp">All Payment Details</a></li>
             <li><a class="dropdown-item" href="apbme.jsp">Payment By Admin</a></li>
@@ -254,24 +242,12 @@
         </li>
 
         <!-- Other Links -->
-        <li class="nav-item"><a class="nav-link" href="fee-notifications.jsp">Send Notifications</a></li>
+        <li class="nav-item"><a class="nav-link" href="fee-notifications.jsp" id="hideFunction()">Send Notifications</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
-        
       </ul>
 
       <!-- Right Side -->
 <%
-    // Session validation: Redirect to login if not authenticated
-    // Check for any login indicator (admin, student, or faculty)
-    HttpSession sessio = request.getSession(false); // Don't create new session if none exists
-    if (sessio == null || 
-        (sessio.getAttribute("adminName") == null && 
-        sessio.getAttribute("studentId") == null && 
-        sessio.getAttribute("facultyId") == null)) {
-        response.sendRedirect("AdminLogin.jsp");
-        return;
-    }
-
     // Prevent caching to avoid back/forward navigation issues after logout or session expiry
     response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
     response.setHeader("Pragma", "no-cache");
@@ -289,26 +265,42 @@
         if(ch == ' ') break;
         else userName += ch;
     }
+
+    String role = (String)session.getAttribute("Roles");
+    String admissionNo1 = (String)session.getAttribute("admissionNo");
+    //System.out.println(role);
 %>
-      <div class="d-flex align-items-center ms-3">
-        <p class="text-white mb-0 me-3">Hello, <%=userName%></p>
+      <div class="ms-lg-auto mt-3 mt-lg-0
+            d-flex flex-column flex-lg-row
+            align-items-start align-items-lg-center
+            gap-2">
 
-        <!-- Roles Dropdown -->
-        <div class="dropdown me-3">
-          <a class="btn btn-sm btn-outline-light dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+    <!-- Hello Admin -->
+    <span class="text-white fw-semibold">
+        Hello, <%= userName %>
+    </span>
+
+    <!-- Roles Dropdown -->
+    <div class="dropdown">
+        <button class="btn btn-sm btn-outline-light dropdown-toggle"
+                data-bs-toggle="dropdown">
             Roles
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end">
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
             <li><a class="dropdown-item" href="home.jsp">Channel Admin</a></li>
-            <li><a class="dropdown-item" href="#">Student</a></li>
+            <li><a class="dropdown-item" href="home.jsp">Student</a></li>
             <li><a class="dropdown-item" href="./faculty/faculty.jsp">Faculty</a></li>
-          </ul>
-        </div>
+        </ul>
+    </div>
 
-        <!-- Auth Buttons -->
-        <a class="btn btn-outline-light btn-sm me-2" href="AdminLogin.jsp">Logout</a>
+    <!-- Auth Buttons (ALWAYS UNDER Roles in mobile) -->
+    <div class="d-flex flex-column flex-lg-row gap-2 mt-2 mt-lg-0">
+        <a class="btn btn-outline-light btn-sm" href="AdminLogin.jsp">Logout</a>
         <a class="btn btn-outline-warning btn-sm" href="createaccount.jsp">Signup</a>
-      </div>
+    </div>
+
+</div>
+
     </div>
   </div>
 </nav>
@@ -318,7 +310,7 @@
     <!-- Student Copy -->
     <div class="copy">
         <div class="header">
-            <h1>🌤️ Bright Future High School</h1>
+            <h1>🌤️ SAS Future High School</h1>
             <p>123 School Lane, Knowledge City, India | Ph: 86456-56789</p>
             <hr>
         </div>
@@ -349,7 +341,7 @@
     <!-- School Copy -->
     <div class="copy">
         <div class="header">
-            <h1>🌤️ Bright Future High School</h1>
+            <h1>🌤️ SAS Future High School</h1>
             <p>123 School Lane, Knowledge City, India | Ph: 86456-56789</p>
             <hr>
         </div>

@@ -1,3 +1,4 @@
+<%@page import="com.DAO.DatabaseConnectivity"%>
 <%@page import="com.DTO.Parallelinsertioninstudentfee"%>
 <%@page import="com.DAO.StudentDetailsImp"%>
 <%@page import="com.DTO.StudentDetails"%>
@@ -7,6 +8,7 @@
 <%@ page import="java.math.BigDecimal" %>
 
 <%
+	DatabaseConnectivity databaseConnectivity = new DatabaseConnectivity();
     // 1. Retrieve form data
     String adminNo = request.getParameter("adminNo");
     String studentName = request.getParameter("studentName");
@@ -69,7 +71,7 @@
         Class.forName("com.mysql.cj.jdbc.Driver");
 
         // 5. Connect to database
-        conn = DriverManager.getConnection("jdbc:mysql://trolley.proxy.rlwy.net:49592/school_data?useSSL=false&allowPublicKeyRetrieval=true", "root", "IIoeacGMfpglDLjgmSkwWIQoajFikXvz");
+        Connection con =databaseConnectivity.getConnection();
 
         // 6. Prepare SQL insert statement
         String sql = "INSERT INTO students (admin_no, student_name, father_name, email, father_number, mother_name, mother_number, guardian_name, guardian_number, address, class, aadhar_number, total_fee, gender, age, dob, pincode, paid_fee) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
