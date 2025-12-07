@@ -49,7 +49,7 @@
 
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        con = DriverManager.getConnection("jdbc:mysql://localhost:3306/academic_details", "root", "W7301@jqir#");
+        con = DriverManager.getConnection("jdbc:mysql://trolley.proxy.rlwy.net:49592/academic_details?useSSL=false&allowPublicKeyRetrieval=true" ,"root", "IIoeacGMfpglDLjgmSkwWIQoajFikXvz");
         stmt = con.createStatement();
         rs = stmt.executeQuery("SELECT * FROM " + tableName + ";");
         rsmd = rs.getMetaData();
