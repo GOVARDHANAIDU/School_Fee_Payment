@@ -1,9 +1,10 @@
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin: 0;
-  background-color: #f8f9fa;
-  overflow-x: hidden;
-}
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding-top: 50px;
+      padding-bottom: 0;
+    }
+ 
     /* Navbar */
     .navbar {
       position: fixed;
@@ -249,34 +250,3 @@ body {
   }
 
 
-
-/* ===========================
-   OUTER RAYS (SPIKES)
-=========================== */
-.rays {
-    position: absolute;
-    top: -45px;
-    left: -45px;
-    width: 240px;
-    height: 240px;
-    background-size: cover;
-    opacity: 0.65;
-}
-
-
-/* Fast rotation */
-.rays1 {
-    animation: rotate 6s linear infinite;
-}
-
-/* Slow rotation */
-.rays2 {
-    animation: rotate 12s linear infinite;
-    opacity: 0.4;
-}
-
-/* Rotation keyframes */
-@keyframes rotate {
-    from { transform: rotate(0deg); }
-    to   { transform: rotate(360deg); }
-}

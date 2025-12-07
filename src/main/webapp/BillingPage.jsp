@@ -15,7 +15,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <style>
-    
+ 
     .dropdown-menu {
       font-size: 0.8rem; /* Smaller dropdown font */
     }
@@ -40,16 +40,71 @@
       padding: 30px 40px;
       border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-      width: 900px;
+      width: 100%;
+      max-width: 900px; /* Responsive max-width */
       margin: auto;
       margin-bottom: 50px; /* Adjusted for better spacing */
     }
  
-    .leftcontainer, .rightcontainer {
-      width: 45%;
-      display: inline-block;
-      vertical-align: top;
-      margin: 0 2%;
+    /* Desktop: Side-by-side layout */
+    @media (min-width: 768px) {
+      .leftcontainer, .rightcontainer {
+        width: 45%;
+        display: inline-block;
+        vertical-align: top;
+        margin: 0 2%;
+      }
+ 
+      .rightcontainer {
+        margin-top: -3%;
+      }
+ 
+      .preview {
+        width: 28%;
+        margin-left: 35%;
+        height: 40px;
+        border-radius: 30px;
+        background: linear-gradient(135deg, #dff6ff, #b6e3f9);
+        border: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: transform 0.2s ease; /* Hover effect for attractiveness */
+      }
+    }
+ 
+    /* Mobile: Stacked layout */
+    @media (max-width: 767.98px) {
+      .leftcontainer, .rightcontainer {
+        width: 100%;
+        display: block;
+        margin: 0 0 20px 0; /* Vertical spacing */
+      }
+ 
+      .preview {
+        width: 100%; /* Full width on mobile */
+        margin-left: 0;
+        height: 45px; /* Slightly taller for touch */
+        border-radius: 8px;
+        font-size: 1rem;
+      }
+ 
+      h2 {
+        font-size: 1.3rem; /* Smaller header on mobile */
+      }
+ 
+      label {
+        font-size: 0.95rem;
+      }
+ 
+      input, select {
+        padding: 12px; /* Larger padding for touch */
+        font-size: 16px; /* Prevent zoom on iOS */
+      }
+ 
+      .maincontainer {
+        padding: 20px 15px; /* Less padding on mobile */
+        margin-bottom: 20px;
+      }
     }
  
     h2 {
@@ -76,6 +131,7 @@
       border: 1px solid #cbd5e0;
       border-radius: 6px;
       font-size: 14px; /* Smaller input font */
+      box-sizing: border-box; /* Ensure padding is included in width */
     }
  
     input[readonly] {
@@ -92,13 +148,7 @@
       font-size: 14px;
     }
  
-    .rightcontainer {
-      margin-top: -3%;
-    }
- 
     .preview {
-      width: 28%;
-      margin-left: 35%;
       height: 40px;
       border-radius: 30px;
       background: linear-gradient(135deg, #dff6ff, #b6e3f9);
@@ -116,31 +166,31 @@
       opacity: 0.6;
       cursor: not-allowed;
     }
-     </style>
-      <link href="./student-profile.css" rel="stylesheet">
-    
+  </style>
+  <link href="./student-profile.css" rel="stylesheet">
+ 
 </head>
 <body>
-
+ 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
   <div class="container-fluid">
     <div class="d-flex align-items-center">
-      <img src="https://img.pikbest.com/png-images/20241026/simple-useful-bright-sun-and-cloud-logo-a-clear-sky-icon-design-vector_11001223.png!sw800" alt="SAS Logo" 
+      <img src="https://img.pikbest.com/png-images/20241026/simple-useful-bright-sun-and-cloud-logo-a-clear-sky-icon-design-vector_11001223.png!sw800" alt="SAS Logo"
       style="height: 40px; margin-right: 10px;" href="home.jsp">
       <a class="navbar-brand mb-0" href="home.jsp">SAS School</a>
     </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
-
+ 
     <div class="collapse navbar-collapse" id="navbarNav">
       <!-- Left side nav items -->
       <ul class="navbar-nav me-auto">
         <li class="nav-item"><a class="nav-link active" href="home.jsp"> Home</a></li>
-
+ 
         <li class="nav-item"><a class="nav-link" href="about.jsp">About Us</a></li>
-
+ 
         <!-- Students Dropdown -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Students</a>
@@ -154,7 +204,7 @@
             <li><a class="dropdown-item" href="newupdates.jsp">Update Student Details</a></li>
           </ul>
         </li>
-
+ 
         <!-- Payments Dropdown -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" id="hideFunction()">Payments</a>
@@ -164,7 +214,7 @@
             <li><a class="dropdown-item" href="paymentdetails.jsp">All Payment Status</a></li>
           </ul>
         </li>
-
+ 
         <!-- Explore Dropdown -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Explore</a>
@@ -174,19 +224,19 @@
             <li><a class="dropdown-item" href="images.jsp">Images</a></li>
           </ul>
         </li>
-
+ 
         <!-- Other Links -->
         <li class="nav-item"><a class="nav-link" href="fee-notifications.jsp" id="hideFunction()">Send Notifications</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
       </ul>
-
+ 
       <!-- Right Side -->
 <%
     // Prevent caching to avoid back/forward navigation issues after logout or session expiry
     response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
     response.setHeader("Pragma", "no-cache");
     response.setDateHeader("Expires", 0);
-
+ 
     // Get user name for display (prioritize adminName, fallback to others if needed)
     String displayName = (String) session.getAttribute("adminName");
     if (displayName == null) {
@@ -199,7 +249,7 @@
         if(ch == ' ') break;
         else userName += ch;
     }
-
+ 
     String role = (String)session.getAttribute("Roles");
     String admissionNo = (String)session.getAttribute("admissionNo");
     //System.out.println(role);
@@ -208,12 +258,12 @@
             d-flex flex-column flex-lg-row
             align-items-start align-items-lg-center
             gap-2">
-
+ 
     <!-- Hello Admin -->
     <span class="text-white fw-semibold">
         Hello, <%= userName %>
     </span>
-
+ 
     <!-- Roles Dropdown -->
     <div class="dropdown">
         <button class="btn btn-sm btn-outline-light dropdown-toggle"
@@ -226,15 +276,15 @@
             <li><a class="dropdown-item" href="./faculty/faculty.jsp">Faculty</a></li>
         </ul>
     </div>
-
+ 
     <!-- Auth Buttons (ALWAYS UNDER Roles in mobile) -->
     <div class="d-flex flex-column flex-lg-row gap-2 mt-2 mt-lg-0">
         <a class="btn btn-outline-light btn-sm" href="AdminLogin.jsp">Logout</a>
         <a class="btn btn-outline-warning btn-sm" href="createaccount.jsp">Signup</a>
     </div>
-
+ 
 </div>
-
+ 
     </div>
   </div>
 </nav>
@@ -242,51 +292,54 @@
   <div class="maincontainer">
   <br><br>
 <h2>Student Fee Billing</h2>
-    <div class="leftcontainer">
-      <label for="studentDropdown">Select Student:</label>
-      <select id="studentDropdown" name="studentName" style="width: 100%">
-        <option></option>
-      </select>
-      <%
-        HttpSession session2 = request.getSession();
-        session2.setAttribute("studentName", request.getParameter("studentName"));
-        System.out.println(request.getParameter("studentName"));
-      %>
-      <label for="email">Email:</label>
-      <input type="text" id="email" readonly name="email" />
+    <!-- Responsive Row for Left and Right Containers -->
+    <div class="row">
+      <div class="col-md-6 leftcontainer">
+        <label for="studentDropdown">Select Student:</label>
+        <select id="studentDropdown" name="studentName" style="width: 100%">
+          <option></option>
+        </select>
+        <%
+          HttpSession session2 = request.getSession();
+          session2.setAttribute("studentName", request.getParameter("studentName"));
+          System.out.println(request.getParameter("studentName"));
+        %>
+        <label for="email">Email:</label>
+        <input type="text" id="email" readonly name="email" />
  
-      <label for="totalFee">Total Fee:</label>
-      <input type="text" id="totalFee" readonly name="totalFee">
-
-
-      <label for="paidfee">Paid Fee:</label>
-      <input type="text" id="paidfee" readonly name="paidfee" />
+        <label for="totalFee">Total Fee:</label>
+        <input type="text" id="totalFee" readonly name="totalFee">
  
-      <label for="class1">Class:</label>
-      <input type="text" id="class1" placeholder="Class 1 to 10" name="class1" readonly />
+ 
+        <label for="paidfee">Paid Fee:</label>
+        <input type="text" id="paidfee" readonly name="paidfee" />
+ 
+        <label for="class1">Class:</label>
+        <input type="text" id="class1" placeholder="Class 1 to 10" name="class1" readonly />
+      </div>
+ 
+      <div class="col-md-6 rightcontainer">
+        <label for="admissionnumber">Admission.no:</label>
+        <input type="text" id="admissionnumber" readonly name="admissionnumber" />
+ 
+        <label for="phone">Phone Number:</label>
+        <input type="text" id="phone" readonly name="phone" />
+ 
+        <label for="payingfee">Paying fee:</label>
+        <input type="number" id="payingfee" name="payingfee">
+ 
+        <label for="modeOfPayment">Mode of payment:</label>
+        <select name="paymentMode" id="paymentMode" required="required">
+          <option value="Cash">Cash</option>
+          <option value="Online">Online</option>
+        </select>
+ 
+        <label>Billed By:</label>
+        <input type="text" value="<%=displayName%>" readonly>
+      </div>
     </div>
  
-    <div class="rightcontainer">
-      <label for="admissionnumber">Admission.no:</label>
-      <input type="text" id="admissionnumber" readonly name="admissionnumber" />
- 
-      <label for="phone">Phone Number:</label>
-      <input type="text" id="phone" readonly name="phone" />
- 
-      <label for="payingfee">Paying fee:</label>
-      <input type="number" id="payingfee" name="payingfee">
- 
-      <label for="modeOfPayment">Mode of payment:</label>
-      <select name="paymentMode" id="paymentMode" required="required">
-        <option value="Cash">Cash</option>
-        <option value="Online">Online</option>
-      </select>
- 
-      <label>Billed By:</label>
-      <input type="text" value="<%=displayName%>" readonly>
-    </div>
- 
-    <button id="proceedBtn" class="preview" disabled>Proceed</button>
+    <button id="proceedBtn" class="preview btn btn-primary mt-3" disabled>Proceed</button>
  
   </div>
  
@@ -298,22 +351,22 @@
   window.userRole = "<%= role.replace("\"", "\\\"") %>";
   window.admissionNo = "<%= admissionNo.replace("\"", "\\\"") %>";
   console.log("User role:", window.userRole);
-  
+ 
   document.addEventListener("DOMContentLoaded", function () {
       const role = window.userRole;
-      
+ 
       if (role && role.toLowerCase() === "student") {
           const cashOption = document.querySelector('#paymentMode option[value="Cash"]');
           const paymentMode = document.getElementById("paymentMode");
-
+ 
           // Disable and hide Cash option
           if (cashOption) cashOption.hidden = true;
-
+ 
           // Force Online as selected for students
           paymentMode.value = "Online";
       }
   });
-  
+ 
 </script>
 <script src="js/billing.js"></script>
  <script src="js/roleControl.js"></script>

@@ -78,6 +78,8 @@
       transform: translateY(0);
     }
   </style>
+    <link href="./student-profile.css" rel="stylesheet">
+  
 </head>
 <body>
 

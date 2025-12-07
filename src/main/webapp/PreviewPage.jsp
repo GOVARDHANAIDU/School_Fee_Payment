@@ -43,6 +43,7 @@
         margin: 0;
         padding: 0;
         background: white;
+        padding-top: 50px; /* Move print content down by adding top padding */
       }
  
       .print-btn, .btn-back {
@@ -53,8 +54,12 @@
         display: none; /* Hide navbar on print */
       }
  
+      .footer {
+        display: none; /* Hide footer on print */
+      }
+ 
       @page {
-        margin: 0; /* Remove default page margins */
+        margin: 1in 0.5in 0.5in 0.5in; /* Add top margin to move content down further if needed */
       }
     }
  
@@ -152,7 +157,7 @@
       width: 100%;
     }
  
-    /* Button alignment: Back and Proceed side by side, no space */
+    /* Button alignment: Back and Proceed side by side on desktop, stacked on mobile */
     .button-group {
       display: flex;
       justify-content: space-between;
@@ -186,6 +191,62 @@
  
     .btn-back:hover {
       background-color: #4c6795;
+    }
+ 
+    /* Mobile-specific adjustments: Stack buttons vertically and adjust receipt padding */
+    @media (max-width: 768px) {
+      body {
+        padding-top: 60px; /* Reduce top padding slightly for mobile navbar */
+      }
+ 
+      .receipt {
+        max-width: 95%;
+        margin: 10px auto;
+        padding: 15px 20px; /* Tighter padding on mobile */
+        border-radius: 8px;
+      }
+ 
+      .header h1 {
+        font-size: 20px; /* Smaller header on mobile */
+      }
+ 
+      .header h3 {
+        font-size: 16px;
+      }
+ 
+      .header p {
+        font-size: 12px;
+      }
+ 
+      .info-section td, .amount-section td {
+        font-size: 13px; /* Slightly smaller fonts on mobile */
+        padding: 4px;
+      }
+ 
+      .label {
+        font-size: 0.8rem;
+        width: 35%; /* Adjust label width for better fit */
+      }
+ 
+      .button-group {
+        flex-direction: column; /* Stack buttons vertically on mobile */
+        gap: 8px;
+      }
+ 
+      .print-btn, .btn-back {
+        max-width: none; /* Full width on mobile */
+        padding: 10px;
+        font-size: 16px; /* Larger touch target */
+      }
+ 
+      .amount-section {
+        padding: 10px 15px;
+      }
+ 
+      .footer {
+        font-size: 11px;
+        margin-top: 15px;
+      }
     }
  
     /* Beautiful Loading Spinner */

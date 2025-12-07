@@ -30,14 +30,16 @@ public class AdminLogin extends HttpServlet {
         AdminLoginInter adminLoginInter = new AdminLoginImp();	
         HttpSession session = req.getSession();
         String role = "";
-
+                
         if (emailid != null && password != null) {
             // Checking admin login
             if (adminLoginInter.selectLoginDetails(emailid, password)) {
                 session.setAttribute("email", emailid);
                 session.setAttribute("adminName", name);
                 session.setAttribute("adminId", adminId);
+                
                 session.setAttribute("admissionNo", admissionNo);
+
                 role = "admin";
                 session.setAttribute("Roles", role);
                 RequestDispatcher requestDispatcher = req.getRequestDispatcher("home.jsp");

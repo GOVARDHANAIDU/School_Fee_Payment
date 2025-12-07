@@ -33,7 +33,6 @@ public class AdminLoginImp implements AdminLoginInter {
 	     	    	int id = resultSet.getInt("id");	
 	     	    	String admissString = resultSet.getString("phone_number");
 	     			adminLogin.userName(name, id,admissString);
-	     			System.out.println(admissString);
 			        return true;
 			     }
 			     else {			    	 

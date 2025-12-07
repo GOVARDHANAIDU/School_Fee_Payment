@@ -69,15 +69,6 @@ video,
   </style>
   <link href="./student-profile.css" rel="stylesheet">
 </head>
-<!-- FULL SCREEN SUN LOADER -->
-
-<div id="sun-loader">
-    <div class="sun">
-        <div class="rays rays1"></div>
-        <div class="rays rays2"></div>
-    </div>
-</div>
-
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
   <div class="container-fluid">
@@ -377,8 +368,6 @@ document.addEventListener("DOMContentLoaded", function () {
           document.getElementById("sun-loader").style.display = "none";
       }, 2000); // 4 seconds
   });
-
-  
 
   
   window.addEventListener("load", function() {

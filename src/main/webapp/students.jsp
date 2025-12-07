@@ -172,7 +172,7 @@
 </nav>
 <!-- Student Feature Cards -->
 <div class="container py-5">
-  <h2 class="text-center mb-4 fw-bold"><br>Student Features</h2>
+  <h2 class="text-center mb-4 fw-bold">Student Features</h2>
   <div class="row g-4">
     <!-- Student Profile -->
     <div class="col-md-4">

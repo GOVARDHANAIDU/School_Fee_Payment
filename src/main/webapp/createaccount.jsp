@@ -1,3 +1,4 @@
+<%@page import="com.DAO.DatabaseConnectivity"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*" %>
 <!DOCTYPE html>
@@ -262,8 +263,7 @@
             PreparedStatement ps = null;
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                con = DriverManager.getConnection("jdbc:mysql://trolley.proxy.rlwy.net:49592/school_data?useSSL=false&allowPublicKeyRetrieval=true", "root", "IIoeacGMfpglDLjgmSkwWIQoajFikXvz");
-
+                con = DatabaseConnectivity.getConnection();
                 String sql = "INSERT INTO admin_registration(name, email, phone_number, aadhar_number, password, confirm_password, dob, address, pincode) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 ps = con.prepareStatement(sql);
                 ps.setString(1, name);

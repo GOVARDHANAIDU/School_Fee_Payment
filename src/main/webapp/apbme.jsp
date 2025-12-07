@@ -31,6 +31,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
  
     <style>
+
        .section-header {
             margin: 10px 0;
             font-size: 1.2rem;
