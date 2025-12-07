@@ -55,7 +55,8 @@ public class CreateClass extends HttpServlet {
 
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                Connection conn = databaseConnectivity.getConnection();
+                Connection conn = 
+                		DriverManager.getConnection("jdbc:mysql://trolley.proxy.rlwy.net:49592/academic_details?useSSL=false&allowPublicKeyRetrieval=true" ,"root", "IIoeacGMfpglDLjgmSkwWIQoajFikXvz");
 
                 Statement stmt = conn.createStatement();
                 stmt.executeUpdate(createSQL.toString());
