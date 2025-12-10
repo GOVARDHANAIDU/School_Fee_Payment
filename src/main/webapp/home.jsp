@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -136,9 +137,12 @@ video,
 
     // Get user name for display (prioritize adminName, fallback to others if needed)
     String displayName = (String) session.getAttribute("adminName");
-    if (displayName == null) {
-        // For student or faculty, you might set a "userName" attribute in servlet; adjust as needed
-        displayName = "User"; // Fallback
+    String role = (String)session.getAttribute("Roles");
+    String admissionNo = (String)session.getAttribute("admissionNo");
+
+    if (displayName == null || role == null) {
+        response.sendRedirect("AdminLogin.jsp");
+        return;  
     }
     String userName = "";
     for(int i = 0; i < displayName.length(); i++) {
@@ -147,8 +151,7 @@ video,
         else userName += ch;
     }
 
-    String role = (String)session.getAttribute("Roles");
-    String admissionNo = (String)session.getAttribute("admissionNo");
+
     //System.out.println(role);
 %>
       <div class="ms-lg-auto mt-3 mt-lg-0

@@ -48,9 +48,73 @@
     .modal-content .feature-card {
       margin-bottom: 1.5rem;
     }
+    /* Modal Specific: Smaller cards on mobile, centered */
+    #paymentModal .feature-card,
+    #attendanceModal .feature-card {
+      height: 100%;
+    }
+    #paymentModal .feature-icon,
+    #attendanceModal .feature-icon {
+      font-size: 2.5rem; /* Slightly smaller */
+    }
+    #paymentModal .card-title,
+    #attendanceModal .card-title {
+      font-size: 1.1rem;
+    }
+    #paymentModal .card-text,
+    #attendanceModal .card-text {
+      font-size: 0.9rem;
+      color: #6c757d;
+    }
+    @media (max-width: 768px) {
+      .modal-80w {
+        max-width: 95%; /* Full width on mobile */
+        margin: 1.75rem auto;
+      }
+      #paymentModal .feature-icon,
+      #attendanceModal .feature-icon {
+        font-size: 2rem;
+      }
+      #paymentModal .card-title,
+      #attendanceModal .card-title {
+        font-size: 1rem;
+      }
+      #paymentModal .row,
+      #attendanceModal .row {
+        justify-content: center;
+      }
+    }
+    .payment-row,
+    .attendance-row {
+      justify-content: center;
+    }
+    /* Footer Styles */
+    .footer {
+      background: #343a40;
+      color: #fff;
+      padding: 40px 0 20px;
+      margin-top: auto;
+    }
+    .footer h6 {
+      color: #fff;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+    .footer a {
+      color: #ffc107;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .footer a:hover {
+      color: #fff;
+    }
+    .footer p {
+      margin-bottom: 10px;
+      color: #adb5bd;
+    }
   </style>
-    <link href="./student-profile.css" rel="stylesheet" >
-  
+  <link href="./student-profile.css" rel="stylesheet" >
+
 </head>
 <body>
 
@@ -58,7 +122,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
   <div class="container-fluid">
     <div class="d-flex align-items-center">
-      <img src="https://img.pikbest.com/png-images/20241026/simple-useful-bright-sun-and-cloud-logo-a-clear-sky-icon-design-vector_11001223.png!sw800" alt="SAS Logo" 
+      <img src="https://img.pikbest.com/png-images/20241026/simple-useful-bright-sun-and-cloud-logo-a-clear-sky-icon-design-vector_11001223.png!sw800" alt="SAS Logo"
       style="height: 40px; margin-right: 10px;" href="home.jsp">
       <a class="navbar-brand mb-0" href="home.jsp">SAS School</a>
     </div>
@@ -187,7 +251,7 @@
       </a>
     </div>
 
-    <!-- Manage Fees -->
+    <!-- Manage Fees - Opens Modal -->
     <div class="col-md-4">
       <a href="#" class="card-link" data-bs-toggle="modal" data-bs-target="#paymentModal">
         <div class="p-4 text-center feature-card h-100">
@@ -239,9 +303,9 @@
       </a>
     </div>
 
-    <!-- Attendance -->
+    <!-- Attendance Record - Opens Modal -->
     <div class="col-md-4">
-      <a href="attendance.jsp" class="card-link">
+      <a href="#" class="card-link" data-bs-toggle="modal" data-bs-target="#attendanceModal">
         <div class="p-4 text-center feature-card h-100">
           <i class="bi bi-calendar-check feature-icon"></i>
           <div class="card-body">
@@ -263,10 +327,10 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div class="row g-4">
+        <div class="row g-4 payment-row">
           <!-- Fee Payment Card -->
-          <div class="col-md-4">
-            <div class="p-4 text-center feature-card h-100">
+          <div class="col-lg-3 col-md-6 col-sm-12">
+            <div class="p-4 text-center feature-card">
               <i class="bi bi-wallet2 feature-icon"></i>
               <div class="card-body">
                 <h5 class="card-title">Fee Payment</h5>
@@ -276,8 +340,8 @@
             </div>
           </div>
           <!-- Payment Info Card -->
-          <div class="col-md-4">
-            <div class="p-4 text-center feature-card h-100">
+          <div class="col-lg-3 col-md-6 col-sm-12">
+            <div class="p-4 text-center feature-card">
               <i class="bi bi-credit-card feature-icon"></i>
               <div class="card-body">
                 <h5 class="card-title">Payment Info</h5>
@@ -286,9 +350,9 @@
               </div>
             </div>
           </div>
-          <!-- Placeholder Card 1 -->
-          <div class="col-md-4">
-            <div class="p-4 text-center feature-card h-100">
+          <!-- Payment History Card -->
+          <div class="col-lg-3 col-md-6 col-sm-12">
+            <div class="p-4 text-center feature-card">
               <i class="bi bi-receipt feature-icon"></i>
               <div class="card-body">
                 <h5 class="card-title">Payment History</h5>
@@ -297,9 +361,9 @@
               </div>
             </div>
           </div>
-          <!-- Placeholder Card 2 (Add more as needed) -->
-          <div class="col-md-4">
-            <div class="p-4 text-center feature-card h-100">
+          <!-- Bank Details Card -->
+          <div class="col-lg-3 col-md-6 col-sm-12">
+            <div class="p-4 text-center feature-card">
               <i class="bi bi-bank feature-icon"></i>
               <div class="card-body">
                 <h5 class="card-title">Bank Details</h5>
@@ -317,13 +381,104 @@
   </div>
 </div>
 
+<!-- Attendance Modal -->
+<div class="modal fade" id="attendanceModal" tabindex="-1" aria-labelledby="attendanceModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-80w">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="attendanceModalLabel">Attendance Options</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-4 attendance-row">
+          <!-- Card 1: Whole School Attendance Overview -->
+          <div class="col-lg-3 col-md-6 col-sm-12">
+            <a href="whole-school-attendance.jsp" class="card-link">
+              <div class="p-4 text-center feature-card">
+                <i class="bi bi-building feature-icon"></i>
+                <div class="card-body">
+                  <h5 class="card-title">Whole School Overview</h5>
+                  <p class="card-text">View attendance for the entire school on a specific day or remaining days.</p>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <!-- Card 2: Particular Class Attendance Display -->
+          <div class="col-lg-3 col-md-6 col-sm-12">
+            <a href="class-attendance-display.jsp" class="card-link">
+              <div class="p-4 text-center feature-card">
+                <i class="bi bi-eye feature-icon"></i>
+                <div class="card-body">
+                  <h5 class="card-title">Class Attendance Display</h5>
+                  <p class="card-text">Display detailed attendance records for a specific class.</p>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <!-- Card 3: Particular Class Attendance Insertion -->
+          <div class="col-lg-3 col-md-6 col-sm-12">
+            <a href="student/class-attendance-insertion.jsp" class="card-link">
+              <div class="p-4 text-center feature-card">
+                <i class="bi bi-calendar-plus feature-icon"></i>
+                <div class="card-body">
+                  <h5 class="card-title">Class Attendance Insertion</h5>
+                  <p class="card-text">Insert and mark attendance for a particular class session.</p>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <!-- Card 4: Comparison Between Classes and Students -->
+          <div class="col-lg-3 col-md-6 col-sm-12">
+            <a href="attendance-comparison.jsp" class="card-link">
+              <div class="p-4 text-center feature-card">
+                <i class="bi bi-graph-up feature-icon"></i>
+                <div class="card-body">
+                  <h5 class="card-title">Class & Student Comparison</h5>
+                  <p class="card-text">Compare attendance trends across classes and individual students.</p>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer bg-dark text-white py-4 mt-5">
+  <div class="container">
+    <div class="row text-center text-md-start">
+      <div class="col-md-4 mb-3">
+        <h6><strong>Contact</strong></h6>
+        <p>Email: contact@sasschool.edu<br>Phone: +1 123 456 7890</p>
+      </div>
+      <div class="col-md-4 mb-3">
+        <h6><strong>About</strong></h6>
+        <a href="#" class="d-block text-warning">Our Story</a>
+        <a href="#" class="d-block text-warning">Privacy Policy</a>
+      </div>
+      <div class="col-md-4 mb-3">
+        <h6><strong>Address</strong></h6>
+        <p>123 Learning Lane<br>Education City, Country</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-  window.userRole = "<%= role.replace("\"", "\\\"") %>";
-  window.admissionNo = "<%= admissionNo.replace("\"", "\\\"") %>";
+  window.userRole = "<%= role != null ? role.replace("\"", "\\\"") : "" %>";
+  window.admissionNo = "<%= admissionNo != null ? admissionNo.replace("\"", "\\\"") : "" %>";
   console.log("User role:", window.userRole);
-  
+
 </script>
 
  <script src="js/roleControl.js"></script>
