@@ -211,31 +211,27 @@ function saveAllAttendance() {
         let cp = path.substring(0, path.lastIndexOf("/"));
         return cp === "" ? "/" : cp;
     })();
- // Log for debugging
-    fetch('./student/AttendanceServlet', {
-        method: "POST",
-        body: formData
-    })
-    .then(r => {
-        if (!r.ok) {
-            console.error("HTTP Error:", r.status, r.statusText); // Enhanced logging
-            throw new Error(`HTTP ${r.status}: ${r.statusText}`);
-        }
-        return r.text();
-    })
-    .then(res => {
-        console.log("Response:", res); // Log response for debugging
-        if (res === "SUCCESS") {
-            alert("Attendance Saved Successfully!");
-            location.reload();
-        } else if (res === "DUPLICATE") {
-            alert("Attendance already marked for this class & date.");
-        } else {
-            alert("Error saving attendance: " + res);
-        }
-    })
-    .catch(err => {
-        console.error("Full Fetch Error:", err); // Enhanced error logging
-        alert("Network error: " + err.message + ". Check browser console and server logs for details.");
-    });
-}
+	const servletUrl = window.location.origin + "/AttendanceServlet";
+
+	fetch(servletUrl, {
+	    method: "POST",
+	    body: formData
+	})
+	.then(r => {
+	    if (!r.ok) throw new Error(`HTTP ${r.status}: ${r.statusText}`);
+	    return r.text();
+	})
+	.then(res => {
+	    if (res === "SUCCESS") {
+	        alert("Attendance Saved Successfully!");
+	        location.reload();
+	    } else if (res === "DUPLICATE") {
+	        alert("Attendance already marked for this class & date.");
+	    } else {
+	        alert("Error saving attendance: " + res);
+	    }
+	})
+	.catch(err => {
+	    console.error("Fetch Error:", err);
+	    alert("Network error: " + err.message);
+	});
