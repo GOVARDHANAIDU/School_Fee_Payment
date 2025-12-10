@@ -393,7 +393,7 @@
         <div class="row g-4 attendance-row">
           <!-- Card 1: Whole School Attendance Overview -->
           <div class="col-lg-3 col-md-6 col-sm-12">
-            <a href="whole-school-attendance.jsp" class="card-link">
+            <a href="student/whole-school-attendance.jsp" class="card-link">
               <div class="p-4 text-center feature-card">
                 <i class="bi bi-building feature-icon"></i>
                 <div class="card-body">

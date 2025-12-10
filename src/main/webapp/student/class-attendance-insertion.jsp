@@ -8,6 +8,8 @@
     <meta charset="UTF-8">
     <title>Class Attendance Insertion - SAS School</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2132/2132732.png" type="image/x-icon">
+    
     <!-- BOOTSTRAP -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Select2 -->
@@ -76,58 +78,122 @@
     window.admissionNo = "<%= admissionNo %>";
 </script>
 <!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 shadow-sm">
+<!-- Navbar - Keep dark green as is -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
   <div class="container-fluid">
-    <!-- LOGO -->
-    <a class="navbar-brand d-flex align-items-center" href="../home.jsp">
-        <img src="https://img.pikbest.com/png-images/20241026/simple-useful-bright-sun-and-cloud-logo-a-clear-sky-icon-design-vector_11001223.png!sw800"
-             style="height:40px;margin-right:10px;">
-        SAS School
-    </a>
-    <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+    <div class="d-flex align-items-center">
+      <img src="https://img.pikbest.com/png-images/20241026/simple-useful-bright-sun-and-cloud-logo-a-clear-sky-icon-design-vector_11001223.png!sw800" alt="SAS Logo"
+      style="height: 40px; margin-right: 10px;">
+      <a class="navbar-brand mb-0" href="home.jsp">SAS School</a>
+    </div>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse" id="navbarNav">
-      <!-- LEFT MENU -->
+      <!-- Left side nav items -->
       <ul class="navbar-nav me-auto">
-        <li class="nav-item"><a class="nav-link" href="../home.jsp">Home</a></li>
+        <li class="nav-item"><a class="nav-link active" href="../home.jsp">Home</a></li>
+
         <li class="nav-item"><a class="nav-link" href="../about.jsp">About Us</a></li>
-        <!-- STUDENTS -->
+
+        <!-- Students Dropdown -->
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Students</a>
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Students</a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="../studentdetails.jsp">Student Details</a></li>
             <li><a class="dropdown-item" href="../allStudents.jsp">Student Payment Info</a></li>
-            <li><a class="dropdown-item" href="../BillingPage.jsp">Fee Payment</a></li>
-            <li><a class="dropdown-item" href="../studentreg.jsp">Create Student</a></li>
+            <li><a class="dropdown-item" href="../BillingPage.jsp">Student Fee Payment</a></li>
+            <li><a class="dropdown-item" href="../studentreg.jsp">Create Student Details</a></li>
             <li><a class="dropdown-item" href="../create-class.jsp">Create Class</a></li>
-            <li><a class="dropdown-item" href="../bulkimporting.jsp">Bulk Import</a></li>
-            <li><a class="dropdown-item" href="../newupdates.jsp">Update Student</a></li>
+            <li><a class="dropdown-item" href="../bulkimporting.jsp">Create Bulk</a></li>
+            <li><a class="dropdown-item" href="../newupdates.jsp">Update Student Details</a></li>
           </ul>
         </li>
-        <!-- PAYMENTS -->
-        <li class="nav-item dropdown" id="hideFunction">
-          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Payments</a>
+
+        <!-- Payments Dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Payments</a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="../allpayments.jsp">All Payment Details</a></li>
             <li><a class="dropdown-item" href="../apbme.jsp">Payment By Admin</a></li>
-            <li><a class="dropdown-item" href="../paymentdetails.jsp">Payment Status</a></li>
+            <li><a class="dropdown-item" href="../paymentdetails.jsp">All Payment Status</a></li>
           </ul>
         </li>
-        <!-- Notifications -->
-        <li class="nav-item" id="hideFunction">
-          <a class="nav-link" href="../fee-notifications.jsp">Send Notifications</a>
+
+        <!-- Explore Dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Explore</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">360° View</a></li>
+            <li><a class="dropdown-item" href="#">Videos</a></li>
+            <li><a class="dropdown-item" href="../images.jsp">Images</a></li>
+          </ul>
         </li>
+
+        <!-- Other Links -->
+        <li class="nav-item"><a class="nav-link" href="../fee-notifications.jsp">Send Notifications</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
       </ul>
-      <!-- RIGHT SIDE -->
-      <div class="d-flex align-items-center gap-3">
-          <span class="text-white fw-semibold">Hello, <%= firstName %></span>
-          <a href="../AdminLogin.jsp" class="btn btn-outline-light btn-sm">Logout</a>
-          <a href="../createaccount.jsp" class="btn btn-outline-warning btn-sm">Signup</a>
-      </div>
+
+      <!-- Right Side -->
+<%
+    // Prevent caching to avoid back/forward navigation issues after logout or session expiry
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    response.setHeader("Pragma", "no-cache");
+    response.setDateHeader("Expires", 0);
+
+    // Get user name for display (prioritize adminName, fallback to others if needed)
+    //String displayName = (String) session.getAttribute("adminName");
+    //String role = (String)session.getAttribute("Roles");
+   // String admissionNo = (String)session.getAttribute("admissionNo");
+
+    if (displayName == null || role == null) {
+        response.sendRedirect("AdminLogin.jsp");
+        return;
+    }
+    String userName = "";
+    for(int i = 0; i < displayName.length(); i++) {
+        char ch = displayName.charAt(i);
+        if(ch == ' ') break;
+        else userName += ch;
+    }
+%>
+      <div class="ms-lg-auto mt-3 mt-lg-0
+            d-flex flex-column flex-lg-row
+            align-items-start align-items-lg-center
+            gap-2">
+
+    <!-- Hello Admin -->
+    <span class="text-white fw-semibold">
+        Hello, <%= userName %>
+    </span>
+
+    <!-- Roles Dropdown -->
+    <div class="dropdown">
+        <button class="btn btn-sm btn-outline-light dropdown-toggle"
+                data-bs-toggle="dropdown">
+            Roles
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="../home.jsp">Channel Admin</a></li>
+            <li><a class="dropdown-item" href="../students.jsp">Student</a></li>
+            <li><a class="dropdown-item" href="./faculty/faculty.jsp">Faculty</a></li>
+        </ul>
+    </div>
+
+    <!-- Auth Buttons (ALWAYS UNDER Roles in mobile) -->
+    <div class="d-flex flex-column flex-lg-row gap-2 mt-2 mt-lg-0">
+        <a class="btn btn-outline-light btn-sm" href="../AdminLogin.jsp">Logout</a>
+        <a class="btn btn-outline-warning btn-sm" href="../createaccount.jsp">Signup</a>
+    </div>
+
+</div>
+
     </div>
   </div>
 </nav>
+
 <!-- MAIN -->
 <div class="container py-4 flex-grow-1">
     <h4 class="text-center fw-bold">Class Attendance Insertion</h4>

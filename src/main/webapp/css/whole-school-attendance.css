@@ -1,0 +1,105 @@
+/* ================= Global ================= */
+body {
+    background: #f5f7fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+}
+
+/* Card shadows */
+.card {
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+}
+
+/* ================= Summary Cards ================= */
+.summary-card {
+    padding: 15px;
+    border-radius: 6px;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    transition: 0.2s;
+}
+
+.summary-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+.summary-card h6 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #198754;
+}
+
+.summary-card h3 {
+    font-size: 1.7rem;
+    font-weight: bold;
+    color: #000;
+}
+
+.summary-card.total {
+    border-left: 4px solid #0d6efd;
+}
+
+.summary-card.present {
+    border-left: 4px solid #198754;
+}
+
+.summary-card.absent {
+    border-left: 4px solid #dc3545;
+}
+
+.summary-card.percent {
+    border-left: 4px solid #6f42c1;
+}
+
+/* ================= Filters ================= */
+.card .form-label {
+    font-weight: 600;
+    color: #555;
+}
+
+#applyFilters {
+    padding: 8px;
+}
+
+/* ================= Table ================= */
+#attendanceTable th {
+    background-color: #198754 !important;
+    color: #fff;
+    font-weight: 600;
+    text-align: center;
+}
+
+#attendanceTable td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table-striped tbody tr:hover {
+    background: #f1f1f1;
+}
+
+/* ================= Datatable Buttons ================= */
+.dt-buttons .dt-button {
+    background: #198754 !important;
+    color: #fff !important;
+    border: none !important;
+    padding: 6px 15px !important;
+    border-radius: 5px !important;
+}
+
+.dt-buttons .dt-button:hover {
+    background: #157347 !important;
+}
+
+/* ================= Footer ================= */
+.footer-dark {
+    background: #343a40;
+    color: white;
+    padding: 20px 0;
+    margin-top: 40px;
+    text-align: center;
+    font-size: 0.9rem;
+}
+

@@ -2,6 +2,8 @@ package com.controller;
 
 import java.io.*;
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -14,6 +16,8 @@ import com.DAO.DatabaseConnectivity;
 @MultipartConfig
 @WebServlet("/AttendanceServlet")
 public class AttendanceServlet extends HttpServlet {
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -29,8 +33,16 @@ public class AttendanceServlet extends HttpServlet {
                 response.getWriter().write("ERROR: Missing date or class parameter.");
                 return;
             }
+            // Optional: Validate date format
+            try {
+                DATE_FORMAT.parse(attendanceDate);
+            } catch (ParseException e) {
+                response.getWriter().write("ERROR: Invalid date format. Use YYYY-MM-DD.");
+                return;
+            }
 
             con = DatabaseConnectivity.getConnection();
+            con.setAutoCommit(false); // Start transaction
 
             // Check duplicate for entire class/date
             classCheckStmt = con.prepareStatement(
@@ -42,6 +54,7 @@ public class AttendanceServlet extends HttpServlet {
             ResultSet classRs = classCheckStmt.executeQuery();
             if (classRs.next() && classRs.getInt(1) > 0) {
                 classRs.close();
+                con.rollback(); // Clean up
                 response.getWriter().write("DUPLICATE");
                 return;
             }
@@ -60,17 +73,21 @@ public class AttendanceServlet extends HttpServlet {
                 if (admin_no == null || admin_no.trim().isEmpty()) continue;
 
                 String status = request.getParameter(key);
-                if (status == null || status.trim().isEmpty() || !("P".equals(status) || "A".equals(status) || "HD".equals(status))) continue;
+                if (status == null || status.trim().isEmpty() || !("P".equals(status.trim()) || "A".equals(status.trim()) || "HD".equals(status.trim()))) continue;
 
                 String reason = request.getParameter("reason_" + admin_no);
                 String leaveType = null;
                 if ("A".equals(status)) {
                     leaveType = request.getParameter("leave_type_" + admin_no);
-                    // Validate ENUM-like: only 'MEDICAL' or 'OTHER' (ignore invalid to prevent truncation)
-                    if (leaveType != null && !("MEDICAL".equals(leaveType.trim()) || "OTHER".equals(leaveType.trim()))) {
-                        leaveType = null; // Fallback to NULL for invalid
-                    } else {
-                        leaveType = leaveType != null ? leaveType.trim() : null;
+                    if (leaveType != null && !leaveType.trim().isEmpty()) {
+                        String trimmed = leaveType.trim();
+                        // Expandable: Add more ENUM values here if schema changes (e.g., 'PERSONAL')
+                        if (!("MEDICAL".equals(trimmed) || "OTHER".equals(trimmed))) {
+                            leaveType = null; // Fallback to prevent truncation
+                            System.err.println("Invalid leave_type '" + trimmed + "' for admin_no " + admin_no + "; set to NULL.");
+                        } else {
+                            leaveType = trimmed;
+                        }
                     }
                 }
 
@@ -90,14 +107,15 @@ public class AttendanceServlet extends HttpServlet {
                         }
                         filePath = "attendance_docs/" + fileName;
                         filePart.write(uploadDir + File.separator + fileName);
+                        System.out.println("File uploaded: " + filePath); // Optional logging
                     }
                 }
 
-                // Insert
+                // Add to batch
                 insertStmt.setString(1, admin_no.trim());
                 insertStmt.setString(2, attendanceDate);
                 insertStmt.setString(3, status.trim());
-                insertStmt.setString(4, leaveType); // NULL for P/HD, or valid ENUM for A
+                insertStmt.setString(4, leaveType);
                 insertStmt.setString(5, reason != null ? reason.trim() : null);
                 insertStmt.setString(6, filePath);
                 insertStmt.addBatch();
@@ -106,11 +124,22 @@ public class AttendanceServlet extends HttpServlet {
 
             if (hasInserts) {
                 insertStmt.executeBatch();
+                con.commit(); // Commit transaction
+            } else {
+                con.rollback(); // No data, rollback
+                response.getWriter().write("ERROR: No valid attendance data to insert.");
+                return;
             }
 
             response.getWriter().write("SUCCESS");
         } catch (SQLException e) {
-            // Specific handling for truncation (ENUM invalid value)
+            if (con != null)
+				try {
+					con.rollback();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}// Rollback on SQL error
             if (e.getMessage().contains("Data truncated for column 'leave_type'")) {
                 System.err.println("ENUM validation failed for leave_type: " + e.getMessage());
                 response.getWriter().write("ERROR: Invalid leave type. Use 'MEDICAL' or 'OTHER' only.");
@@ -119,9 +148,17 @@ public class AttendanceServlet extends HttpServlet {
                 response.getWriter().write("ERROR: Database error - " + e.getMessage());
             }
         } catch (Exception e) {
+            if (con != null)
+				try {
+					con.rollback();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} // Rollback on general error
             e.printStackTrace();
             response.getWriter().write("ERROR: " + e.getMessage());
         } finally {
+            try { if (con != null) con.setAutoCommit(true); } catch (Exception ignore) {}
             try { if (classCheckStmt != null) classCheckStmt.close(); } catch (Exception ignore) {}
             try { if (insertStmt != null) insertStmt.close(); } catch (Exception ignore) {}
             try { if (con != null) con.close(); } catch (Exception ignore) {}
