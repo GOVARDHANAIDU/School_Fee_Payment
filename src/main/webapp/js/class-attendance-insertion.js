@@ -200,7 +200,7 @@ function saveAllAttendance() {
         return;
     }
     // Use absolute path to avoid 404; adjust '/yourApp' if context path differs
-    fetch("/AttendanceServlet", { // Absolute path from root
+    fetch(window.location.origin + "/AttendanceServlet", { // Absolute path from root
         method: "POST",
         body: formData
     })
