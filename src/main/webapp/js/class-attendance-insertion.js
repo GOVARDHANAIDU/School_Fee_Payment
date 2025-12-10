@@ -1,4 +1,5 @@
 let attendanceData = {};
+
 document.addEventListener("DOMContentLoaded", () => {
     const btn = document.getElementById("reviewBtn");
     if (btn) {
@@ -203,35 +204,64 @@ function saveAllAttendance() {
         alert("No attendance data to save.");
         return;
     }
-    // Use server-provided context path for foolproof URL resolution (add this script to your JSP before including this JS file)
+    
+    // ============================================
+    // FIXED URL CONSTRUCTION FOR LIVE SERVER
+    // ============================================
+    
+    // Option 1: If you added the JSP script tag with contextPath
     // <script>window.contextPath = '<%= request.getContextPath() %>';</script>
-    // If not set, fallback to dynamic extraction
-    let contextPath = window.contextPath || (() => {
+    let contextPath = window.contextPath || "";
+    
+    // Option 2: Fallback extraction if contextPath is not set
+    if (!contextPath || contextPath === "") {
         const path = window.location.pathname;
-        let cp = path.substring(0, path.lastIndexOf("/"));
-        return cp === "" ? "/" : cp;
-    })();
-	const servletUrl = window.location.origin + "/AttendanceServlet";
-
-	fetch(servletUrl, {
-	    method: "POST",
-	    body: formData
-	})
-	.then(r => {
-	    if (!r.ok) throw new Error(`HTTP ${r.status}: ${r.statusText}`);
-	    return r.text();
-	})
-	.then(res => {
-	    if (res === "SUCCESS") {
-	        alert("Attendance Saved Successfully!");
-	        location.reload();
-	    } else if (res === "DUPLICATE") {
-	        alert("Attendance already marked for this class & date.");
-	    } else {
-	        alert("Error saving attendance: " + res);
-	    }
-	})
-	.catch(err => {
-	    console.error("Fetch Error:", err);
-	    alert("Network error: " + err.message);
-	});
+        // Extract the application context path
+        const pathParts = path.split('/');
+        if (pathParts.length > 1 && pathParts[1]) {
+            contextPath = '/' + pathParts[1];
+        } else {
+            contextPath = '/';
+        }
+    }
+    
+    // Ensure contextPath doesn't have trailing slash
+    if (contextPath.endsWith('/')) {
+        contextPath = contextPath.substring(0, contextPath.length - 1);
+    }
+    
+    // Build the complete servlet URL
+    const servletUrl = window.location.origin + contextPath + "/AttendanceServlet";
+    
+    // Debug log (remove in production)
+    console.log("Context Path:", contextPath);
+    console.log("Servlet URL:", servletUrl);
+    console.log("Full URL being called:", servletUrl);
+    
+    // ============================================
+    // FETCH REQUEST WITH CORRECT URL
+    // ============================================
+    
+    fetch(servletUrl, {
+        method: "POST",
+        body: formData
+    })
+    .then(r => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}: ${r.statusText}`);
+        return r.text();
+    })
+    .then(res => {
+        if (res === "SUCCESS") {
+            alert("Attendance Saved Successfully!");
+            location.reload();
+        } else if (res === "DUPLICATE") {
+            alert("Attendance already marked for this class & date.");
+        } else {
+            alert("Error saving attendance: " + res);
+        }
+    })
+    .catch(err => {
+        console.error("Fetch Error:", err);
+        alert("Network error: " + err.message);
+    });
+}

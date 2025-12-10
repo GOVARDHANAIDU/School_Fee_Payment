@@ -347,6 +347,10 @@
 <script>
 $("#classSelect").select2();
 $("#classSelect").on("change", () => $("#classForm").submit());
+// Set the application context path from server side
+// This is the most reliable way to get the correct context path
+window.contextPath = '<%= request.getContextPath() %>';
+console.log("Server Context Path:", window.contextPath);
 </script>
 </body>
 </html>
