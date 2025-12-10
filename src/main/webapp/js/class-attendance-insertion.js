@@ -211,9 +211,8 @@ function saveAllAttendance() {
         let cp = path.substring(0, path.lastIndexOf("/"));
         return cp === "" ? "/" : cp;
     })();
-    const servletUrl = contextPath + "/AttendanceServlet";
-    console.log("Fetching to:", servletUrl); // Log for debugging
-    fetch(servletUrl, {
+ // Log for debugging
+    fetch('./student/AttendanceServlet', {
         method: "POST",
         body: formData
     })
