@@ -351,6 +351,18 @@ $("#classSelect").on("change", () => $("#classForm").submit());
 // This is the most reliable way to get the correct context path
 window.contextPath = '<%= request.getContextPath() %>';
 console.log("Server Context Path:", window.contextPath);
+
+//Set environment variables
+window.APP_CONFIG = {
+    isLocal: window.location.hostname === 'localhost' || 
+             window.location.hostname === '127.0.0.1' ||
+             window.location.hostname.includes('192.168.'),
+    contextPath: '<%= request.getContextPath() %>',
+    requestURI: '<%= request.getRequestURI() %>'
+};
+
+console.log("App Config:", window.APP_CONFIG);
+
 </script>
 </body>
 </html>

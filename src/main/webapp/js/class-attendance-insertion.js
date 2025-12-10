@@ -206,40 +206,45 @@ function saveAllAttendance() {
     }
     
     // ============================================
-    // FIXED URL CONSTRUCTION FOR LIVE SERVER
+    // SMART URL DETECTION - WORKS FOR BOTH LOCAL & LIVE
     // ============================================
     
-    // Option 1: If you added the JSP script tag with contextPath
-    // <script>window.contextPath = '<%= request.getContextPath() %>';</script>
-    let contextPath = window.contextPath || "";
-    
-    // Option 2: Fallback extraction if contextPath is not set
-    if (!contextPath || contextPath === "") {
-        const path = window.location.pathname;
-        // Extract the application context path
-        const pathParts = path.split('/');
-        if (pathParts.length > 1 && pathParts[1]) {
-            contextPath = '/' + pathParts[1];
+    // Function to get the correct servlet URL
+    function getServletUrl() {
+        const currentPath = window.location.pathname;
+        const hostname = window.location.hostname;
+        
+        console.log("Current Path:", currentPath);
+        console.log("Hostname:", hostname);
+        
+        // Check if we're in development (localhost)
+        const isLocal = hostname === 'localhost' || hostname === '127.0.0.1' || hostname.includes('192.168.');
+        
+        // Check if path contains /student/
+        const isInStudentDir = currentPath.includes('/student/');
+        
+        // Build URL based on environment
+        if (isLocal && isInStudentDir) {
+            // Local development with /student/ context
+            return "/student/AttendanceServlet";
+        } else if (isLocal) {
+            // Local development at root
+            return "/AttendanceServlet";
         } else {
-            contextPath = '/';
+            // Live server (always root context on Railway)
+            return "/AttendanceServlet";
         }
     }
     
-    // Ensure contextPath doesn't have trailing slash
-    if (contextPath.endsWith('/')) {
-        contextPath = contextPath.substring(0, contextPath.length - 1);
-    }
+    // Get the servlet URL
+    const servletPath = getServletUrl();
+    const servletUrl = window.location.origin + servletPath;
     
-    // Build the complete servlet URL
-    const servletUrl = window.location.origin + contextPath + "/AttendanceServlet";
-    
-    // Debug log (remove in production)
-    console.log("Context Path:", contextPath);
-    console.log("Servlet URL:", servletUrl);
-    console.log("Full URL being called:", servletUrl);
+    console.log("Servlet Path:", servletPath);
+    console.log("Full Servlet URL:", servletUrl);
     
     // ============================================
-    // FETCH REQUEST WITH CORRECT URL
+    // FETCH REQUEST
     // ============================================
     
     fetch(servletUrl, {
@@ -265,3 +270,40 @@ function saveAllAttendance() {
         alert("Network error: " + err.message);
     });
 }
+
+// ============================================
+// OPTIONAL: URL TEST FUNCTION (DEBUGGING)
+// ============================================
+function testServletConnection() {
+    console.log("=== Testing Servlet Connection ===");
+    
+    const testUrls = [
+        "/AttendanceServlet",
+        "/student/AttendanceServlet",
+        "../AttendanceServlet",
+        window.location.origin + "/AttendanceServlet",
+        window.location.origin + "/student/AttendanceServlet"
+    ];
+    
+    testUrls.forEach(url => {
+        console.log("Testing URL:", url);
+        
+        fetch(url, {
+            method: 'POST',
+            body: new FormData()
+        })
+        .then(r => {
+            console.log(`✓ ${url} - Status: ${r.status}`);
+            return r.text();
+        })
+        .then(text => {
+            console.log(`Response: ${text.substring(0, 100)}...`);
+        })
+        .catch(err => {
+            console.log(`✗ ${url} - Error: ${err.message}`);
+        });
+    });
+}
+
+// Uncomment to test on page load
+// document.addEventListener("DOMContentLoaded", testServletConnection);
