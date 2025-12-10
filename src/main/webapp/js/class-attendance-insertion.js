@@ -26,6 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
         checkAll();
     }
 });
+
 function updateStatus(label) {
     const radio = label.previousElementSibling;
     label.parentElement.querySelectorAll("label")
@@ -38,6 +39,7 @@ function updateStatus(label) {
         label.classList.add("absent-active");
     }
 }
+
 function openAbsenteeModal() {
     attendanceData = {};
     document.querySelectorAll("tr[data-admin-no]").forEach(tr => {
@@ -53,9 +55,9 @@ function openAbsenteeModal() {
     });
     const container = document.getElementById("absenteeForms");
     container.innerHTML = "";
-    if (absent.length === 0) { 
-        generatePreview(); 
-        return; 
+    if (absent.length === 0) {
+        generatePreview();
+        return;
     }
     absent.forEach(admin => {
         const row = document.querySelector(`tr[data-admin-no="${admin}"]`);
@@ -118,6 +120,7 @@ function openAbsenteeModal() {
     });
     modal.show();
 }
+
 function generatePreview() {
     // Update attendance data from forms for absentees, aligning with DB schema
     Object.keys(attendanceData).forEach(admin => {
@@ -177,6 +180,7 @@ function generatePreview() {
     });
     previewModal.show();
 }
+
 function saveAllAttendance() {
     const formData = new FormData();
     formData.append("date", document.getElementById("datePicker").value);
@@ -199,64 +203,29 @@ function saveAllAttendance() {
         alert("No attendance data to save.");
         return;
     }
-    // Use absolute path to avoid 404; adjust '/yourApp' if context path differs
-    fetch(window.location.origin + "/AttendanceServlet", { // Absolute path from root
-        method: "POST",
-        body: formData
-    })
-    .then(r => {
-        if (!r.ok) throw new Error(`HTTP ${r.status}: ${r.statusText}`);
-        return r.text();
-    })
-    .then(res => {
-        if (res === "SUCCESS") {
-            alert("Attendance Saved Successfully!");
-            location.reload();
-        } else if (res === "DUPLICATE") {
-            alert("Attendance already marked for this class & date.");
-        } else {
-            alert("Error saving attendance: " + res);
-        }
-    })
-    .catch(err => {
-        console.error("Fetch error:", err);
-        alert("Network error: " + err.message + ". Check server logs.");
-    });
-}
-function saveAllAttendance() {
-    const formData = new FormData();
-    formData.append("date", document.getElementById("datePicker").value);
-    formData.append("selectedClass", document.getElementById("classSelect").value);
-    let hasData = false;
-    for (let admin in attendanceData) {
-        let d = attendanceData[admin];
-        formData.append("status_" + admin, d.status);
-        if (d.reason) formData.append("reason_" + admin, d.reason);
-        if (d.leave_type && d.status === 'A') {
-            formData.append("leave_type_" + admin, d.leave_type);
-        }
-        const fileInput = document.getElementById("file_" + admin);
-        if (fileInput && fileInput.files[0]) {
-            formData.append("document_" + admin, fileInput.files[0]);
-        }
-        hasData = true;
-    }
-    if (!hasData) {
-        alert("No attendance data to save.");
-        return;
-    }
-    // Dynamic context path (adjust if your app context is e.g. '/school')
-    const contextPath = window.location.pathname.split('/')[1]; // Extracts 'school' or similar
-    const servletUrl = `/${contextPath}/AttendanceServlet`;
+    // Use server-provided context path for foolproof URL resolution (add this script to your JSP before including this JS file)
+    // <script>window.contextPath = '<%= request.getContextPath() %>';</script>
+    // If not set, fallback to dynamic extraction
+    let contextPath = window.contextPath || (() => {
+        const path = window.location.pathname;
+        let cp = path.substring(0, path.lastIndexOf("/"));
+        return cp === "" ? "/" : cp;
+    })();
+    const servletUrl = contextPath + "/AttendanceServlet";
+    console.log("Fetching to:", servletUrl); // Log for debugging
     fetch(servletUrl, {
         method: "POST",
         body: formData
     })
     .then(r => {
-        if (!r.ok) throw new Error(`HTTP ${r.status}: ${r.statusText}`);
+        if (!r.ok) {
+            console.error("HTTP Error:", r.status, r.statusText); // Enhanced logging
+            throw new Error(`HTTP ${r.status}: ${r.statusText}`);
+        }
         return r.text();
     })
     .then(res => {
+        console.log("Response:", res); // Log response for debugging
         if (res === "SUCCESS") {
             alert("Attendance Saved Successfully!");
             location.reload();
@@ -267,7 +236,7 @@ function saveAllAttendance() {
         }
     })
     .catch(err => {
-        console.error("Fetch error:", err);
-        alert("Network error: " + err.message + ". Check server logs.");
+        console.error("Full Fetch Error:", err); // Enhanced error logging
+        alert("Network error: " + err.message + ". Check browser console and server logs for details.");
     });
 }
