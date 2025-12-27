@@ -9,7 +9,8 @@
     <title>Class Attendance Insertion - SAS School</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2132/2132732.png" type="image/x-icon">
-    
+    	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    	
     <!-- BOOTSTRAP -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Select2 -->
@@ -17,6 +18,61 @@
     <!-- OUR CSS -->
     <link href="../css/class-attendance-insertion.css" rel="stylesheet">
     <link href="../student-profile.css" rel="stylesheet">
+    <style type="text/css">
+    /* Toast Notifications */
+    
+.toast {
+    min-width: 300px;
+    max-width: 300px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border: none;
+    border-radius: 8px;
+}
+
+.toast-header {
+    border-radius: 8px 8px 0 0;
+    padding: 10px 15px;
+}
+
+.toast-body {
+    padding: 15px;
+    font-size: 0.95rem;
+}
+
+.toast i {
+    font-size: 1.2rem;
+}
+
+/* Toast animations */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.toast.show {
+    animation: slideInRight 0.3s ease-out;
+}
+
+.toast.hide {
+    animation: fadeOut 0.5s ease-out;
+}
+    
+    </style>
 </head>
 <body>
 <%
@@ -194,6 +250,62 @@
   </div>
 </nav>
 
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1055;">
+    <div id="successToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header bg-success text-white">
+            <strong class="me-auto"><i class="bi bi-check-circle-fill me-2"></i>Success</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-check-circle-fill text-success fs-5 me-3"></i>
+                <span id="successMessage"></span>
+            </div>
+        </div>
+    </div>
+    
+    <div id="errorToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header bg-danger text-white">
+            <strong class="me-auto"><i class="bi bi-exclamation-circle-fill me-2"></i>Error</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-exclamation-circle-fill text-danger fs-5 me-3"></i>
+                <span id="errorMessage"></span>
+            </div>
+        </div>
+    </div>
+    
+    <div id="warningToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header bg-warning text-white">
+            <strong class="me-auto"><i class="bi bi-exclamation-triangle-fill me-2"></i>Warning</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-exclamation-triangle-fill text-warning fs-5 me-3"></i>
+                <span id="warningMessage"></span>
+            </div>
+        </div>
+    </div>
+    
+    <div id="infoToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header bg-info text-white">
+            <strong class="me-auto"><i class="bi bi-info-circle-fill me-2"></i>Information</strong>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+        </div>
+        <div class="toast-body">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-info-circle-fill text-info fs-5 me-3"></i>
+                <span id="infoMessage"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <!-- MAIN -->
 <div class="container py-4 flex-grow-1">
     <h4 class="text-center fw-bold">Class Attendance Insertion</h4>
@@ -339,6 +451,11 @@
         SAS School © 2025 — All Rights Reserved
     </div>
 </footer>
+
+
+<!-- Toast Container for Notifications -->
+
+<!-- Bootstrap Icons -->
 <!-- SCRIPTS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

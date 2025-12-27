@@ -26,7 +26,7 @@
 
     <style>
         body {
-            background: url('https://img.freepik.com/free-vector/education-pattern-background-doodle-style_53876-115373.jpg') no-repeat center center fixed;
+            background: url('https://img.pikbest.com/png-images/20241026/simple-useful-bright-sun-and-cloud-logo-a-clear-sky-icon-design-vector_11001223.png!sw800') no-repeat center center fixed;
             background-size: cover;
             height: 100vh;
             display: flex;
