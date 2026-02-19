@@ -841,7 +841,8 @@
                 <div class="col-md-6">
                     <div class="contact-info hidden fade-from-right">
                         <h5><i class="fas fa-map-marker-alt me-2"></i>Address</h5>
-                        <p class="mb-3">123 Education Avenue, Learning City, IN 12345</p>
+                        <p class="mb-3"><a href="https://www.google.com/maps/place/Sri+little+angel+English+medium+school/@14.5316323,79.3534175,15z/data=!4m15!1m8!3m7!1s0x3bb34bf17b3d716f:0xd78287617ed53ca0!2sSomasila,+Andhra+Pradesh+524300!3b1!8m2!3d14.499339!4d79.3063471!16s%2Fm%2F05zht6m!3m5!1s0x3bb34dba01b53bc7:0x9d6ba8615f42b078!8m2!3d14.5402188!4d79.3654278!16s%2Fg%2F11mpcmqwn2?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D"
+                        target="blank">123 Education Avenue, Learning City, IN 12345 </a></p>
                         
                         <h5><i class="fas fa-phone me-2"></i>Phone</h5>
                         <p class="mb-3">+91 123 456 7890</p>

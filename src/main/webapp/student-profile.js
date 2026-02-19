@@ -1,7 +1,14 @@
 let studentData = [];
 
 /* -----------------------------------------
-       Generate Initials for Avatar
+   HELPER: BUILD CONTEXT-SAFE URL
+------------------------------------------*/
+function getAbsoluteUrl(path) {
+    return `${window.contextPath || ''}/${path}`;
+}
+
+/* -----------------------------------------
+   GENERATE INITIALS FOR AVATAR
 ------------------------------------------*/
 function generateInitials(name) {
     if (!name) return "NA";
@@ -11,434 +18,7 @@ function generateInitials(name) {
 }
 
 /* -----------------------------------------
-          ON PAGE LOAD
-------------------------------------------*/
-$(document).ready(function () {
-    console.log("Student Profile Loaded");
-
-    const role = (window.userRole || "guest").toLowerCase();
-    const admissionNo = window.admissionNo || null;
-
-    // Student logged in → Only show own profile
-    if (role === "student" && admissionNo) {
-        console.log("🎓 Student Mode");
-        $("#studentSearchWrapper").hide();
-        $("#studentDropdown").prop("disabled", true);
-        $("#studentDropdown").next(".select2-container").hide();
-
-        hideEditControls();
-        fetchStudentFromSession();
-        return;
-    }
-
-    // Admin/Staff Mode → Can search
-    $("#studentDropdown").select2({
-        placeholder: "Search by name or admission no...",
-        allowClear: true,
-        width: "100%",
-        dropdownParent: $("#studentDropdown").parent()
-    });
-
-    loadStudents();
-
-    $("#studentDropdown").on("select2:select", function () {
-        fetchStudent();
-    });
-
-    /* ------ EDIT BUTTON ------ */
-    $("#editBtn").click(function () {
-        if (role === "student") {
-            alert("Students cannot edit their profile.");
-            return;
-        }
-
-        $("input:not([type='hidden']), textarea")
-            .prop("readonly", false)
-            .removeClass("bg-light")
-            .addClass("bg-white");
-
-        $("#updateBtn, #resetBtn").removeClass("d-none");
-        $(this).addClass("d-none");
-    });
-
-    /* ------ UPDATE BUTTON (UPDATED: Decoupled photo upload - always plain POST to UpdateStudentProfile, separate photo if needed) ------ */
-    $("#updateBtn").click(function (e) {
-        e.preventDefault();
-        if (role === "student") {
-            alert("Students cannot edit.");
-            return;
-        }
-
-        const fileInput = $("#fileInput")[0];
-        const hasFile = fileInput && fileInput.files && fileInput.files.length > 0;
-        const studentId = $("#studentId").val();
-
-        // Collect form fields (no file here)
-        const formFields = {
-            studentId: studentId,
-            adminNo: $("#adminNo").val(),
-            studentName: $("#studentName").val(),
-            email: $("#email").val(),
-            gender: $("#gender").val(),
-            dob: $("#dob").val(),
-            age: $("#age").val(),
-            aadharNumber: $("#aadharNumber").val(),
-            address: $("#address").val(),
-            pincode: $("#pincode").val(),
-            fatherName: $("#fatherName").val(),
-            fatherNumber: $("#fatherNumber").val(),
-            motherName: $("#motherName").val(),
-            motherNumber: $("#motherNumber").val(),
-            guardianName: $("#guardianName").val(),
-            guardianNumber: $("#guardianNumber").val(),
-            totalFee: $("#totalFee").val(),
-            paidFee: $("#paidFee").val()
-        };
-
-        // Validate required fields (add more as needed)
-        if (!formFields.studentId) {
-            return showToast("Student ID is required.", true);
-        }
-        if (!formFields.studentName) {
-            return showToast("Student Name is required.", true);
-        }
-
-        // Step 1: If file selected, upload photo first via UploadPhotoServlet
-        function uploadPhotoThenProfile() {
-            if (!hasFile) {
-                // No file: Directly update profile
-                updateProfileOnly(formFields);
-                return;
-            }
-
-            // Has file: Upload photo separately
-            const fd = new FormData();
-            fd.append("studentId", studentId);
-            fd.append("photo", fileInput.files[0]);
-
-            $.ajax({
-                url: "UploadPhotoServlet", // ✅ Call UploadPhotoServlet ONLY for photo
-                type: "POST",
-                data: fd,
-                processData: false,
-                contentType: false,
-                success: function (msg) {
-                    console.log("Photo upload success:", msg);
-                    showToast("Photo uploaded! Updating profile...", false);
-                    // Clear file input
-                    fileInput.value = "";
-                    // Now update profile fields
-                    updateProfileOnly(formFields);
-                },
-                error: function (xhr) {
-                    console.error("Photo upload error:", xhr.responseText);
-                    showToast("Photo upload failed: " + (xhr.responseText || "Unknown error"), true);
-                    // Still try to update profile? Or abort? Here, proceed to avoid blocking
-                    updateProfileOnly(formFields);
-                }
-            });
-        }
-
-        // Helper: Update profile fields only (plain POST)
-        function updateProfileOnly(fields) {
-            $.ajax({
-                url: "UpdateStudentProfile",
-                method: "POST",
-                data: fields, // Plain object → urlencoded, no multipart
-                success: function () {
-                    showToast("Profile updated successfully!");
-                    resetForm();
-                    fetchStudent(); // Refresh profile after update
-                },
-                error: function (xhr, status, error) {
-                    console.error("Profile update error:", error);
-                    showToast("Profile update failed: " + (xhr.responseText || error), true);
-                }
-            });
-        }
-
-        // Start the process
-        uploadPhotoThenProfile();
-    });
-
-    /* ------ RESET BUTTON ------ */
-    $("#resetBtn").click(function () {
-        if (role === "student") {
-            alert("Students cannot reset.");
-            return;
-        }
-        resetForm();
-        fetchStudent();
-    });
-});
-
-/* -----------------------------------------
-            LOAD STUDENT LIST
-------------------------------------------*/
-function loadStudents() {
-    if (window.userRole === "student") return;
-
-    $.ajax({
-        url: "SearchServlet",
-        method: "GET",
-        dataType: "json",
-        success: function (data) {
-            studentData = data;
-            $("#studentDropdown").empty().append(new Option("Select Student", ""));
-
-            data.forEach(function (s) {
-                const label = `${s.name} - ${s.admissionnumber}`;
-                // ✅ FIXED: Use admissionnumber as value (string) for consistency with backend admissionNo param
-                // This ensures fetch uses admissionNo path, which resolves student_id via DAO (avoids potential ID mismatch)
-                $("#studentDropdown").append(new Option(label, s.admissionnumber));
-            });
-        },
-        error: function () {
-            showToast("Error loading students", true);
-        }
-    });
-}
-
-/* -----------------------------------------
-          FETCH PROFILE (ADMIN)
-------------------------------------------*/
-function fetchStudent() {
-    const id = $("#studentDropdown").val();
-    if (!id) return showToast("Select a student", true);
-
-    $("#profileLoading").removeClass("d-none");
-    $("#profileContainer").hide();
-
-    $.ajax({
-        url: "GetStudentProfile",
-        method: "POST",
-        // ✅ FIXED: Send as admissionNo (matches the new dropdown value), backend will resolve to student_id via DAO
-        data: { admissionNo: id },
-        dataType: "json",
-        success: function (data) {
-            console.log(" DEBUG: FetchStudent - Full data from backend:", data); // Debug: Log entire response
-            if (data.error) return showToast(data.error, true);
-
-            populateProfile(data);
-            ensureReadonly();
-
-            $("#profileLoading").addClass("d-none");
-            $("#profileContainer").fadeIn();
-        },
-        error: function (xhr, status, error) {
-            console.error(" DEBUG: FetchStudent Error:", error); // Debug: Log AJAX error
-            showToast("Error fetching profile: " + error, true);
-        }
-    });
-}
-
-/* -----------------------------------------
-   FETCH PROFILE FOR STUDENT (SESSION)
-------------------------------------------*/
-function fetchStudentFromSession() {
-    $("#profileLoading").removeClass("d-none");
-    $("#profileContainer").hide();
-
-    $.ajax({
-        url: "GetStudentProfile",
-        method: "POST",
-        data: {},
-        dataType: "json",
-        success: function (data) {
-            console.log("DEBUG: FetchStudentFromSession - Full data from backend:", data); // Debug: Log entire response
-            if (data.error) return showToast(data.error, true);
-
-            populateProfile(data);
-            ensureReadonly();
-            hideEditControls();
-
-            $("#profileLoading").addClass("d-none");
-            $("#profileContainer").fadeIn();
-        },
-        error: function (xhr, status, error) {
-            console.error("🔍 DEBUG: FetchStudentFromSession Error:", error); // Debug: Log AJAX error
-            showToast("Error fetching profile: " + error, true);
-        }
-    });
-}
-
-/* -----------------------------------------
-            POPULATE UI FIELDS
-------------------------------------------*/
-function populateProfile(data) {
-    console.log("🔍 DEBUG: populateProfile - Full data received:", data); // Debug: Log entire data object
-
-    // BASIC INFO
-    $("#studentId").val(data.student_id || "");
-    $("#adminNo").val(data.admin_no || "");
-    $("#adminNoDisplay").text(data.admin_no || "ADM No.");
-
-    // ✅ FIXED: Remove duplicate (data.student_name || data.student_name)
-    const name = data.student_name || "";
-    console.log("🔍 DEBUG: Student Name from backend:", name); // Debug: Log student name
-    $("#studentName").val(name);
-    $("#studentNameHeader").text(name || "Student Name");
-
-    $("#email").val(data.email || "");
-    $("#gender").val(data.gender || "");
-    $("#dob").val(data.dob || "");
-    $("#age").val(data.age || "");
-    $("#aadharNumber").val(data.aadhar_number || "");
-    $("#address").val(data.address || "");
-    $("#pincode").val(data.pincode || "");
-
-    // PARENTS
-    $("#fatherName").val(data.father_name || "");
-    $("#fatherNumber").val(data.father_number || "");
-    $("#motherName").val(data.mother_name || "");
-    $("#motherNumber").val(data.mother_number || "");
-    $("#guardianName").val(data.guardian_name || "");
-    $("#guardianNumber").val(data.guardian_number || "");
-
-    // PAYMENT
-    // ✅ FIXED: Handle "NA" explicitly, remove duplicate (data.total_fee || data.total_fee)
-    let totalFee = 0;
-    if (data.total_fee && data.total_fee !== "NA") {
-        totalFee = parseFloat(data.total_fee) || 0;
-    }
-    let paidFee = 0;
-    if (data.paid_fee && data.paid_fee !== "NA") {
-        paidFee = parseFloat(data.paid_fee) || 0;
-    }
-    console.log("🔍 DEBUG: Total Fee from backend:", totalFee, "(raw:", data.total_fee, ")"); // Debug: Log total fee
-    console.log("🔍 DEBUG: Paid Fee from backend:", paidFee, "(raw:", data.paid_fee, ")"); // Debug: Log paid fee
-
-    $("#totalFee").val(totalFee);
-    $("#paidFee").val(paidFee);
-
-    const balance = (totalFee - paidFee).toFixed(2);
-    console.log("🔍 DEBUG: Calculated Balance:", balance); // Debug: Log balance
-    $("#balance").text("₹" + balance);
-
-    // Other tabs remain empty because backend doesn’t send data
-
-    // AVATAR
-    if (data.photo && data.photo !== "NA" && data.photo !== "") {
-        console.log("🔍 DEBUG: Using photo from backend:", data.photo); // Debug: Log photo usage
-        $("#avatarPreview").attr("src", data.photo);
-    } else {
-        const initials = generateInitials(name);
-        console.log("🔍 DEBUG: Generating initials avatar:", initials); // Debug: Log initials
-        $("#avatarPreview").attr("src", generateAvatarInitials(initials));
-    }
-
-    // ✅ ADDED: Populate class if form field exists (backend sends as "class1")
-    if (data.class1 && $("#classFieldId").length > 0) { // Replace "classFieldId" with actual ID
-        $("#classFieldId").val(data.class1);
-    }
-}
-
-/* -----------------------------------------
-        ENSURE READONLY MODE
-------------------------------------------*/
-function ensureReadonly() {
-    $("input:not([type='hidden']), textarea")
-        .prop("readonly", true)
-        .addClass("bg-light");
-}
-
-function hideEditControls() {
-    $("#editBtn, #updateBtn, #resetBtn").hide();
-}
-
-/* -----------------------------------------
-          RESET FORM
-------------------------------------------*/
-function resetForm() {
-    $("input:not([type='hidden']), textarea")
-        .prop("readonly", true)
-        .removeClass("bg-white")
-        .addClass("bg-light");
-
-    $("#editBtn").removeClass("d-none");
-    $("#updateBtn, #resetBtn").addClass("d-none");
-
-    // Clear file input on reset
-    $("#fileInput").val("");
-}
-
-/* -----------------------------------------
-               CAMERA
-------------------------------------------*/
-function startCamera() {
-    const video = $("#video")[0];
-    navigator.mediaDevices.getUserMedia({ video: true })
-        .then(stream => {
-            video.srcObject = stream;
-            $("#cameraContainer").removeClass("d-none");
-        })
-        .catch(() => $("#cameraError").removeClass("d-none"));
-}
-
-function capturePhoto() {
-    const video = $("#video")[0];
-    const canvas = $("#canvas")[0];
-
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-
-    canvas.getContext("2d").drawImage(video, 0, 0);
-
-    const imgData = canvas.toDataURL("image/png");
-    $("#avatarPreview").attr("src", imgData);
-
-    $("#cameraContainer").addClass("d-none");
-
-    video.srcObject.getTracks().forEach(t => t.stop());
-}
-
-/* -----------------------------------------
-           AVATAR UPLOAD / PREVIEW
-------------------------------------------*/
-function previewAvatar(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = e => $("#avatarPreview").attr("src", e.target.result);
-    reader.readAsDataURL(file);
-}
-
-/* -----------------------------------------
-             UPLOAD PHOTO (SEPARATE: Only for photo modal, no profile update)
-------------------------------------------*/
-$(document).on("click", "#modalUploadBtn", function () {
-
-    const file = $("#fileInput")[0].files[0];
-    const studentId = $("#studentId").val();
-
-    if (!studentId) return showToast("Select a student first", true);
-    if (!file) return showToast("Please choose a photo", true);
-
-    const fd = new FormData();
-    fd.append("studentId", studentId);
-    fd.append("photo", file);
-
-    $.ajax({
-        url: "UploadPhotoServlet", // ✅ Call UploadPhotoServlet ONLY for photo
-        type: "POST",
-        data: fd,
-        processData: false,
-        contentType: false,
-        success: function (msg) {
-            showToast(msg);
-            fetchStudent(); // Refresh to show new photo
-            // Clear file input
-            $("#fileInput").val("");
-        },
-        error: function (xhr) {
-            showToast(xhr.responseText, true);
-        }
-    });
-});
-
-/* -----------------------------------------
-       GENERATE CANVAS AVATAR (Initials)
+   GENERATE CANVAS AVATAR
 ------------------------------------------*/
 function generateAvatarInitials(initials) {
     const canvas = document.createElement("canvas");
@@ -461,14 +41,450 @@ function generateAvatarInitials(initials) {
 }
 
 /* -----------------------------------------
-                 TOAST
+   PAGE LOAD
 ------------------------------------------*/
-function showToast(msg, isError) {
+$(document).ready(function () {
+    console.log("Student Profile Loaded");
+    console.log("Context Path:", window.contextPath);
+    console.log("User Role:", window.userRole);
+    console.log("Admission No:", window.admissionNo);
+
+    const role = (window.userRole || "guest").toLowerCase();
+    const admissionNo = window.admissionNo || null;
+
+    // Student Mode: Hide search, load own profile from session
+    if (role === "student" && admissionNo) {
+        console.log("🎓 Student Mode Activated");
+        $("#studentSearchWrapper").hide();
+        $("#studentDropdown").prop("disabled", true).next(".select2-container").hide();
+        hideEditControls();
+        fetchStudentFromSession();
+        return;
+    }
+
+    // Admin/Staff Mode: Enable search
+    $("#studentDropdown").select2({
+        placeholder: "Search by name or admission no...",
+        allowClear: true,
+        width: "100%",
+        dropdownParent: $("#studentDropdown").parent()
+    });
+
+    loadStudents();
+
+    $("#studentDropdown").on("select2:select", fetchStudent);
+
+    // Edit Button
+    $("#editBtn").click(function () {
+        if (role === "student") {
+            showToast("Students cannot edit their profile.", true);
+            return;
+        }
+
+        $("input:not([type='hidden']), textarea")
+            .prop("readonly", false)
+            .removeClass("bg-light")
+            .addClass("bg-white");
+
+        $("#updateBtn, #resetBtn").removeClass("d-none");
+        $("#editBtn").addClass("d-none");
+    });
+
+    // Update Button - With Photo Upload Support
+    $("#updateBtn").click(function (e) {
+        e.preventDefault();
+        if (role === "student") {
+            showToast("Students cannot update profile.", true);
+            return;
+        }
+
+        const studentId = $("#studentId").val();
+        if (!studentId || !$("#studentName").val().trim()) {
+            return showToast("Student ID and Name are required.", true);
+        }
+
+        const fileInput = $("#fileInput")[0];
+        const hasFile = fileInput && fileInput.files && fileInput.files.length > 0;
+
+        const formFields = {
+            studentId: studentId,
+            adminNo: $("#adminNo").val(),
+            studentName: $("#studentName").val().trim(),
+            email: $("#email").val(),
+            gender: $("#gender").val(),
+            dob: $("#dob").val(),
+            age: $("#age").val(),
+            aadharNumber: $("#aadharNumber").val(),
+            address: $("#address").val(),
+            pincode: $("#pincode").val(),
+            fatherName: $("#fatherName").val(),
+            fatherNumber: $("#fatherNumber").val(),
+            motherName: $("#motherName").val(),
+            motherNumber: $("#motherNumber").val(),
+            guardianName: $("#guardianName").val(),
+            guardianNumber: $("#guardianNumber").val(),
+            totalFee: $("#totalFee").val(),
+            paidFee: $("#paidFee").val()
+        };
+
+        function uploadPhotoThenProfile() {
+            if (!hasFile) {
+                updateProfileOnly(formFields);
+                return;
+            }
+
+            const fd = new FormData();
+            fd.append("studentId", studentId);
+            fd.append("photo", fileInput.files[0]);
+
+            $.ajax({
+                url: getAbsoluteUrl("UploadPhotoServlet"),
+                type: "POST",
+                data: fd,
+                processData: false,
+                contentType: false,
+                success: function () {
+                    showToast("Photo uploaded successfully!", false);
+                    fileInput.value = "";
+                    updateProfileOnly(formFields);
+                },
+                error: function (xhr) {
+                    console.error("Photo upload failed:", xhr.responseText);
+                    showToast("Photo upload failed. Updating profile anyway...", true);
+                    updateProfileOnly(formFields);
+                }
+            });
+        }
+
+        function updateProfileOnly(fields) {
+            $.ajax({
+                url: getAbsoluteUrl("UpdateStudentProfile"),
+                method: "POST",
+                data: fields,
+                success: function () {
+                    showToast("Profile updated successfully!", false);
+                    resetForm();
+                    fetchStudent(); // Reload current student
+                },
+                error: function (xhr) {
+                    showToast("Update failed: " + (xhr.responseText || "Server error"), true);
+                }
+            });
+        }
+
+        uploadPhotoThenProfile();
+    });
+
+    // Reset Button
+    $("#resetBtn").click(function () {
+        if (role === "student") return;
+        resetForm();
+        fetchStudent();
+    });
+});
+
+/* -----------------------------------------
+   LOAD STUDENTS (ADMIN ONLY)
+------------------------------------------*/
+function loadStudents() {
+    $.ajax({
+        url: getAbsoluteUrl("SearchServlet"),
+        method: "GET",
+        dataType: "json",
+        success: function (data) {
+            studentData = data;
+            $("#studentDropdown").empty().append('<option value="">Select Student</option>');
+            data.forEach(s => {
+                const label = `${s.name} - ${s.admissionnumber}`;
+                $("#studentDropdown").append(new Option(label, s.admissionnumber));
+            });
+        },
+        error: function () {
+            showToast("Failed to load student list.", true);
+        }
+    });
+}
+
+/* -----------------------------------------
+   FETCH PROFILE (ADMIN - BY ADMISSION NO)
+------------------------------------------*/
+function fetchStudent() {
+    const id = $("#studentDropdown").val();
+    if (!id) return showToast("Please select a student.", true);
+
+    toggleLoading(true);
+	console.log("Enter into fetchstudent");
+    $.ajax({
+        url: getAbsoluteUrl("GetStudentProfile"),
+        method: "POST",
+        data: { admissionNo: id },
+        dataType: "json",
+        success: function (data) {
+            if (data.error || data.success === false) {
+                showToast(data.error || "Student not found", true);
+                return;
+            }
+            populateProfile(data);
+            ensureReadonly();
+        },
+        error: function (xhr, status, error) {
+            // More robust error handling
+            let errorMessage = "Failed to fetch profile.";
+            
+            if (xhr.responseText) {
+                // Check if it's an HTML page (likely login redirect)
+                if (xhr.responseText.trim().startsWith("<!DOCTYPE") || 
+                    xhr.responseText.includes("login") || 
+                    xhr.responseText.includes("session")) {
+                    errorMessage = "Access denied. Please log in again.";
+                } 
+                // Try to parse JSON error if it's not HTML
+                else {
+                    try {
+                        const errorData = JSON.parse(xhr.responseText);
+                        if (errorData.error) {
+                            errorMessage = errorData.error;
+                        }
+                    } catch (e) {
+                        // Not JSON, keep default message
+                    }
+                }
+            } else if (xhr.status === 401 || xhr.status === 403) {
+                errorMessage = "Access denied. Please log in again.";
+            } else if (xhr.status === 404) {
+                errorMessage = "Student profile not found.";
+            } else if (xhr.status === 500) {
+                errorMessage = "Server error. Please try again later.";
+            }
+            
+            showToast(errorMessage, true);
+        },
+        complete: function () {
+            toggleLoading(false);
+        }
+    });
+}
+/* -----------------------------------------
+   FETCH PROFILE (STUDENT - FROM SESSION)
+------------------------------------------*/
+function fetchStudentFromSession() {
+    toggleLoading(true);
+
+    $.ajax({
+        url: getAbsoluteUrl("GetStudentProfile"),
+        method: "POST",
+        data: {}, // Servlet uses session
+        dataType: "json",
+        success: function (data) {
+            console.log("Session Profile Data:", data);
+            if (data.error || data.success === false) {
+                showToast(data.error || "Your profile could not be loaded.", true);
+                return;
+            }
+            populateProfile(data);
+            ensureReadonly();
+            hideEditControls();
+        },
+        error: function (xhr, status, error) {
+            console.error("Session fetch error:", xhr);
+            
+            let errorMessage = "Failed to load your profile.";
+            let redirectToLogin = false;
+            
+            if (xhr.responseText) {
+                // Check for HTML response (likely login page)
+                const responseStr = xhr.responseText.toString();
+                if (responseStr.trim().startsWith("<!DOCTYPE") || 
+                    responseStr.includes("login") || 
+                    responseStr.includes("session") ||
+                    responseStr.includes("expired")) {
+                    errorMessage = "Session expired. Redirecting to login...";
+                    redirectToLogin = true;
+                } 
+                // Try to parse JSON error
+                else {
+                    try {
+                        const errorData = JSON.parse(responseStr);
+                        if (errorData.error) {
+                            errorMessage = errorData.error;
+                        }
+                    } catch (e) {
+                        console.log("Response is not JSON");
+                    }
+                }
+            } 
+            // Check HTTP status codes
+            else if (xhr.status === 401 || xhr.status === 403) {
+                errorMessage = "Unauthorized access. Please log in again.";
+                redirectToLogin = true;
+            } else if (xhr.status === 0) {
+                errorMessage = "Network error. Please check your connection.";
+            } else if (xhr.status === 500) {
+                errorMessage = "Server error. Please try again later.";
+            }
+            
+            showToast(errorMessage, true);
+            
+            if (redirectToLogin) {
+                setTimeout(() => {
+                    window.location.href = getAbsoluteUrl("AdminLogin.jsp");
+                }, 2000);
+            }
+        },
+        complete: function () {
+            toggleLoading(false);
+        }
+    });
+}
+
+/* -----------------------------------------
+   POPULATE PROFILE FIELDS
+------------------------------------------*/
+function populateProfile(data) {
+    console.log("Populating UI with:", data);
+
+    $("#studentId").val(data.student_id || "");
+    $("#adminNo").val(data.admin_no || "");
+    $("#adminNoDisplay").text(data.admin_no || "ADM No.");
+
+    const name = data.student_name || "";
+    $("#studentName").val(name);
+    $("#studentNameHeader").text(name || "Student Name");
+
+    $("#email").val(data.email || "");
+    $("#gender").val(data.gender || "");
+    $("#dob").val(data.dob || "");
+    $("#age").val(data.age || "");
+    $("#aadharNumber").val(data.aadhar_number || "");
+    $("#address").val(data.address || "");
+    $("#pincode").val(data.pincode || "");
+
+    $("#fatherName").val(data.father_name || "");
+    $("#fatherNumber").val(data.father_number || "");
+    $("#motherName").val(data.mother_name || "");
+    $("#motherNumber").val(data.mother_number || "");
+    $("#guardianName").val(data.guardian_name || "");
+    $("#guardianNumber").val(data.guardian_number || "");
+
+    // Handle fees safely
+    let totalFee = parseFloat(data.total_fee) || 0;
+    let paidFee = parseFloat(data.paid_fee) || 0;
+    if (data.total_fee === "NA") totalFee = 0;
+    if (data.paid_fee === "NA") paidFee = 0;
+
+    $("#totalFee").val(totalFee.toFixed(2));
+    $("#paidFee").val(paidFee.toFixed(2));
+    $("#balance").text("₹" + (totalFee - paidFee).toFixed(2));
+
+    if (data.class && $("#classField").length) {
+        $("#classField").val(data.class);
+    }
+
+    // Avatar
+    if (data.photo && data.photo !== "NA" && data.photo !== "") {
+        $("#avatarPreview").attr("src", data.photo);
+    } else {
+        const initials = generateInitials(name);
+        $("#avatarPreview").attr("src", generateAvatarInitials(initials));
+    }
+}
+
+/* -----------------------------------------
+   UI HELPERS
+------------------------------------------*/
+function ensureReadonly() {
+    $("input:not([type='hidden']), textarea")
+        .prop("readonly", true)
+        .addClass("bg-light")
+        .removeClass("bg-white");
+}
+
+function hideEditControls() {
+    $("#editBtn, #updateBtn, #resetBtn").hide();
+}
+
+function resetForm() {
+    ensureReadonly();
+    $("#editBtn").removeClass("d-none");
+    $("#updateBtn, #resetBtn").addClass("d-none");
+    $("#fileInput").val("");
+}
+
+function toggleLoading(show) {
+    if (show) {
+        $("#profileLoading").removeClass("d-none");
+        $("#profileContainer").hide();
+    } else {
+        $("#profileLoading").addClass("d-none");
+        $("#profileContainer").fadeIn();
+    }
+}
+
+/* -----------------------------------------
+   TOAST NOTIFICATION (UNIFIED)
+------------------------------------------*/
+function showToast(msg, isError = false) {
+    const toastEl = $("#liveToast")[0];
+    if (!toastEl) {
+        alert(msg); // Fallback
+        return;
+    }
     $("#toastMessage").text(msg);
-    const toast = $("#liveToast");
+    $("#liveToast")
+        .removeClass("text-bg-success text-bg-danger")
+        .addClass(isError ? "text-bg-danger" : "text-bg-success");
 
-    toast.removeClass("text-bg-danger text-bg-success");
-    toast.addClass(isError ? "text-bg-danger" : "text-bg-success");
+    new bootstrap.Toast(toastEl).show();
+}
 
-    new bootstrap.Toast(toast[0]).show();
+// Global zoom level
+let currentZoom = 1;
+
+function openPhotoViewer() {
+    const avatarSrc = document.getElementById('avatarPreview').src;
+    const fullPhoto = document.getElementById('fullPhoto');
+    
+    if (avatarSrc && avatarSrc !== location.href) {
+        fullPhoto.src = avatarSrc;
+        currentZoom = 1;
+        fullPhoto.style.transform = 'scale(1)';
+        const modal = new bootstrap.Modal(document.getElementById('photoViewerModal'));
+        modal.show();
+    } else {
+        alert("No photo available to view.");
+    }
+}
+
+function zoomPhoto(factor) {
+    currentZoom *= factor;
+    // Limit zoom between 0.5x and 5x
+    currentZoom = Math.min(Math.max(currentZoom, 0.5), 5);
+    document.getElementById('fullPhoto').style.transform = `scale(${currentZoom})`;
+}
+
+function resetZoom() {
+    currentZoom = 1;
+    document.getElementById('fullPhoto').style.transform = 'scale(1)';
+}
+
+// Optional: Keyboard shortcuts (Esc already closes, add + / -)
+document.getElementById('photoViewerModal').addEventListener('shown.bs.modal', () => {
+    document.addEventListener('keydown', handleZoomKeys);
+});
+
+document.getElementById('photoViewerModal').addEventListener('hidden.bs.modal', () => {
+    document.removeEventListener('keydown', handleZoomKeys);
+});
+
+function handleZoomKeys(e) {
+    if (e.key === '+' || e.key === '=') {
+        e.preventDefault();
+        zoomPhoto(1.2);
+    } else if (e.key === '-') {
+        e.preventDefault();
+        zoomPhoto(0.8);
+    } else if (e.key === '0') {
+        e.preventDefault();
+        resetZoom();
+    }
 }

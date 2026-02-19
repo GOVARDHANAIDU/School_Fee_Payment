@@ -12,7 +12,6 @@
  
         .container {
             background: white;
-            padding: 30px 40px;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             width: 100%;
@@ -102,12 +101,155 @@
                 width: 90%;
             }
         }
+        
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7fa;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    background-color: white;
+    padding: 30px 25px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 24px;
+    color: #2c3e50;
+    font-size: 26px;
+}
+
+/* Form Grid with Labels */
+#paymentForm {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+/* Label styling */
+#paymentForm label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #34495e;
+    font-size: 14px;
+}
+
+/* Smaller, compact inputs */
+input[type="text"],
+input[type="email"],
+input[type="number"] {
+    padding: 10px 14px;           /* Smaller padding */
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;              /* Slightly smaller font */
+    width: 100%;
+    height: 44px;                 /* Consistent height */
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+input[readonly] {
+    background-color: #f8f9fa;
+    color: #555;
+    cursor: not-allowed;
+}
+
+button {
+    padding: 12px;
+    background-color: #3498db;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    height: 48px;
+    margin-top: 8px;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+/* Spinner */
+.dots-spinner {
+    display: none;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.dots-spinner.active {
+    display: flex;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    background-color: #3498db;
+    border-radius: 50%;
+    margin: 0 5px;
+    animation: bounce 1.4s infinite ease-in-out;
+}
+
+.dot:nth-child(1) { animation-delay: -0.32s; }
+.dot:nth-child(2) { animation-delay: -0.16s; }
+.dot:nth-child(3) { animation-delay: 0s; }
+
+@keyframes bounce {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1); }
+}
+
+/* Responsive: Two columns on tablets and desktops */
+@media (min-width: 768px) {
+    #paymentForm {
+        grid-template-columns: 1fr 1fr;   /* Two columns */
+        gap: 18px 20px;
+    }
+
+    /* Full width for button and name (optional) */
+    #paymentForm .full-width {
+        grid-column: 1 / -1;
+    }
+
+    .container {
+        padding: 40px;
+        max-width: 600px;
+    }
+}
     </style>
        <link href="./student-profile.css" rel="stylesheet">
     
 </head>
 <body>
-
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
   <div class="container-fluid">
@@ -129,7 +271,7 @@
 
         <!-- Students Dropdown -->
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Students</a>
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" hidden="true">Students</a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="studentdetails.jsp">Student Details</a></li>
             <li><a class="dropdown-item" href="allStudents.jsp">Student Payment Info</a></li>
@@ -143,7 +285,7 @@
 
         <!-- Payments Dropdown -->
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" id="hideFunction()">Payments</a>
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" id="hideFunction()" hidden="true">Payments</a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="allpayments.jsp">All Payment Details</a></li>
             <li><a class="dropdown-item" href="apbme.jsp">Payment By Admin</a></li>
@@ -153,7 +295,7 @@
 
         <!-- Explore Dropdown -->
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Explore</a>
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" hidden="true">Explore</a>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="#">360° View</a></li>
             <li><a class="dropdown-item" href="#">Videos</a></li>
@@ -162,7 +304,7 @@
         </li>
 
         <!-- Other Links -->
-        <li class="nav-item"><a class="nav-link" href="fee-notifications.jsp" id="hideFunction()">Send Notifications</a></li>
+        <li class="nav-item"><a class="nav-link" href="fee-notifications.jsp" id="hideFunction()" hidden="true">Send Notifications</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
       </ul>
 
@@ -201,7 +343,7 @@
     </span>
 
     <!-- Roles Dropdown -->
-    <div class="dropdown">
+    <div class="dropdown" hidden="true">
         <button class="btn btn-sm btn-outline-light dropdown-toggle"
                 data-bs-toggle="dropdown">
             Roles
@@ -216,7 +358,7 @@
     <!-- Auth Buttons (ALWAYS UNDER Roles in mobile) -->
     <div class="d-flex flex-column flex-lg-row gap-2 mt-2 mt-lg-0">
         <a class="btn btn-outline-light btn-sm" href="AdminLogin.jsp">Logout</a>
-        <a class="btn btn-outline-warning btn-sm" href="createaccount.jsp">Signup</a>
+        <a class="btn btn-outline-warning btn-sm" href="createaccount.jsp" hidden="true">Signup</a>
     </div>
 
 </div>
@@ -224,6 +366,7 @@
     </div>
   </div>
 </nav>
+
 <%
   String studentName = (String)session.getAttribute("studentName");
   String email = (String)session.getAttribute("email");
@@ -231,27 +374,45 @@
   String  class1 = (String)session.getAttribute("class1");
   double payingfee = (double)session.getAttribute("payingfee");
 %>
-    <div class="container">
-    <br><br>
-        <h2>Student Payment</h2>
-        <form id="paymentForm">
-            <input type="text" id="name" value="<%=studentName%>" placeholder="Student Name" readonly="readonly" required>
-            
-            <input type="email" id="email" value="<%=email%>" placeholder="Email">
-            <input type="text" id="phone" placeholder="Phone" value="<%=phone%>" required>
-            <input type="text" id="course" placeholder="Class" value="<%=class1%>" required>
-            <input type="number" id="amount" placeholder="Amount (INR)" value="<%=payingfee%>" required>
-            <button type="button" onclick="payNow()">Pay Now</button>
-        </form>
-        
-        <!-- Dot-Dots Spinner -->
-        <div class="dots-spinner" id="spinner">
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
+<div class="container">
+    <h2>Student Payment</h2>
+    <form id="paymentForm">
+        <div>
+            <label for="name">Student Name</label>
+            <input type="text" id="name" value="<%= studentName %>" readonly required>
         </div>
-    </div>
 
+        <div>
+            <label for="email">Email</label>
+            <input type="email" id="email" value="<%= email %>" required readonly>
+        </div>
+
+        <div>
+            <label for="phone">Phone</label>
+            <input type="text" id="phone" value="<%= phone %>" required readonly>
+        </div>
+
+        <div>
+            <label for="course">Class</label>
+            <input type="text" id="course" value="<%= class1 %>" required >
+        </div>
+
+        <div>
+            <label for="amount">Amount (INR)</label>
+            <input type="number" id="amount" value="<%= payingfee %>" required readonly>
+        </div>
+
+        <div class="full-width">
+            <button type="button" onclick="payNow()">Pay Now</button>
+        </div>
+    </form>
+
+    <div class="dots-spinner" id="spinner">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+    </div>
+</div>
 <script>
         function payNow() {
             const data = {
@@ -317,5 +478,6 @@
             });
         }
 </script>
+<script src="js/roleControl.js"> </script>
 </body>
 </html>

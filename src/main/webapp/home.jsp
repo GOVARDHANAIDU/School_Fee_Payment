@@ -71,149 +71,28 @@ video,
   <link href="./student-profile.css" rel="stylesheet">
 </head>
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
-  <div class="container-fluid">
-    <div class="d-flex align-items-center">
-      <img src="https://img.pikbest.com/png-images/20241026/simple-useful-bright-sun-and-cloud-logo-a-clear-sky-icon-design-vector_11001223.png!sw800" alt="SAS Logo" 
-      style="height: 40px; margin-right: 10px;" href="home.jsp">
-      <a class="navbar-brand mb-0" href="home.jsp">SAS School</a>
-    </div>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+  <jsp:include page="includes/navbar.jsp" />
 
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <!-- Left side nav items -->
-      <ul class="navbar-nav me-auto">
-        <li class="nav-item"><a class="nav-link active" href="home.jsp">Home</a></li>
-
-        <li class="nav-item"><a class="nav-link" href="about.jsp">About Us</a></li>
-
-        <!-- Students Dropdown -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Students</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="studentdetails.jsp">Student Details</a></li>
-            <li><a class="dropdown-item" href="allStudents.jsp">Student Payment Info</a></li>
-            <li><a class="dropdown-item" href="BillingPage.jsp">Student Fee Payment</a></li>
-            <li><a class="dropdown-item" href="studentreg.jsp">Create Student Details</a></li>
-            <li><a class="dropdown-item" href="create-class.jsp">Create Class</a></li>
-            <li><a class="dropdown-item" href="bulkimporting.jsp">Create Bulk</a></li>
-            <li><a class="dropdown-item" href="newupdates.jsp">Update Student Details</a></li>
-          </ul>
-        </li>
-
-        <!-- Payments Dropdown -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" id="hideFunction()">Payments</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="allpayments.jsp">All Payment Details</a></li>
-            <li><a class="dropdown-item" href="apbme.jsp">Payment By Admin</a></li>
-            <li><a class="dropdown-item" href="paymentdetails.jsp">All Payment Status</a></li>
-          </ul>
-        </li>
-
-        <!-- Explore Dropdown -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Explore</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="addAnnouncement.jsp">Announcements</a></li>
-            <li><a class="dropdown-item" href="#">360° View</a></li>
-            <li><a class="dropdown-item" href="#">Videos</a></li>
-            <li><a class="dropdown-item" href="images.jsp">Images</a></li>
-          </ul>
-        </li>
-
-        <!-- Other Links -->
-        <li class="nav-item"><a class="nav-link" href="fee-notifications.jsp" id="hideFunction()">Send Notifications</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
-      </ul>
-
-      <!-- Right Side -->
-<%
-    // Prevent caching to avoid back/forward navigation issues after logout or session expiry
-    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    response.setHeader("Pragma", "no-cache");
-    response.setDateHeader("Expires", 0);
-
-    // Get user name for display (prioritize adminName, fallback to others if needed)
-    String displayName = (String) session.getAttribute("adminName");
-    String role = (String)session.getAttribute("Roles");
-    String admissionNo = (String)session.getAttribute("admissionNo");
-
-    if (displayName == null || role == null) {
-        response.sendRedirect("AdminLogin.jsp");
-        return;  
-    }
-    String userName = "";
-    for(int i = 0; i < displayName.length(); i++) {
-        char ch = displayName.charAt(i);
-        if(ch == ' ') break;
-        else userName += ch;
-    }
-
-
-    //System.out.println(role);
-%>
-      <div class="ms-lg-auto mt-3 mt-lg-0
-            d-flex flex-column flex-lg-row
-            align-items-start align-items-lg-center
-            gap-2">
-
-    <!-- Hello Admin -->
-    <span class="text-white fw-semibold">
-        Hello, <%= userName %>
-    </span>
-
-    <!-- Roles Dropdown -->
-    <div class="dropdown">
-        <button class="btn btn-sm btn-outline-light dropdown-toggle"
-                data-bs-toggle="dropdown">
-            Roles
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="home.jsp">Channel Admin</a></li>
-            <li><a class="dropdown-item" href="home.jsp">Student</a></li>
-            <li><a class="dropdown-item" href="./faculty/faculty.jsp">Faculty</a></li>
-        </ul>
-    </div>
-
-    <!-- Auth Buttons (ALWAYS UNDER Roles in mobile) -->
-    <div class="d-flex flex-column flex-lg-row gap-2 mt-2 mt-lg-0">
-        <a class="btn btn-outline-light btn-sm" href="AdminLogin.jsp">Logout</a>
-        <a class="btn btn-outline-warning btn-sm" href="createaccount.jsp">Signup</a>
-    </div>
-
-</div>
-
-    </div>
-  </div>
-</nav>
- <!-- marquee -->
- <div class="announcement-bar">
+<!-- Announcement Bar -->
+<div class="announcement-bar">
   <marquee behavior="scroll" direction="left" scrollamount="6">
     📢 Welcome to Bright Future High School — Latest Announcements:  
-    <a href="announcement.jsp" style="color:#0d47a1; text-decoration:none; font-weight:600;">
-        Admission Open 2025
+    <a href="#" style="color:#0d47a1; text-decoration:none; font-weight:600;">
+      Admission Open 2025
     </a>
     |
-    <a href="announcement.jsp" style="color:#0d47a1; text-decoration:none; font-weight:600;">
-        Annual Sports Meet on 12th December
+    <a href="#" style="color:#0d47a1; text-decoration:none; font-weight:600;">
+      Annual Sports Meet on 12th December
     </a>
     |
-    <a href="announcement.jsp" style="color:#0d47a1; text-decoration:none; font-weight:600;">
-        Fee Payment Portal Updated
+    <a href="#" style="color:#0d47a1; text-decoration:none; font-weight:600;">
+      Fee Payment Portal Updated
     </a>
     |
-    <a href="announcement.jsp" style="color:#0d47a1; text-decoration:none; font-weight:600;">
-        Parent–Teacher Meeting on Friday
+    <a href="#" style="color:#0d47a1; text-decoration:none; font-weight:600;">
+      Parent–Teacher Meeting on Friday
     </a>
-    |
-    <a href="announcement.jsp" style="color:#0d47a1; text-decoration:none; font-weight:600;">
-        New Computer Lab Inauguration
-    </a>
-</marquee>
-
+  </marquee>
 </div>
  
  
@@ -223,13 +102,13 @@ video,
 
     <div class="carousel-inner h-100">
 
-      <div class="carousel-item active h-100">
-        <video class="d-block w-600 h-100" autoplay muted loop playsinline>
+      <div class="carousel-item active h-90">
+        <video class="d-block w-400 h-90" autoplay muted loop playsinline>
           <source src="images/20251120-1902-27.8452048.mp4" type="video/mp4">
         </video>
       </div>
 
-      <div class="carousel-item h-100">
+ <!--      <div class="carousel-item h-100">
         <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=1400&q=80" 
              class="d-block w-100" alt="School 2">
       </div>
@@ -237,7 +116,7 @@ video,
       <div class="carousel-item h-100">
         <img src="https://images.unsplash.com/photo-1571260899304-425eee4c7efc?auto=format&fit=crop&w=1400&q=80" 
              class="d-block w-100" alt="School 3">
-      </div>
+      </div> --> 
 
     </div>
 
@@ -363,10 +242,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-  window.userRole = "<%= role.replace("\"", "\\\"") %>";
-  window.admissionNo = "<%= admissionNo.replace("\"", "\\\"") %>";
-  console.log("User role:", window.userRole);
-  
   window.addEventListener("load", function () {
       setTimeout(() => {
           document.getElementById("sun-loader").style.display = "none";

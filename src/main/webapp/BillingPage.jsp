@@ -166,129 +166,49 @@
       opacity: 0.6;
       cursor: not-allowed;
     }
+   .proceed-btn {
+  background: #000000; /* Pure black */
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 0.8rem 2.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  width: 100%;
+  max-width: 320px;
+  margin: 2.5rem auto 0 auto;
+  display: block;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  letter-spacing: 0.5px;
+}
+
+.proceed-btn:hover:not(:disabled) {
+  background: #1a1a1a; /* Slightly lighter black on hover for depth */
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+}
+
+.proceed-btn:active:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.proceed-btn:disabled {
+  background: #4a4a4a; /* Dark gray for disabled – still matches black theme */
+  color: #aaaaaa;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  opacity: 0.7;
+}
   </style>
   <link href="./student-profile.css" rel="stylesheet">
  
 </head>
 <body>
  
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
-  <div class="container-fluid">
-    <div class="d-flex align-items-center">
-      <img src="https://img.pikbest.com/png-images/20241026/simple-useful-bright-sun-and-cloud-logo-a-clear-sky-icon-design-vector_11001223.png!sw800" alt="SAS Logo"
-      style="height: 40px; margin-right: 10px;" href="home.jsp">
-      <a class="navbar-brand mb-0" href="home.jsp">SAS School</a>
-    </div>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
- 
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <!-- Left side nav items -->
-      <ul class="navbar-nav me-auto">
-        <li class="nav-item"><a class="nav-link active" href="home.jsp"> Home</a></li>
- 
-        <li class="nav-item"><a class="nav-link" href="about.jsp">About Us</a></li>
- 
-        <!-- Students Dropdown -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Students</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="studentdetails.jsp">Student Details</a></li>
-            <li><a class="dropdown-item" href="allStudents.jsp">Student Payment Info</a></li>
-            <li><a class="dropdown-item" href="BillingPage.jsp">Student Fee Payment</a></li>
-            <li><a class="dropdown-item" href="studentreg.jsp">Create Student Details</a></li>
-            <li><a class="dropdown-item" href="create-class.jsp">Create Class</a></li>
-            <li><a class="dropdown-item" href="bulkimporting.jsp">Create Bulk</a></li>
-            <li><a class="dropdown-item" href="newupdates.jsp">Update Student Details</a></li>
-          </ul>
-        </li>
- 
-        <!-- Payments Dropdown -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" id="hideFunction()">Payments</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="allpayments.jsp">All Payment Details</a></li>
-            <li><a class="dropdown-item" href="apbme.jsp">Payment By Admin</a></li>
-            <li><a class="dropdown-item" href="paymentdetails.jsp">All Payment Status</a></li>
-          </ul>
-        </li>
- 
-        <!-- Explore Dropdown -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Explore</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">360° View</a></li>
-            <li><a class="dropdown-item" href="#">Videos</a></li>
-            <li><a class="dropdown-item" href="images.jsp">Images</a></li>
-          </ul>
-        </li>
- 
-        <!-- Other Links -->
-        <li class="nav-item"><a class="nav-link" href="fee-notifications.jsp" id="hideFunction()">Send Notifications</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
-      </ul>
- 
-      <!-- Right Side -->
-<%
-    // Prevent caching to avoid back/forward navigation issues after logout or session expiry
-    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    response.setHeader("Pragma", "no-cache");
-    response.setDateHeader("Expires", 0);
- 
-    // Get user name for display (prioritize adminName, fallback to others if needed)
-    String displayName = (String) session.getAttribute("adminName");
-    if (displayName == null) {
-        // For student or faculty, you might set a "userName" attribute in servlet; adjust as needed
-        displayName = "User"; // Fallback
-    }
-    String userName = "";
-    for(int i = 0; i < displayName.length(); i++) {
-        char ch = displayName.charAt(i);
-        if(ch == ' ') break;
-        else userName += ch;
-    }
- 
-    String role = (String)session.getAttribute("Roles");
-    String admissionNo = (String)session.getAttribute("admissionNo");
-    //System.out.println(role);
-%>
-      <div class="ms-lg-auto mt-3 mt-lg-0
-            d-flex flex-column flex-lg-row
-            align-items-start align-items-lg-center
-            gap-2">
- 
-    <!-- Hello Admin -->
-    <span class="text-white fw-semibold">
-        Hello, <%= userName %>
-    </span>
- 
-    <!-- Roles Dropdown -->
-    <div class="dropdown">
-        <button class="btn btn-sm btn-outline-light dropdown-toggle"
-                data-bs-toggle="dropdown">
-            Roles
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="home.jsp">Channel Admin</a></li>
-            <li><a class="dropdown-item" href="home.jsp">Student</a></li>
-            <li><a class="dropdown-item" href="./faculty/faculty.jsp">Faculty</a></li>
-        </ul>
-    </div>
- 
-    <!-- Auth Buttons (ALWAYS UNDER Roles in mobile) -->
-    <div class="d-flex flex-column flex-lg-row gap-2 mt-2 mt-lg-0">
-        <a class="btn btn-outline-light btn-sm" href="AdminLogin.jsp">Logout</a>
-        <a class="btn btn-outline-warning btn-sm" href="createaccount.jsp">Signup</a>
-    </div>
- 
-</div>
- 
-    </div>
-  </div>
-</nav>
- 
+  <jsp:include page="includes/navbar.jsp" />
+
   <div class="maincontainer">
   <br><br>
 <h2>Student Fee Billing</h2>
@@ -299,11 +219,21 @@
         <select id="studentDropdown" name="studentName" style="width: 100%">
           <option></option>
         </select>
+        
         <%
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setDateHeader("Expires", 0);
+        String displayName = (String) session.getAttribute("adminName");
+
+        String role = (String) session.getAttribute("Roles");
+        String admissionNo = (String) session.getAttribute("admissionNo");
+
           HttpSession session2 = request.getSession();
           session2.setAttribute("studentName", request.getParameter("studentName"));
           System.out.println(request.getParameter("studentName"));
         %>
+        
         <label for="email">Email:</label>
         <input type="text" id="email" readonly name="email" />
  
@@ -317,8 +247,10 @@
         <label for="class1">Class:</label>
         <input type="text" id="class1" placeholder="Class 1 to 10" name="class1" readonly />
       </div>
- 
+ 	
+ 	
       <div class="col-md-6 rightcontainer">
+      <br>
         <label for="admissionnumber">Admission.no:</label>
         <input type="text" id="admissionnumber" readonly name="admissionnumber" />
  
@@ -334,20 +266,24 @@
           <option value="Online">Online</option>
         </select>
  
-        <label>Billed By:</label>
-        <input type="text" value="<%=displayName%>" readonly>
+        <label hidden="true">Billed By:</label>
+        <input type="text" hidden="true" value="<%=displayName%>" readonly>
       </div>
     </div>
- 
+ 	
     <button id="proceedBtn" class="preview btn btn-primary mt-3" disabled>Proceed</button>
- 
+ 	
   </div>
+ 	
+ 	 	<!-- Loading Overlay -->
+
  
 <!-- jQuery and JS -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
  
 <script>
+
   window.userRole = "<%= role.replace("\"", "\\\"") %>";
   window.admissionNo = "<%= admissionNo.replace("\"", "\\\"") %>";
   console.log("User role:", window.userRole);
@@ -367,6 +303,29 @@
       }
   });
  
+  
+  // Add this script at the end of your JSP
+  $(document).ready(function() {
+      $('#debugBtn').click(function() {
+          console.log("=== DEBUG INFO ===");
+          console.log("Class field value:", $('#class1').val());
+          console.log("Class field HTML:", $('#class1')[0].outerHTML);
+          console.log("All form values:", {
+              email: $('#email').val(),
+              phone: $('#phone').val(),
+              totalFee: $('#totalFee').val(),
+              paidFee: $('#paidfee').val(),
+              payingFee: $('#payingfee').val(),
+              admissionNo: $('#admissionnumber').val(),
+              class: $('#class1').val(),
+              paymentMode: $('#paymentMode').val()
+          });
+      });
+      
+      // Also log when the page loads
+      console.log("=== PAGE LOADED ===");
+      console.log("Initial class field value:", $('#class1').val());
+  });  
 </script>
 <script src="js/billing.js"></script>
  <script src="js/roleControl.js"></script>

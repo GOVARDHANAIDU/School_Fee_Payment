@@ -1,175 +1,143 @@
-// StudentServlet.java (Final updated complete servlet code with all fixes: safe handling, debug logs, NumberFormatException catch, and "NA" defaults)
 package com.controller;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.*;
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import org.json.JSONObject;
 
+import org.json.JSONObject;
 import com.DAO.DatabaseConnectivity;
-import com.DAO.StudentDetailsImp;
-import com.DAO.StudentDetailsInter;
 
 @WebServlet("/GetStudentProfile")
 public class StudentServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
 
-    private final StudentDetailsInter studentDetailsInter = new StudentDetailsImp();
+    private static final long serialVersionUID = 1L;
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
-        DatabaseConnectivity databaseConnectivity = new DatabaseConnectivity();
+
         response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
         JSONObject result = new JSONObject();
-        PrintWriter out = response.getWriter();
-        try {
-            HttpSession session = request.getSession();
+
+        try (PrintWriter out = response.getWriter()) {
+
+            /* ================= SESSION CHECK ================= */
+            HttpSession session = request.getSession(false);
+            if (session == null) {
+                result.put("success", false);
+                result.put("error", "Session expired. Please login again.");
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                out.print(result.toString());
+                return;
+            }
+
+            String role = (String) session.getAttribute("Roles");
             String sessionAdmissionNo = (String) session.getAttribute("admissionNo");
-            String studentIdParam = request.getParameter("studentId");
-            String admissionNoParam = request.getParameter("admissionNo");
+            String paramAdmissionNo = request.getParameter("admissionNo");
+
+            /* ================= ADMISSION NO DECISION ================= */
             String finalAdmissionNo = null;
-            String finalStudentId = null;
 
-            // ✅ Determine which identifier to use (priority: param studentId > param admissionNo > session admissionNo)
-            if (studentIdParam != null && !studentIdParam.trim().isEmpty() && !studentIdParam.equalsIgnoreCase("null")) {
-                finalStudentId = studentIdParam;
-            } else if (admissionNoParam != null && !admissionNoParam.trim().isEmpty() && !admissionNoParam.equalsIgnoreCase("null")) {
-                finalAdmissionNo = admissionNoParam;
-            } else if (sessionAdmissionNo != null && !sessionAdmissionNo.trim().isEmpty()) {
-                finalAdmissionNo = sessionAdmissionNo;
+            if (paramAdmissionNo != null && !paramAdmissionNo.trim().isEmpty()
+                    && !"null".equalsIgnoreCase(paramAdmissionNo)) {
+                finalAdmissionNo = paramAdmissionNo.trim();
+            } else if ("student".equalsIgnoreCase(role) && sessionAdmissionNo != null) {
+                finalAdmissionNo = sessionAdmissionNo.trim();
             }
 
-            // ✅ If we only have admissionNo (from param or session), get studentId from DAO
-            if (finalStudentId == null && finalAdmissionNo != null) {
-                int tempId = studentDetailsInter.getStudentId(finalAdmissionNo);
-                if (tempId > 0) {
-                    finalStudentId = String.valueOf(tempId);
-                } else {
-                    result.put("error", "Invalid admission number.");
-                    out.print(result.toString());
-                    return;
-                }
-            }
-
-            // ✅ If still null, respond with error
-            if (finalStudentId == null || finalStudentId.trim().isEmpty()) {
-                result.put("error", "Missing valid student identifier.");
+            if (finalAdmissionNo == null || finalAdmissionNo.isEmpty()) {
+                result.put("success", false);
+                result.put("error", "No student identifier provided.");
                 out.print(result.toString());
                 return;
             }
 
-            // ✅ Validate studentId is numeric before query
-            int studentIdInt;
-            try {
-                studentIdInt = Integer.parseInt(finalStudentId);
-            } catch (NumberFormatException e) {
-                result.put("error", "Invalid student ID format.");
-                out.print(result.toString());
-                return;
-            }
+            /* ================= DATABASE ================= */
+            try (Connection con = DatabaseConnectivity.getConnection();
+                 PreparedStatement ps = con.prepareStatement(
+                         "SELECT * FROM students WHERE admin_no = ?")) {
 
-            // ✅ Fetch student details (extend query if needed for additional fields like section, marks)
-            try (Connection con = databaseConnectivity.getConnection()) {
-                String sql = "SELECT * FROM students WHERE student_id = ?";
-                PreparedStatement ps = con.prepareStatement(sql);
-                ps.setInt(1, studentIdInt);
-                ResultSet rs = ps.executeQuery();
+                ps.setString(1, finalAdmissionNo);
 
-                // Debug logging (check server logs)
+                try (ResultSet rs = ps.executeQuery()) {
 
-                if (rs.next()) {
-                    // Helper method to safely get string value, replacing null/empty with "NA"
-                    // Wrapped in try-catch to handle potential SQLException (e.g., column not found due to schema changes)
-                    java.util.function.Function<String, String> safeGetString = fieldName -> {
-                        try {
-                            String val = rs.getString(fieldName);
-                            return (val == null || val.trim().isEmpty()) ? "NA" : val.trim();
-                        } catch (SQLException e) {
-                            // Log the error if needed (e.g., via logger), but return "NA" to avoid breaking the whole response
-                            System.out.println("Error fetching field '" + fieldName + "': " + e.getMessage());
-                            return "NA";
-                        }
-                    };
-
-                    // For student_id, use getInt with safe handling (since it's numeric, but store as string for consistency/JSON)
-                    try {
-                        int sid = rs.getInt("student_id");
-                        result.put("student_id", (rs.wasNull() ? "NA" : String.valueOf(sid)));
-                    } catch (SQLException e) {
-                        System.out.println("Error fetching student_id: " + e.getMessage());
-                        result.put("student_id", "NA");
+                    if (!rs.next()) {
+                        result.put("success", false);
+                        result.put("error", "No student found with admission number: " + finalAdmissionNo);
+                        out.print(result.toString());
+                        return;
                     }
 
-                    result.put("admin_no", safeGetString.apply("admin_no"));
-                    result.put("student_name", safeGetString.apply("student_name"));
-                    result.put("email", safeGetString.apply("email"));
-                    result.put("class1", safeGetString.apply("class")); // Use "class1" key in JS as data.class1
-                    result.put("father_name", safeGetString.apply("father_name"));
-                    result.put("father_number", safeGetString.apply("father_number"));
-                    result.put("mother_name", safeGetString.apply("mother_name"));
-                    result.put("mother_number", safeGetString.apply("mother_number"));
-                    result.put("guardian_name", safeGetString.apply("guardian_name"));
-                    result.put("guardian_number", safeGetString.apply("guardian_number"));
-                    result.put("address", safeGetString.apply("address"));
-                    result.put("aadhar_number", safeGetString.apply("aadhar_number"));
+                    /* ================= RESULT BUILD ================= */
+                    result.put("success", true);
+                    result.put("message", "Student profile retrieved successfully");
+                    result.put("role", role);
 
-                    // For numeric fields (total_fee, paid_fee, age), safe handling with "NA" for null/invalid
-                    try {
-                        double totalFee = rs.getDouble("total_fee");
-                        result.put("total_fee", (rs.wasNull() ? "NA" : String.valueOf(totalFee)));
-                    } catch (SQLException e) {
-                        System.out.println("Error fetching total_fee: " + e.getMessage());
-                        result.put("total_fee", "NA");
-                    }
+                    result.put("student_id", rs.getInt("student_id"));
 
-                    try {
-                        double paidFee = rs.getDouble("paid_fee");
-                        result.put("paid_fee", (rs.wasNull() ? "NA" : String.valueOf(paidFee)));
-                    } catch (SQLException e) {
-                        System.out.println("Error fetching paid_fee: " + e.getMessage());
-                        result.put("paid_fee", "NA");
-                    }
+                    result.put("admin_no", safeGetString(rs, "admin_no"));
+                    result.put("student_name", safeGetString(rs, "student_name"));
+                    result.put("email", safeGetString(rs, "email"));
+                    result.put("class", safeGetString(rs, "class"));
+                    result.put("gender", safeGetString(rs, "gender"));
+                    result.put("dob", safeGetString(rs, "dob"));
 
-                    try {
-                        int age = rs.getInt("age");
-                        result.put("age", (rs.wasNull() ? "NA" : String.valueOf(age)));
-                    } catch (SQLException e) {
-                        System.out.println("Error fetching age: " + e.getMessage());
-                        result.put("age", "NA");
-                    }
+                    int age = rs.getInt("age");
+                    result.put("age", rs.wasNull() ? "NA" : age);
 
-                    result.put("gender", safeGetString.apply("gender"));
-                    result.put("dob", safeGetString.apply("dob"));
-                    result.put("pincode", safeGetString.apply("pincode"));
-                    result.put("photo", safeGetString.apply("photo"));
-                    // Add more fields if queried (e.g., JOIN with attendance/marks tables)
-                    // Example: result.put("section", safeGetString.apply("section"));
-                    // result.put("fullPhoto", safeGetString.apply("fullPhoto"));
-                } else {
-                    // Debug logging (check server logs)
-                    System.out.println("No student row found for student_id: " + studentIdInt);
-                    result.put("error", "Student not found.");
+                    result.put("father_name", safeGetString(rs, "father_name"));
+                    result.put("father_number", safeGetString(rs, "father_number"));
+                    result.put("mother_name", safeGetString(rs, "mother_name"));
+                    result.put("mother_number", safeGetString(rs, "mother_number"));
+                    result.put("guardian_name", safeGetString(rs, "guardian_name"));
+                    result.put("guardian_number", safeGetString(rs, "guardian_number"));
+                    result.put("address", safeGetString(rs, "address"));
+                    result.put("pincode", safeGetString(rs, "pincode"));
+                    result.put("aadhar_number", safeGetString(rs, "aadhar_number"));
+
+                    double totalFee = rs.getDouble("total_fee");
+                    result.put("total_fee", rs.wasNull() ? "NA" : totalFee);
+
+                    double paidFee = rs.getDouble("paid_fee");
+                    result.put("paid_fee", rs.wasNull() ? "NA" : paidFee);
+
+                    result.put("photo", safeGetString(rs, "photo"));
                 }
             }
-            // System.out.println(result);
+
             out.print(result.toString());
+            out.flush();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            result.put("success", false);
+            result.put("error", "Database error: " + e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Unexpected error in StudentServlet: " + e.getMessage());
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            JSONObject error = new JSONObject();
-            error.put("error", "Server error: " + e.getMessage());
-            out.print(error.toString());
+            result.put("success", false);
+            result.put("error", "Server error: " + e.getMessage());
         }
     }
 
-    // Optional: Handle GET if needed, but POST is used
+    /* ================= HELPER METHOD ================= */
+    private String safeGetString(ResultSet rs, String fieldName) {
+        try {
+            String val = rs.getString(fieldName);
+            return (val == null || val.trim().isEmpty()) ? "NA" : val.trim();
+        } catch (SQLException e) {
+            System.out.println("Warning: Column not found: " + fieldName);
+            return "NA";
+        }
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
-        doPost(request, response); // Delegate to POST for simplicity
+        doPost(request, response);
     }
 }

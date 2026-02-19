@@ -67,7 +67,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <!-- Left side nav items -->
       <ul class="navbar-nav me-auto">
-        <li class="nav-item"><a class="nav-link active" href="../home.jsp">Home</a></li>
+        <li class="nav-item"><a class="nav-link active" href="<%= request.getContextPath() %>/home.jsp">Home</a></li>
  
 <li class="nav-item"><a class="nav-link" href="../about.jsp">About Us</a></li>
  

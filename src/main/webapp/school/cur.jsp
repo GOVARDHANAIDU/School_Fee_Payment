@@ -1120,13 +1120,13 @@
                     <div class="col-md-6">
                         <h5>SAS School Curriculum</h5>
                         <p>Affiliated to Central Board of Secondary Education (CBSE), New Delhi</p>
-                        <p>Follows National Education Policy 2020 guidelines</p>
+                        <p><a href="https://www.education.gov.in/sites/upload_files/mhrd/files/NEP_Final_English_0.pdf" target="blank">Follows National Education Policy 2020 guidelines </a></p>
                     </div>
                     <div class="col-md-6 text-md-end">
                         <div class="footer-links">
-                            <a href="../home.html#home"><i class="fas fa-home"></i> Home</a>
-                            <a href="../home.html#academics"><i class="fas fa-graduation-cap"></i> Academics</a>
-                            <a href="../home.html#contact"><i class="fas fa-envelope"></i> Contact</a>
+                            <a href="home.jsp"><i class="fas fa-home"></i> Home</a>
+                            <a href="home.jsp#academics"><i class="fas fa-graduation-cap"></i> Academics</a>
+                            <a href="home.jsp#contact"><i class="fas fa-envelope"></i> Contact</a>
                         </div>
                         <div class="mt-3">
                             <p>© 2025 SAS School. All Rights Reserved.</p>

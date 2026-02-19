@@ -302,11 +302,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .chairman-img {
-    width: 120px;
-    height: 120px;
+    width: 220px;
+    height: 220px;
     object-fit: cover;
     border: 3px solid var(--gold-color);
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    border-radius: 50%;
 }
 
 .chairman-message h4 {
@@ -1718,5 +1719,101 @@ h1, h2, h3, h4, h5, h6 {
     
     .modal-body {
         padding: 15px;
+    }
+}
+
+
+
+@keyframes typedjsBlink {
+    50% { opacity: 0.0; }
+}
+
+@-webkit-keyframes typedjsBlink {
+    0% { opacity: 1; }
+    50% { opacity: 0.0; }
+    100% { opacity: 1; }
+}
+
+/* Remove ALL space between typing effect and subtitle */
+/* Drastically reduce hero-title height */
+.hero-title {
+    height: 50px !important; /* Reduced from 60px to 30px */
+    min-height: 50px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+    font-size: 2rem !important; /* Reduced from 3.5rem */
+    font-weight: 700;
+        text-align: center;
+    
+}
+
+/* Remove ALL space below typing effect */
+.hero-subtitle {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    margin-bottom: 0.5rem !important; /* Minimal bottom margin */
+    font-size: 1.3rem !important; /* Slightly smaller */
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    text-align: center;
+    line-height: 1.2 !important;
+}
+
+
+/* Reset hero-content spacing */
+.hero-content {
+    position: relative;
+    padding: 0; /* Remove padding */
+}
+
+/* Reset typed-title specifically */
+#typed-title {
+    display: block;
+    height: 60px; /* Fixed height, not min-height */
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Hide any overflow */
+}
+
+/* Reset container spacing */
+.hero-overlay .container {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.hero-overlay {
+    padding: 0; /* Remove vertical padding */
+}
+
+/* Adjust chairman message to start immediately after subtitle */
+.chairman-message {
+    margin-top: 1.5rem; /* Space starts from subtitle bottom */
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .hero-title {
+        height: 50px;
+        font-size: 2.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-title {
+        height: 40px;
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem;
+        margin-bottom: 0.8rem;
     }
 }
